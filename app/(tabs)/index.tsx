@@ -45,7 +45,7 @@ export default function HomeScreen() {
             <Button onPress={showDrawer}>Change picture</Button>
 
             <Image
-              source={{ uri: modelImage, width: 200, height: 200 }}
+              source={{ uri: modelImage, width: 300, height: 400 }}
               width="100%"
               height="auto"
               aspectRatio={3 / 4}

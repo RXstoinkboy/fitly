@@ -33,8 +33,8 @@ export const Button = styled(TamaguiButton, {
       },
     },
   } as const,
-  defaultVariants: {
-    size: "medium",
-    card: false,
-  },
+  // defaultVariants: {
+  //   size: "medium",
+  //   card: false,
+  // },
 });

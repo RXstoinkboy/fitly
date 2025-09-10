@@ -5,12 +5,12 @@ export const getFilesList = async (path: string): Promise<string[]> => {
     const dir = `${FileSystem.documentDirectory}${path}`;
     const directoryInfo = await FileSystem.getInfoAsync(dir);
 
-    if (!directoryInfo.exists) {
+    if (!directoryInfo.exists || !directoryInfo.isDirectory) {
       return [];
     }
 
     const files = await FileSystem.readDirectoryAsync(dir);
-    return files;
+    return files.map((file) => `${dir}/${file}`);
   } catch (error) {
     console.error(`Error reading directory at path ${path}:`, error);
     return [];

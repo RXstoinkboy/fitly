@@ -1,5 +1,10 @@
-import { YStack, Image, Sheet, H5, H6 } from "tamagui";
-import { Button, AddImage, GenerateImageButton } from "@/components/ui";
+import { YStack, Image, Sheet, XStack } from "tamagui";
+import {
+  Button,
+  AddModelPhoto,
+  GenerateImageButton,
+  AddImage,
+} from "@/components/ui";
 import {
   useModelImage,
   MODEL_IMAGE_STORAGE_KEY,
@@ -18,7 +23,34 @@ export default function HomeScreen() {
   return (
     <>
       <YStack items="center" justify="center" flex={1}>
-        {modelImage ? (
+        {!models.data?.length ? (
+          <AddModelPhoto />
+        ) : (
+          <>
+            <XStack
+              maxH={"70%"}
+              width={"100%"}
+              flex={1}
+              justify="center"
+              py="$4"
+            >
+              {models.data.map((model) => {
+                return (
+                  <Image
+                    rounded={"$6"}
+                    key={model}
+                    source={{ uri: model, width: 300, height: 400 }}
+                    width="auto"
+                    height="100%"
+                    aspectRatio={3 / 4}
+                  />
+                );
+              })}
+            </XStack>
+            <Button onPress={showDrawer}>Change picture</Button>
+          </>
+        )}
+        {/*{modelImage ? (
           <YStack width={"100%"} flex={1} items="center" bg="red">
             <Button onPress={showDrawer}>Change picture</Button>
 
@@ -30,27 +62,16 @@ export default function HomeScreen() {
             />
           </YStack>
         ) : (
-          <YStack p="$4">
-            <YStack gap="$4">
-              <H5 text={"center"} fontWeight={"bold"}>
-                No photo!
-              </H5>
-              <H6 text={"center"}>
-                Please choose your photo from gallery or take one with your
-                camera
-              </H6>
-            </YStack>
-            <AddImage onSuccess={saveModelImage} />
-          </YStack>
-        )}
-        {models.data?.length && (
+
+        )}*/}
+        {models.data?.length ? (
           <YStack gap="$2" p="$4" width={"100%"}>
             <GenerateImageButton />
             <Link href="/garments-picker" asChild>
               <Button variant="outlined">Garments Picker</Button>
             </Link>
           </YStack>
-        )}
+        ) : null}
       </YStack>
       <Sheet
         forceRemoveScrollEnabled={open}
@@ -69,6 +90,7 @@ export default function HomeScreen() {
 
         <Sheet.Handle />
         <Sheet.Frame p="$4" justify="center" items="center" gap="$5">
+          {/*TODO: replace it ASAP*/}
           <AddImage onSuccess={saveModelImage} />
         </Sheet.Frame>
       </Sheet>

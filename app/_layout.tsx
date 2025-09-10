@@ -10,7 +10,7 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "react-native";
 import { TamaguiProvider } from "tamagui";
-import { config } from "../tamagui.config";
+import { tamaguiConfig } from "../tamagui.config";
 import { QueryClientProvider } from "@/lib/query-provider";
 
 export default function RootLayout() {
@@ -28,7 +28,7 @@ export default function RootLayout() {
   return (
     <QueryClientProvider>
       <TamaguiProvider
-        config={config}
+        config={tamaguiConfig}
         defaultTheme={colorScheme === "dark" ? "dark" : "light"}
       >
         <ThemeProvider
@@ -36,6 +36,14 @@ export default function RootLayout() {
         >
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="garments-picker"
+              options={{
+                presentation: "modal",
+                title: "Garments Picker",
+                headerTitle: "Garments Picker",
+              }}
+            />
             <Stack.Screen name="+not-found" />
           </Stack>
           <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />

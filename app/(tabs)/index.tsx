@@ -1,47 +1,30 @@
-import { Button, Text, YStack, Image, Sheet } from "@/components/ui";
-import { useModelImage } from "@/hooks/model-image";
-import * as ImagePicker from "expo-image-picker";
+import {
+  Button,
+  Text,
+  YStack,
+  Image,
+  Sheet,
+  AddImage,
+  GenerateImageButton,
+} from "@/components/ui";
+import {
+  useModelImage,
+  MODEL_IMAGE_STORAGE_KEY,
+} from "@/hooks/use-model-image";
+import { Link } from "expo-router";
 import { useState } from "react";
 
 export default function HomeScreen() {
   const [open, setOpen] = useState(false);
   const showDrawer = () => setOpen(true);
 
-  const { modelImage, saveModelImage } = useModelImage();
-
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      aspect: [3, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      saveModelImage(result.assets[0].uri);
-    }
-  };
-
-  const takeImage = async () => {
-    // No permissions request is necessary for launching the image library
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      aspect: [3, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      saveModelImage(result.assets[0].uri);
-    }
-  };
+  const { modelImage, saveModelImage } = useModelImage(MODEL_IMAGE_STORAGE_KEY);
 
   return (
     <>
-      <YStack alignItems="center" justifyContent="center" height="100%">
+      <YStack items="center" justify="center" flex={1}>
         {modelImage ? (
-          <YStack width={"100%"} flex={1} alignItems="center">
+          <YStack width={"100%"} flex={1} items="center" bg="red">
             <Button onPress={showDrawer}>Change picture</Button>
 
             <Image
@@ -57,16 +40,15 @@ export default function HomeScreen() {
               No photo. Please choose your photo from gallery or take one with
               your camera
             </Text>
-            <YStack>
-              <Button onPress={pickImage} background={"$accent"}>
-                Choose photo
-              </Button>
-              <Button onPress={takeImage} background={"$accent"}>
-                Take photo
-              </Button>
-            </YStack>
+            <AddImage onSuccess={saveModelImage} />
           </YStack>
         )}
+        <YStack gap="$2" p="$4" width={"100%"}>
+          <GenerateImageButton />
+          <Link href="/garments-picker" asChild>
+            <Button variant="outlined">Garments Picker</Button>
+          </Link>
+        </YStack>
       </YStack>
       <Sheet
         forceRemoveScrollEnabled={open}
@@ -78,24 +60,14 @@ export default function HomeScreen() {
       >
         <Sheet.Overlay
           animation="lazy"
-          backgroundColor="$shadow6"
+          bg="$shadow6"
           enterStyle={{ opacity: 0 }}
           exitStyle={{ opacity: 0 }}
         />
 
         <Sheet.Handle />
-        <Sheet.Frame
-          padding="$4"
-          justifyContent="center"
-          alignItems="center"
-          gap="$5"
-        >
-          <Button onPress={pickImage} background={"$accent"}>
-            Choose photo
-          </Button>
-          <Button onPress={takeImage} background={"$accent"}>
-            Take photo
-          </Button>
+        <Sheet.Frame p="$4" justify="center" items="center" gap="$5">
+          <AddImage onSuccess={saveModelImage} />
         </Sheet.Frame>
       </Sheet>
     </>

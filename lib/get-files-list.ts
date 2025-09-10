@@ -1,0 +1,18 @@
+import * as FileSystem from "expo-file-system";
+
+export const getFilesList = async (path: string): Promise<string[]> => {
+  try {
+    const dir = `${FileSystem.documentDirectory}${path}`;
+    const directoryInfo = await FileSystem.getInfoAsync(dir);
+
+    if (!directoryInfo.exists) {
+      return [];
+    }
+
+    const files = await FileSystem.readDirectoryAsync(dir);
+    return files;
+  } catch (error) {
+    console.error(`Error reading directory at path ${path}:`, error);
+    return [];
+  }
+};

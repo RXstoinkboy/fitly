@@ -1,47 +1,31 @@
 import * as ImagePicker from "expo-image-picker";
-import { Button, YStack } from "@/components/ui";
+import { Button } from "@/components/ui";
+import { XStack } from "tamagui";
+import { GalleryHorizontalEnd, Camera } from "@tamagui/lucide-icons";
+import { pickImage } from "@/lib/pick-image-from-file-system";
+import { takePhoto } from "@/lib/take-photo";
 
 type AddImageProps = {
   onSuccess: (uri: string) => void;
 };
 
 export const AddImage = ({ onSuccess }: AddImageProps) => {
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      aspect: [3, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      onSuccess(result.assets[0].uri);
-    }
+  const onSelectImage = async () => {
+    const image = await pickImage();
   };
 
-  const takeImage = async () => {
-    // No permissions request is necessary for launching the image library
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      aspect: [3, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      onSuccess(result.assets[0].uri);
-    }
+  const onCamera = async () => {
+    const image = await takePhoto();
   };
 
   return (
-    <YStack>
-      <Button onPress={pickImage} bg={"$accent7"}>
+    <XStack gap={"$4"} p="$4">
+      <Button card icon={GalleryHorizontalEnd} onPress={onSelectImage}>
         Choose photo
       </Button>
-      <Button onPress={takeImage} bg={"$accent7"}>
+      <Button card icon={Camera} onPress={onCamera}>
         Take photo
       </Button>
-    </YStack>
+    </XStack>
   );
 };

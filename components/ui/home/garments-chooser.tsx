@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sheet, Text, XStack, Image, YStack } from "@/components/ui";
+import { Sheet, Text, XStack, Image, YStack } from "tamagui";
 import { Image as ImageIcon } from "@tamagui/lucide-icons";
 import { Pressable } from "react-native";
 

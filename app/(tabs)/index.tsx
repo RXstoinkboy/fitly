@@ -1,22 +1,17 @@
-import {
-  Button,
-  Text,
-  YStack,
-  Image,
-  Sheet,
-  AddImage,
-  GenerateImageButton,
-} from "@/components/ui";
+import { YStack, Image, Sheet, H5, H6 } from "tamagui";
+import { Button, AddImage, GenerateImageButton } from "@/components/ui";
 import {
   useModelImage,
   MODEL_IMAGE_STORAGE_KEY,
 } from "@/hooks/use-model-image";
 import { Link } from "expo-router";
 import { useState } from "react";
+import { useGetModelsList } from "@/queries/image-generation/models/get-models-list";
 
 export default function HomeScreen() {
   const [open, setOpen] = useState(false);
   const showDrawer = () => setOpen(true);
+  const models = useGetModelsList();
 
   const { modelImage, saveModelImage } = useModelImage(MODEL_IMAGE_STORAGE_KEY);
 
@@ -35,20 +30,27 @@ export default function HomeScreen() {
             />
           </YStack>
         ) : (
-          <YStack>
-            <Text>
-              No photo. Please choose your photo from gallery or take one with
-              your camera
-            </Text>
+          <YStack p="$4">
+            <YStack gap="$4">
+              <H5 text={"center"} fontWeight={"bold"}>
+                No photo!
+              </H5>
+              <H6 text={"center"}>
+                Please choose your photo from gallery or take one with your
+                camera
+              </H6>
+            </YStack>
             <AddImage onSuccess={saveModelImage} />
           </YStack>
         )}
-        <YStack gap="$2" p="$4" width={"100%"}>
-          <GenerateImageButton />
-          <Link href="/garments-picker" asChild>
-            <Button variant="outlined">Garments Picker</Button>
-          </Link>
-        </YStack>
+        {models.data?.length && (
+          <YStack gap="$2" p="$4" width={"100%"}>
+            <GenerateImageButton />
+            <Link href="/garments-picker" asChild>
+              <Button variant="outlined">Garments Picker</Button>
+            </Link>
+          </YStack>
+        )}
       </YStack>
       <Sheet
         forceRemoveScrollEnabled={open}

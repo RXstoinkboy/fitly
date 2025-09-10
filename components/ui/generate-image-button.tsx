@@ -1,12 +1,13 @@
 import { Sparkles } from "@tamagui/lucide-icons";
-import { Button, Spinner, Text, Image } from ".";
+import { Spinner, Text, Image } from "tamagui";
+import { Button } from ".";
 import {
   BOTTOM_IMAGE_STORAGE_KEY,
   getModelImage,
   MODEL_IMAGE_STORAGE_KEY,
   TOP_IMAGE_STORAGE_KEY,
 } from "@/hooks/use-model-image";
-import { useGenerateImageMutation } from "@/features/image-generation/mutation";
+import { useGenerateImageMutation } from "@/queries/image-generation/mutation";
 import { fileUriToBase64 } from "@/lib/file-uri-to-base64";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from "expo-file-system";

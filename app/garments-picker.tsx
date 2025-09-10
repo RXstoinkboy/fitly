@@ -5,8 +5,8 @@ import {
   Image,
   Tabs,
   type TabsContentProps,
-  AddImage,
-} from "@/components/ui";
+} from "tamagui";
+import { AddImage } from "@/components/ui";
 import {
   BOTTOM_IMAGE_STORAGE_KEY,
   TOP_IMAGE_STORAGE_KEY,

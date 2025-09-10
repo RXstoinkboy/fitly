@@ -7,7 +7,7 @@ export const saveToFileSystem = async (
 ) => {
   const fileName = name ?? `${Date.now()}.png`;
 
-  const fileUri = `${FileSystem.documentDirectory}/${path}/` + fileName;
+  const fileUri = `${FileSystem.documentDirectory}${path}/` + fileName;
 
   await FileSystem.writeAsStringAsync(fileUri, imageData, {
     encoding: FileSystem.EncodingType.Base64,

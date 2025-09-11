@@ -1,4 +1,3 @@
-import * as ImagePicker from "expo-image-picker";
 import { Button } from "@/components/ui";
 import { XStack } from "tamagui";
 import { GalleryHorizontalEnd, Camera } from "@tamagui/lucide-icons";

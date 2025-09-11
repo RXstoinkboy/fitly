@@ -1,7 +1,10 @@
 export const paths = {
   fileSystem: {
     generated: `generated`,
-    garments: `garments`,
+    garments: {
+      top: "garments/top",
+      bottom: "garments/bottom",
+    },
     models: `models`,
   },
 };

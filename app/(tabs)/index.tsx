@@ -1,8 +1,9 @@
-import { YStack, Image, XStack } from "tamagui";
+import { YStack, Image, XStack, H6 } from "tamagui";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, AddModelPhoto, GenerateImageButton } from "@/components/ui";
 import { Link } from "expo-router";
-import { useGetModelsList } from "@/queries/image-generation/models/get-models-list";
+import { useGetModelsList } from "@/queries/models/get-models-list";
+import { Shirt } from "@tamagui/lucide-icons";
 
 export default function HomeScreen() {
   const models = useGetModelsList();
@@ -29,11 +30,23 @@ export default function HomeScreen() {
               })}
             </XStack>
             {models.data?.length ? (
-              <YStack gap="$2" minW={"100%"} px="$4">
+              <YStack gap="$4" minW={"100%"} px="$4">
                 <GenerateImageButton />
-                <Link href="/garments-picker" asChild>
-                  <Button variant="outlined">Garments Picker</Button>
-                </Link>
+                <YStack gap={"$2"}>
+                  <H6>Select garments</H6>
+                  <XStack gap="$2" width={"100%"} justify={"space-evenly"}>
+                    <Link href="/garments/top" asChild>
+                      <Button flex={1} icon={Shirt} card="outlined">
+                        Top
+                      </Button>
+                    </Link>
+                    <Link href="/garments/bottom" asChild>
+                      <Button flex={1} card="outlined">
+                        Bottom
+                      </Button>
+                    </Link>
+                  </XStack>
+                </YStack>
               </YStack>
             ) : null}
           </YStack>

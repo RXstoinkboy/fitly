@@ -37,11 +37,10 @@ export default function RootLayout() {
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen
-              name="garments-picker"
+              name="garments/[type]"
               options={{
+                title: "Select garment",
                 presentation: "modal",
-                title: "Garments Picker",
-                headerTitle: "Garments Picker",
               }}
             />
             <Stack.Screen name="+not-found" />

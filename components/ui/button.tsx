@@ -35,6 +35,18 @@ export const Button = styled(TamaguiButton, {
           bg: "$accent6",
         },
       },
+      outlined: {
+        height: "auto",
+        p: "$4",
+        flex: 1,
+        fontSize: "$4",
+        bordered: true,
+        flexDirection: "column",
+        scaleIcon: 3,
+        pressStyle: {
+          scale: 0.95,
+        },
+      },
     },
     primary: {
       true: {

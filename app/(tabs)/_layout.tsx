@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
-import { Shirt, Wand2 } from "@tamagui/lucide-icons";
+import { GalleryHorizontalEnd, Wand2 } from "@tamagui/lucide-icons";
 
 export default function TabLayout() {
   return (
@@ -31,7 +31,9 @@ export default function TabLayout() {
           title: "Gallery",
           headerShown: false,
           animation: "shift",
-          tabBarIcon: ({ color, size }) => <Shirt color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <GalleryHorizontalEnd color={color} size={size} />
+          ),
         }}
       />
     </Tabs>

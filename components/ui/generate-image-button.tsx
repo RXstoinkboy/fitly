@@ -1,5 +1,5 @@
 import { Sparkles } from "@tamagui/lucide-icons";
-import { Spinner, Text, Image } from "tamagui";
+import { Spinner } from "tamagui";
 import { Button } from ".";
 import {
   BOTTOM_IMAGE_STORAGE_KEY,
@@ -9,22 +9,14 @@ import {
 } from "@/hooks/use-model-image";
 import { useGenerateImageMutation } from "@/queries/image-generation/mutation";
 import { fileUriToBase64 } from "@/lib/file-uri-to-base64";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as FileSystem from "expo-file-system";
-import { useEffect, useState } from "react";
-
-const getFiles = async () => {
-  const files = await FileSystem.readDirectoryAsync(
-    FileSystem.documentDirectory ?? "",
-  );
-  return files;
-};
+import { saveToFileSystem } from "@/lib/save-to-file-system";
+import { paths } from "@/constants/paths";
 
 export const GenerateImageButton = () => {
-  const { mutate, isPending, data } = useGenerateImageMutation({
+  const { mutate, isPending } = useGenerateImageMutation({
     onSuccess: (data) => {
       if (data) {
-        AsyncStorage.setItem("generatedImage" + data, data);
+        return saveToFileSystem(paths.fileSystem.generated, data);
       }
     },
     onError: (error) => {
@@ -54,37 +46,14 @@ export const GenerateImageButton = () => {
     });
   };
 
-  const [myFiles, setMyFiles] = useState<string[]>([]);
-
-  useEffect(() => {
-    getFiles().then(setMyFiles);
-  }, []);
-
   return (
-    <>
-      {myFiles
-        .filter((file) => file.endsWith(".jpg") || file.endsWith(".png"))
-        .map((file) => (
-          <Image
-            key={file}
-            source={{
-              uri: FileSystem.documentDirectory + file,
-              width: 100,
-              height: 200,
-            }}
-            style={{ width: 100, height: 200 }}
-          />
-        ))}
-      <Text>{typeof data}</Text>
-      <Text>{data}</Text>
-      <Button
-        size={"$6"}
-        bg="$accent7"
-        icon={isPending ? Spinner : Sparkles}
-        onPress={handleGenerate}
-      >
-        {isPending ? null : "Generate"}
-      </Button>
-    </>
+    <Button
+      size="large"
+      primary
+      icon={isPending ? Spinner : Sparkles}
+      onPress={handleGenerate}
+    >
+      {isPending ? null : "Generate"}
+    </Button>
   );
 };

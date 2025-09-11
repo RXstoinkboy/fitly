@@ -1,6 +1,7 @@
 import { styled, Button as TamaguiButton } from "tamagui";
 
 export const Button = styled(TamaguiButton, {
+  animation: "bouncy",
   variants: {
     size: {
       small: {
@@ -29,6 +30,17 @@ export const Button = styled(TamaguiButton, {
         pressStyle: {
           scale: 0.95,
           bg: "$accent6",
+        },
+      },
+    },
+    primary: {
+      true: {
+        rounded: "$radius.12",
+        bg: "$accent7",
+        color: "$color",
+        pressStyle: {
+          bg: "$accent6",
+          scale: 0.95,
         },
       },
     },

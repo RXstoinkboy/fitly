@@ -18,14 +18,14 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          headerShown: false,
           animation: "shift",
         }}
       />
       <Tabs.Screen
         name="gallery"
         options={{
-          title: "Gallery",
+          headerShown: false,
           animation: "shift",
         }}
       />

@@ -7,14 +7,17 @@ export const Button = styled(TamaguiButton, {
       small: {
         height: "$2",
         fontSize: "$2",
+        scaleIcon: 1,
       },
       medium: {
         height: "$4",
         fontSize: "$4",
+        scaleIcon: 1.5,
       },
       large: {
         height: "$6",
         fontSize: "$6",
+        scaleIcon: 2,
       },
     },
     card: {
@@ -35,7 +38,6 @@ export const Button = styled(TamaguiButton, {
     },
     primary: {
       true: {
-        rounded: "$radius.12",
         bg: "$accent7",
         color: "$color",
         pressStyle: {

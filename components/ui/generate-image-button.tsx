@@ -49,6 +49,7 @@ export const GenerateImageButton = () => {
   return (
     <Button
       size="large"
+      rounded={"$radius.12"}
       primary
       icon={isPending ? Spinner : Sparkles}
       onPress={handleGenerate}

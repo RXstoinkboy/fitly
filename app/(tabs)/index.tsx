@@ -4,12 +4,15 @@ import { Button, AddModelPhoto, GenerateImageButton } from "@/components/ui";
 import { Link } from "expo-router";
 import { useGetModelsList } from "@/queries/models/get-models-list";
 import { Shirt } from "@tamagui/lucide-icons";
+import { useContext } from "react";
+import { GarmentsContext } from "@/context/garment-context";
 
 export default function HomeScreen() {
   const models = useGetModelsList();
+  const { bottom, top } = useContext(GarmentsContext);
 
   return (
-    <SafeAreaView flex={1}>
+    <SafeAreaView height={"100%"}>
       <YStack items="center" justify="center" flex={1}>
         {!models.data?.length ? (
           <AddModelPhoto />
@@ -34,14 +37,36 @@ export default function HomeScreen() {
                 <GenerateImageButton />
                 <YStack gap={"$2"}>
                   <H6>Select garments</H6>
-                  <XStack gap="$2" width={"100%"} justify={"space-evenly"}>
+                  <XStack gap="$2" width={"100%"} justify="space-evenly">
                     <Link href="/garments/top" asChild>
-                      <Button flex={1} icon={Shirt} card="outlined">
+                      <Button
+                        flex={1}
+                        icon={() =>
+                          top ? (
+                            <Image
+                              source={{ uri: top, height: 80, width: 80 }}
+                            />
+                          ) : (
+                            <Shirt />
+                          )
+                        }
+                        card="outlined"
+                      >
                         Top
                       </Button>
                     </Link>
                     <Link href="/garments/bottom" asChild>
-                      <Button flex={1} card="outlined">
+                      <Button
+                        flex={1}
+                        icon={() =>
+                          bottom ? (
+                            <Image
+                              source={{ uri: bottom, height: 80, width: 80 }}
+                            />
+                          ) : null
+                        }
+                        card="outlined"
+                      >
                         Bottom
                       </Button>
                     </Link>

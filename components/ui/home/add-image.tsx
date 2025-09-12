@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui";
+import { Button } from "..";
 import { XStack } from "tamagui";
 import { GalleryHorizontalEnd, Camera } from "@tamagui/lucide-icons";
 import { pickImage } from "@/lib/pick-image-from-file-system";

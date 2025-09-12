@@ -1,5 +1,5 @@
 import { Camera } from "@tamagui/lucide-icons";
-import { Button } from ".";
+import { Button } from "./button";
 import { takePhoto } from "@/lib/take-photo";
 
 export const TakePhoto = ({

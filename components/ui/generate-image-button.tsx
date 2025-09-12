@@ -1,6 +1,6 @@
 import { Sparkles } from "@tamagui/lucide-icons";
 import { Spinner } from "tamagui";
-import { Button } from ".";
+import { Button } from "./button";
 import {
   BOTTOM_IMAGE_STORAGE_KEY,
   getModelImage,
@@ -48,7 +48,7 @@ export const GenerateImageButton = () => {
 
   return (
     <Button
-      size="large"
+      buttonSize="lg"
       rounded={"$radius.12"}
       primary
       icon={isPending ? Spinner : Sparkles}

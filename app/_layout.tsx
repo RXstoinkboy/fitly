@@ -12,6 +12,7 @@ import { useColorScheme } from "react-native";
 import { TamaguiProvider } from "tamagui";
 import { tamaguiConfig } from "../tamagui.config";
 import { QueryClientProvider } from "@/lib/query-provider";
+import { GarmentsProvider } from "@/context/garment-context";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -34,18 +35,32 @@ export default function RootLayout() {
         <ThemeProvider
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="garments/[type]"
-              options={{
-                title: "Select garment",
-                presentation: "modal",
-              }}
-            />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+          <GarmentsProvider>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="garments/[type]"
+                options={({ route }) => {
+                  const titleMap = {
+                    top: "Select top garment",
+                    bottom: "Select bottom garment",
+                  };
+
+                  return {
+                    title:
+                      titleMap[
+                        (route.params as { type: string })
+                          ?.type as keyof typeof titleMap
+                      ],
+                    presentation: "modal",
+                    animation: "default",
+                  };
+                }}
+              />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+          </GarmentsProvider>
         </ThemeProvider>
       </TamaguiProvider>
     </QueryClientProvider>

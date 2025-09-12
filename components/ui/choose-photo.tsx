@@ -1,5 +1,5 @@
 import { GalleryHorizontalEnd } from "@tamagui/lucide-icons";
-import { Button } from "./button";
+import { Button } from "@/components/ui/button";
 import { pickImage } from "@/lib/pick-image-from-file-system";
 
 export const ChoosePhoto = ({

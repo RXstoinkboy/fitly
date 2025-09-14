@@ -37,6 +37,8 @@ export function ImagesCarousel({
   const carouselWidth = width;
   const carouselHeight = height;
 
+  console.log("images", images);
+  console.log("images.length", images.length);
   return (
     <Carousel
       data={images}
@@ -46,12 +48,13 @@ export function ImagesCarousel({
       snapEnabled={true}
       width={carouselWidth}
       mode={"parallax"}
+      defaultIndex={images.length - 1}
       modeConfig={{
         parallaxScrollingScale: 0.9,
         parallaxScrollingOffset: 55,
       }}
       renderItem={renderItem()}
-      customConfig={() => ({ viewCount: images.length - 1 })}
+      customConfig={() => ({ viewCount: images.length })}
     />
   );
 }

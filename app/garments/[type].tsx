@@ -7,6 +7,7 @@ import { useAddGarment } from "@/queries/garments/add-garment";
 import { useGetGarmentsList } from "@/queries/garments/get-garments-list";
 import { useContext } from "react";
 import { GarmentsContext } from "@/context/garment-context";
+import { Image } from "tamagui";
 
 export default function GarmentsPicker() {
   const params = useLocalSearchParams();
@@ -37,7 +38,10 @@ export default function GarmentsPicker() {
           {getGarmentsList.data?.length ? (
             <YStack gap={"$2"}>
               {getGarmentsList.data?.map((garment) => (
-                <Paragraph key={garment}>{garment}</Paragraph>
+                <XStack key={garment}>
+                  <Image source={{ uri: garment, width: 50, height: 50 }} />
+                  <Paragraph>{garment}</Paragraph>
+                </XStack>
               ))}
             </YStack>
           ) : (

@@ -16,7 +16,7 @@ export const TakePhoto = ({
   };
 
   return (
-    <Button card icon={Camera} onPress={onCamera}>
+    <Button card={"outlined"} icon={Camera} onPress={onCamera}>
       Take photo
     </Button>
   );

@@ -15,7 +15,11 @@ export const ChoosePhoto = ({
     }
   };
   return (
-    <Button card icon={GalleryHorizontalEnd} onPress={onSelectImage}>
+    <Button
+      card={"outlined"}
+      icon={GalleryHorizontalEnd}
+      onPress={onSelectImage}
+    >
       Choose photo
     </Button>
   );

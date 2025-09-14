@@ -1,4 +1,5 @@
 import { YStack, Image, XStack, H6, View } from "tamagui";
+import { LinearGradient } from "@tamagui/linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Button,
@@ -39,93 +40,69 @@ export default function HomeScreen() {
     console.log("dir", dir);
   };
   return (
-    <SafeAreaView height={"100%"}>
-      {/*<Button onPress={debugFn}>Debug</Button>*/}
-      <YStack flex={1}>
-        {!models.data?.length ? (
-          <AddModelPhoto />
-        ) : (
-          <YStack flex={1} minW={"100%"}>
-            {/*<XStack
-              width={"100%"}
-              flex={1}
-              p="$4"p
-              borderWidth={1}
-              borderStyle="solid"
-              borderColor={"$red8"}
-            >*/}
-            {/*{images.map((model) => {
-                return (
-                  <Image
-                    rounded={"$8"}
-                    key={model}
-                    source={{ uri: model, width: 300, height: 400 }}
-                    objectFit="cover"
-                    height={"100%"}
-                    width={"100%"}
-                  />
-                );
-              })}*/}
-            <View
-              flex={1}
-              onLayout={(event) => {
-                const { height } = event.nativeEvent.layout;
-                setGalleryWrapperHeight(height);
-              }}
-            >
-              <ImagesCarousel height={galleryWrapperHeight} images={images} />
-            </View>
-            {/*</XStack>*/}
-            {models.data?.length ? (
-              <YStack
-                gap="$4"
-                // minW={"100%"}
-                items={"center"}
-                px="$4"
-                borderWidth={1}
-                borderColor={"$accent8"}
+    <LinearGradient colors={["$color5", "$color1"]}>
+      <SafeAreaView height={"100%"} bg="$accent11">
+        {/*<Button onPress={debugFn}>Debug</Button>*/}
+        <YStack flex={1}>
+          {!models.data?.length ? (
+            <AddModelPhoto />
+          ) : (
+            <YStack flex={1} minW={"100%"}>
+              <View
+                flex={1}
+                onLayout={(event) => {
+                  const { height } = event.nativeEvent.layout;
+                  setGalleryWrapperHeight(height);
+                }}
               >
-                <GenerateImageButton />
-                <YStack gap={"$2"}>
-                  <H6>Select garments</H6>
-                  <XStack gap="$2" width={"100%"} justify="space-evenly">
-                    <Link href="/garments/top" asChild>
-                      <Button
-                        flex={1}
-                        icon={() =>
-                          top ? (
-                            <Image
-                              source={{ uri: top, height: 80, width: 80 }}
-                            />
-                          ) : (
-                            <Shirt />
-                          )
-                        }
-                      >
-                        Top
-                      </Button>
-                    </Link>
-                    <Link href="/garments/bottom" asChild>
-                      <Button
-                        flex={1}
-                        icon={() =>
-                          bottom ? (
-                            <Image
-                              source={{ uri: bottom, height: 80, width: 80 }}
-                            />
-                          ) : null
-                        }
-                      >
-                        Bottom
-                      </Button>
-                    </Link>
-                  </XStack>
+                <ImagesCarousel height={galleryWrapperHeight} images={images} />
+              </View>
+              {models.data?.length ? (
+                <YStack gap="$4" px="$6">
+                  <GenerateImageButton />
+                  <YStack gap={"$2"}>
+                    <H6 px={"$2"}>Select garments</H6>
+                    <XStack gap="$2" width={"100%"} justify="center">
+                      <Link href="/garments/top" asChild>
+                        <Button
+                          card="outlined"
+                          flex={1}
+                          icon={() =>
+                            top ? (
+                              <Image
+                                source={{ uri: top, height: 80, width: 80 }}
+                              />
+                            ) : (
+                              <Shirt />
+                            )
+                          }
+                        >
+                          Top
+                        </Button>
+                      </Link>
+                      <Link href="/garments/bottom" asChild>
+                        <Button
+                          card="outlined"
+                          flex={1}
+                          icon={() =>
+                            bottom ? (
+                              <Image
+                                source={{ uri: bottom, height: 80, width: 80 }}
+                              />
+                            ) : null
+                          }
+                        >
+                          Bottom
+                        </Button>
+                      </Link>
+                    </XStack>
+                  </YStack>
                 </YStack>
-              </YStack>
-            ) : null}
-          </YStack>
-        )}
-      </YStack>
-    </SafeAreaView>
+              ) : null}
+            </YStack>
+          )}
+        </YStack>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }

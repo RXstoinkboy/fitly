@@ -5,13 +5,22 @@ export const saveToFileSystem = async (
   imageData: string,
   name?: string,
 ) => {
-  const fileName = name ?? `${Date.now()}.png`;
+  try {
+    const dir = `${FileSystem.documentDirectory}${path}/`;
+    const dirInfo = await FileSystem.getInfoAsync(dir);
+    if (!dirInfo.exists) {
+      await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
+    }
 
-  const fileUri = `${FileSystem.documentDirectory}${path}/` + fileName;
+    const fileName = name ?? `${Date.now()}.png`;
+    const fileUri = dir + fileName;
 
-  await FileSystem.writeAsStringAsync(fileUri, imageData, {
-    encoding: FileSystem.EncodingType.Base64,
-  });
+    await FileSystem.writeAsStringAsync(fileUri, imageData, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
 
-  return fileUri;
+    return fileUri;
+  } catch (error) {
+    console.error("Error saving to file system:", error);
+  }
 };

@@ -1,25 +1,60 @@
-import { YStack, Image, XStack, H6 } from "tamagui";
+import { YStack, Image, XStack, H6, View } from "tamagui";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, AddModelPhoto, GenerateImageButton } from "@/components/ui";
+import {
+  Button,
+  AddModelPhoto,
+  GenerateImageButton,
+  ImagesCarousel,
+} from "@/components/ui";
 import { Link } from "expo-router";
 import { useGetModelsList } from "@/queries/models/get-models-list";
 import { Shirt } from "@tamagui/lucide-icons";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GarmentsContext } from "@/context/garment-context";
+import { useGetGeneratedImagesList } from "@/queries/image-generation/get-generated-images-list";
+import * as FileSystem from "expo-file-system";
+import { paths } from "@/constants/paths";
 
 export default function HomeScreen() {
   const models = useGetModelsList();
+  const generatedImages = useGetGeneratedImagesList();
   const { bottom, top } = useContext(GarmentsContext);
+  const images = [...(models.data ?? []), ...(generatedImages.data ?? [])];
+  const [galleryWrapperHeight, setGalleryWrapperHeight] = useState(0);
 
+  console.log("generatedImages", generatedImages.data);
+
+  const debugFn = async () => {
+    console.log(
+      "debugFn called",
+      `${FileSystem.documentDirectory}${paths.fileSystem.generated}`,
+    );
+    const info = await FileSystem.getInfoAsync(
+      `${FileSystem.documentDirectory}${paths.fileSystem.generated}`,
+    );
+    console.log("info", info);
+    const dir = await FileSystem.readDirectoryAsync(
+      `${FileSystem.documentDirectory}${paths.fileSystem.generated}`,
+    );
+    console.log("dir", dir);
+  };
   return (
     <SafeAreaView height={"100%"}>
-      <YStack items="center" justify="center" flex={1}>
+      {/*<Button onPress={debugFn}>Debug</Button>*/}
+      <YStack flex={1}>
         {!models.data?.length ? (
           <AddModelPhoto />
         ) : (
-          <YStack flex={1}>
-            <XStack width={"100%"} flex={1} justify="center" p="$4">
-              {models.data.map((model) => {
+          <YStack flex={1} minW={"100%"}>
+            {/*<XStack
+              width={"100%"}
+              flex={1}
+              p="$4"p
+              borderWidth={1}
+              borderStyle="solid"
+              borderColor={"$red8"}
+            >*/}
+            {/*{images.map((model) => {
                 return (
                   <Image
                     rounded={"$8"}
@@ -30,10 +65,26 @@ export default function HomeScreen() {
                     width={"100%"}
                   />
                 );
-              })}
-            </XStack>
+              })}*/}
+            <View
+              flex={1}
+              onLayout={(event) => {
+                const { height } = event.nativeEvent.layout;
+                setGalleryWrapperHeight(height);
+              }}
+            >
+              <ImagesCarousel height={galleryWrapperHeight} images={images} />
+            </View>
+            {/*</XStack>*/}
             {models.data?.length ? (
-              <YStack gap="$4" minW={"100%"} px="$4">
+              <YStack
+                gap="$4"
+                // minW={"100%"}
+                items={"center"}
+                px="$4"
+                borderWidth={1}
+                borderColor={"$accent8"}
+              >
                 <GenerateImageButton />
                 <YStack gap={"$2"}>
                   <H6>Select garments</H6>
@@ -50,7 +101,6 @@ export default function HomeScreen() {
                             <Shirt />
                           )
                         }
-                        card="outlined"
                       >
                         Top
                       </Button>
@@ -65,7 +115,6 @@ export default function HomeScreen() {
                             />
                           ) : null
                         }
-                        card="outlined"
                       >
                         Bottom
                       </Button>

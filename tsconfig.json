@@ -2,13 +2,13 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "types": ["tamagui"],
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
+    "tamagui.config.ts",
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",

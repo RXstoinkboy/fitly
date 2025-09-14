@@ -13,7 +13,8 @@ export const useAddGarment = ({ type }: { type: string }) => {
       const filename = imagePath.split("/").pop();
       return copyFile(
         imagePath,
-        `${FileSystem.documentDirectory}${paths.fileSystem.garments[type as keyof typeof paths.fileSystem.garments]}/${filename}`,
+        `${FileSystem.documentDirectory}${paths.fileSystem.garments[type as keyof typeof paths.fileSystem.garments]}/`,
+        filename ?? "",
       );
     },
     onSuccess: () => {

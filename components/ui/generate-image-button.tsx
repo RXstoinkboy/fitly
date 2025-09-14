@@ -1,18 +1,17 @@
 import { Sparkles } from "@tamagui/lucide-icons";
 import { Spinner } from "tamagui";
 import { Button } from "./button";
-import {
-  BOTTOM_IMAGE_STORAGE_KEY,
-  getModelImage,
-  MODEL_IMAGE_STORAGE_KEY,
-  TOP_IMAGE_STORAGE_KEY,
-} from "@/hooks/use-model-image";
 import { useGenerateImageMutation } from "@/queries/image-generation/mutation";
 import { fileUriToBase64 } from "@/lib/file-uri-to-base64";
 import { saveToFileSystem } from "@/lib/save-to-file-system";
 import { paths } from "@/constants/paths";
+import { useContext } from "react";
+import { GarmentsContext } from "@/context/garment-context";
+import { useGetModelsList } from "@/queries/models/get-models-list";
 
 export const GenerateImageButton = () => {
+  const { bottom, top } = useContext(GarmentsContext);
+  const models = useGetModelsList();
   const { mutate, isPending } = useGenerateImageMutation({
     onSuccess: (data) => {
       if (data) {
@@ -25,18 +24,12 @@ export const GenerateImageButton = () => {
   });
 
   const handleGenerate = async () => {
-    const [modelImage, topImage, bottomImage] = await Promise.all([
-      getModelImage(MODEL_IMAGE_STORAGE_KEY)(),
-      getModelImage(TOP_IMAGE_STORAGE_KEY)(),
-      getModelImage(BOTTOM_IMAGE_STORAGE_KEY)(),
-    ]);
-
     // Convert URIs to base64 strings
     const [modelImageBase64, garmentTopImageBase64, garmentBottomImageBase64] =
       await Promise.all([
-        fileUriToBase64(modelImage),
-        fileUriToBase64(topImage),
-        fileUriToBase64(bottomImage),
+        fileUriToBase64(models.data?.[0]),
+        fileUriToBase64(top),
+        fileUriToBase64(bottom),
       ]);
 
     mutate({
@@ -51,6 +44,7 @@ export const GenerateImageButton = () => {
       buttonSize="lg"
       rounded={"$radius.12"}
       primary
+      width={"100%"}
       icon={isPending ? Spinner : Sparkles}
       onPress={handleGenerate}
     >

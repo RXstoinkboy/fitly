@@ -13,7 +13,8 @@ export const useAddModel = () => {
       const filename = imagePath.split("/").pop();
       return copyFile(
         imagePath,
-        `${FileSystem.documentDirectory}${paths.fileSystem.models}/${filename}`,
+        `${FileSystem.documentDirectory}${paths.fileSystem.models}/`,
+        filename ?? "",
       );
     },
     onSuccess: () => {

@@ -97,19 +97,26 @@ export async function generateImage({
 
   const prompt = [{ text: textPrompt }, ...imageParts];
 
+  console.log("final prompt", prompt);
   try {
+    console.log("start request");
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-image-preview",
       contents: prompt,
     });
 
     const parts = response.candidates?.[0].content?.parts ?? [];
+    console.log("end request");
 
     for (const part of parts) {
       if (part.inlineData) {
         const imageData = part.inlineData.data;
 
+        console.log("before 1 saving to file system", part);
+        console.log("before 2 saving to file system", parts);
+
         if (imageData) {
+          console.log("saving to file system", imageData);
           return saveToFileSystem(paths.fileSystem.generated, imageData);
         }
       }

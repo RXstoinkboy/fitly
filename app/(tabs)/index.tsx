@@ -40,7 +40,7 @@ export default function HomeScreen() {
     console.log("dir", dir);
   };
   return (
-    <LinearGradient colors={["$color5", "$color1"]}>
+    <LinearGradient colors={["$color2", "$color6"]} start={{ x: 0.2, y: 0.1 }} end={{ x: 0.8, y: .8 }}>
       <SafeAreaView height={"100%"} bg="$accent11">
         {/*<Button onPress={debugFn}>Debug</Button>*/}
         <YStack flex={1}>

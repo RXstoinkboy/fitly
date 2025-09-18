@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Image, View } from "tamagui";
-import type { CarouselRenderItem, TAnimationStyle } from "react-native-reanimated-carousel";
+import type { TAnimationStyle } from "react-native-reanimated-carousel";
 import Carousel from "react-native-reanimated-carousel";
 import Animated, { useSharedValue, interpolate, Extrapolation, FadeInDown } from "react-native-reanimated";
 import { Dimensions } from "react-native";
@@ -8,35 +8,23 @@ import { Dimensions } from "react-native";
 const SlideItem = ({ imageUri }: { imageUri: string }) => {
   return (
     <Animated.View
-      entering={FadeInDown.duration(300)}
+      entering={FadeInDown.duration(1000)}
       style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
     >
       <View
-        style={{
-          width: '75%',
-          height: "90%",
-          borderRadius: 20,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "white",
-
-          shadowColor: "#000000d1",
-          shadowOffset: {
-            width: 0,
-            height: 10,
-          },
-          shadowOpacity: 0.51,
-          shadowRadius: 20,
-          elevation: 20,
-        }}
+        rounded={"$7"}
+        width={'80%'}
+        height="90%"
+        justify={"center"}
+        items={"center"}
+        bg='$color6'
+        elevationAndroid={'$6'}
       >
         <Image
           source={{ uri: imageUri, width: 300, height: 400 }}
-          style={{
-            width: '100%',
-            height: '100%',
-            borderRadius: 20,
-          }}
+          width={'100%'}
+          height={'100%'}
+          rounded={"$7"}
         />
       </View>
     </Animated.View>
@@ -61,9 +49,9 @@ export function ImagesCarousel({
       "worklet";
       const translateY = interpolate(value, [0, 1], [0, -30]);
       const translateX =
-        interpolate(value, [-1, 0], [PAGE_WIDTH, 0], Extrapolation.CLAMP) * directionAnimVal.value;
+        interpolate(value, [-1, 0], [-PAGE_WIDTH, 0], Extrapolation.CLAMP);
       const rotateZ =
-        interpolate(value, [-1, 0], [15, 0], Extrapolation.CLAMP) * directionAnimVal.value;
+        interpolate(value, [-1, 0], [-15, 0], Extrapolation.CLAMP);
 
       // Ensure zIndex is always an integer
       const zIndex = Math.round(

@@ -15,14 +15,14 @@ export const Button = styled(TamaguiButton, {
       },
       lg: {
         height: "$6",
-        fontSize: "$6",
-        scaleIcon: 1.5,
+        fontSize: "$5",
+        scaleIcon: 1.4,
       },
     },
     primary: {
       true: {
-        bg: "$accent5",
-        color: "$color12",
+        bg: "$color12",
+        color: "$color1",
         pressStyle: {
           bg: "$accent6",
           scale: 0.95,
@@ -46,13 +46,10 @@ export const Button = styled(TamaguiButton, {
       },
       outlined: {
         height: "$10",
-        width: "$10",
-        maxW: "$10",
+        width: "$6",
         p: "$4",
-        flex: 1,
         fontSize: "$4",
-        bg: "$accent5",
-        bordered: true,
+        borderColor: '$color10',
         flexDirection: "column",
         scaleIcon: 1,
         bg: "transparent",

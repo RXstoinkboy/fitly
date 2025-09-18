@@ -9,7 +9,7 @@ import {
 } from "@/components/ui";
 import { Link } from "expo-router";
 import { useGetModelsList } from "@/queries/models/get-models-list";
-import { Shirt } from "@tamagui/lucide-icons";
+import { Share2, Shirt } from "@tamagui/lucide-icons";
 import { useContext, useState } from "react";
 import { GarmentsContext } from "@/context/garment-context";
 import { useGetGeneratedImagesList } from "@/queries/image-generation/get-generated-images-list";
@@ -59,43 +59,49 @@ export default function HomeScreen() {
               </View>
               {models.data?.length ? (
                 <YStack gap="$4" px="$6">
-                  <GenerateImageButton />
-                  <YStack gap={"$2"}>
-                    <H6 px={"$2"}>Select garments</H6>
-                    <XStack gap="$2" width={"100%"} justify="center">
-                      <Link href="/garments/top" asChild>
-                        <Button
-                          card="outlined"
-                          flex={1}
-                          icon={() =>
-                            top ? (
-                              <Image
-                                source={{ uri: top, height: 80, width: 80 }}
-                              />
-                            ) : (
-                              <Shirt />
-                            )
-                          }
-                        >
-                          Top
-                        </Button>
-                      </Link>
-                      <Link href="/garments/bottom" asChild>
-                        <Button
-                          card="outlined"
-                          flex={1}
-                          icon={() =>
-                            bottom ? (
-                              <Image
-                                source={{ uri: bottom, height: 80, width: 80 }}
-                              />
-                            ) : null
-                          }
-                        >
-                          Bottom
-                        </Button>
-                      </Link>
+                  <YStack gap={"$4"}>
+                    <YStack gap={"$2"}>
+                      <H6 px={"$2"}>Let's try something on</H6>
+                      <XStack gap="$2" width={"100%"} justify="center">
+                        <Link href="/garments/top" asChild>
+                          <Button
+                            card="outlined"
+                            flex={1}
+                            icon={() =>
+                              top ? (
+                                <Image
+                                  source={{ uri: top, height: 80, width: 80 }}
+                                />
+                              ) : (
+                                <Shirt />
+                              )
+                            }
+                          >
+                            Top
+                          </Button>
+                        </Link>
+                        <Link href="/garments/bottom" asChild>
+                          <Button
+                            card="outlined"
+                            flex={1}
+                            icon={() =>
+                              bottom ? (
+                                <Image
+                                  source={{ uri: bottom, height: 80, width: 80 }}
+                                />
+                              ) : null
+                            }
+                          >
+                            Bottom
+                          </Button>
+                        </Link>
+                      </XStack>
+                    </YStack>
+                    <XStack justify={'space-evenly'} gap={'$4'}>
+
+                      <GenerateImageButton />
                     </XStack>
+
                   </YStack>
                 </YStack>
               ) : null}

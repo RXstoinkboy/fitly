@@ -4,6 +4,8 @@ import type { TAnimationStyle } from "react-native-reanimated-carousel";
 import Carousel from "react-native-reanimated-carousel";
 import Animated, { useSharedValue, interpolate, Extrapolation, FadeInDown } from "react-native-reanimated";
 import { Dimensions } from "react-native";
+import { Share2 } from "@tamagui/lucide-icons";
+import { Button } from "./button";
 
 const SlideItem = ({ imageUri }: { imageUri: string }) => {
   return (
@@ -19,6 +21,7 @@ const SlideItem = ({ imageUri }: { imageUri: string }) => {
         items={"center"}
         bg='$color6'
         elevationAndroid={'$6'}
+        position="relative"
       >
         <Image
           source={{ uri: imageUri, width: 300, height: 400 }}
@@ -26,6 +29,14 @@ const SlideItem = ({ imageUri }: { imageUri: string }) => {
           height={'100%'}
           rounded={"$7"}
         />
+        <Button
+          position="absolute"
+          b={10}
+          r={10}
+          themeInverse
+          elevation={"$1"}
+          rounded={"$radius.12"}
+          icon={Share2} />
       </View>
     </Animated.View>
   );
@@ -47,7 +58,7 @@ export function ImagesCarousel({
   const animationStyle: TAnimationStyle = React.useCallback(
     (value: number) => {
       "worklet";
-      const translateY = interpolate(value, [0, 1], [0, -30]);
+      const translateY = interpolate(value, [0, 1], [0, -33]);
       const translateX =
         interpolate(value, [-1, 0], [-PAGE_WIDTH, 0], Extrapolation.CLAMP);
       const rotateZ =
@@ -95,7 +106,6 @@ export function ImagesCarousel({
             directionAnimVal.value = Math.sign(e.translationX);
           });
         }}
-        // fixedDirection="negative"
         renderItem={({ index, item }) => <SlideItem key={index} imageUri={item} />}
         customAnimation={animationStyle}
         windowSize={5}

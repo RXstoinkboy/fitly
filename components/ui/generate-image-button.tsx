@@ -1,4 +1,4 @@
-import { Sparkles } from "@tamagui/lucide-icons";
+import { Wand2 } from "@tamagui/lucide-icons";
 import { Spinner } from "tamagui";
 import { Button } from "./button";
 import { useGenerateImageMutation } from "@/queries/image-generation/mutation";
@@ -72,15 +72,15 @@ export const GenerateImageButton = () => {
     <Button
       buttonSize="lg"
       rounded={"$radius.12"}
+      flex={1}
       primary
-      icon={isPending ? Spinner : Sparkles}
+      icon={isPending ? Spinner : Wand2}
       onPress={handleGenerate}
       elevation={"$2"}
-      shadowColor={"$shadowColor"}
     >
       {isPending
         ? loadingStates[Math.floor(Math.random() * loadingStates.length)]
-        : "Generate"}
+        : "Create"}
     </Button>
   );
 };

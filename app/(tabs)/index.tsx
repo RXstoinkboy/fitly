@@ -55,7 +55,7 @@ export default function HomeScreen() {
                   setGalleryWrapperHeight(height);
                 }}
               >
-                <ImagesCarousel height={galleryWrapperHeight} images={images} />
+                <ImagesCarousel height={galleryWrapperHeight ?? 0} images={images} />
               </View>
               {models.data?.length ? (
                 <YStack gap="$4" px="$6">

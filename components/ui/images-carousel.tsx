@@ -3,6 +3,7 @@ import { Image, View } from "tamagui";
 import type { CarouselRenderItem, TAnimationStyle } from "react-native-reanimated-carousel";
 import Carousel from "react-native-reanimated-carousel";
 import Animated, { useSharedValue, interpolate, Extrapolation, FadeInDown } from "react-native-reanimated";
+import { Dimensions } from "react-native";
 
 const SlideItem = ({ imageUri }: { imageUri: string }) => {
   return (
@@ -14,8 +15,6 @@ const SlideItem = ({ imageUri }: { imageUri: string }) => {
         style={{
           width: '75%',
           height: "90%",
-          borderWidth: 1,
-          borderColor: "black",
           borderRadius: 20,
           justifyContent: "center",
           alignItems: "center",
@@ -44,13 +43,6 @@ const SlideItem = ({ imageUri }: { imageUri: string }) => {
   );
 };
 
-export const renderItem =
-  (): CarouselRenderItem<any> =>
-    // eslint-disable-next-line react/display-name
-    ({ index, item }: { index: number; item: string }) => (
-      <SlideItem key={index} imageUri={item} />
-    );
-
 export function ImagesCarousel({
   height,
   images,
@@ -58,7 +50,8 @@ export function ImagesCarousel({
   height: number;
   images: string[];
 }) {
-  const PAGE_WIDTH = height * 0.75; // Adjust the multiplier to change the width relative to height
+  const { width } = Dimensions.get("window");
+  const PAGE_WIDTH = (height * 0.75) || width; // Adjust the multiplier to change the width relative to height
   const PAGE_HEIGHT = height;
 
   const directionAnimVal = useSharedValue(0);
@@ -66,7 +59,7 @@ export function ImagesCarousel({
   const animationStyle: TAnimationStyle = React.useCallback(
     (value: number) => {
       "worklet";
-      const translateY = interpolate(value, [0, 1], [0, -22]);
+      const translateY = interpolate(value, [0, 1], [0, -30]);
       const translateX =
         interpolate(value, [-1, 0], [PAGE_WIDTH, 0], Extrapolation.CLAMP) * directionAnimVal.value;
       const rotateZ =
@@ -82,7 +75,7 @@ export function ImagesCarousel({
         )
       );
 
-      const scale = interpolate(value, [0, 1], [1, 0.95]);
+      const scale = interpolate(value, [0, 1], [1, 0.92]);
       const opacity = interpolate(value, [-1, -0.8, 0, 1], [0, 0.9, 1, 0.85], Extrapolation.EXTEND);
 
       return {
@@ -114,7 +107,7 @@ export function ImagesCarousel({
             directionAnimVal.value = Math.sign(e.translationX);
           });
         }}
-        fixedDirection="negative"
+        // fixedDirection="negative"
         renderItem={({ index, item }) => <SlideItem key={index} imageUri={item} />}
         customAnimation={animationStyle}
         windowSize={5}

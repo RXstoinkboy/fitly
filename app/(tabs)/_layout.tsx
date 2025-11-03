@@ -4,6 +4,7 @@ import { Platform } from "react-native";
 import { GalleryHorizontalEnd, Wand2 } from "@tamagui/lucide-icons";
 
 export default function TabLayout() {
+  console.log('tabs laout render');
   return (
     <Tabs
       screenOptions={{

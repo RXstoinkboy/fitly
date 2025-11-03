@@ -4,7 +4,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
@@ -13,6 +13,25 @@ import { TamaguiProvider } from "tamagui";
 import { tamaguiConfig } from "../tamagui.config";
 import { QueryClientProvider } from "@/lib/query-provider";
 import { GarmentsProvider } from "@/context/garment-context";
+import { useGetStatus } from "@/queries/onboarding/get-status";
+import { OnboardingStatus } from "@/lib/onboarding/types";
+
+const RootContent = () => {
+  const { data } = useGetStatus();
+  const isOnboarded = data === OnboardingStatus.Completed;
+
+  return <Stack screenOptions={{ headerShown: false }}>
+    <Stack.Protected guard={!isOnboarded}>
+      <Stack.Screen name="onboarding/index" options={{ headerShown: false }} />
+    </Stack.Protected>
+    <Stack.Protected guard={isOnboarded}>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    </Stack.Protected>
+    <Stack.Screen name="+not-found" />
+    {/* clothes selection drawer */}
+    {/* modal with image zoom -n */}
+  </Stack>
+}
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -36,29 +55,7 @@ export default function RootLayout() {
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
           <GarmentsProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="garments/[type]"
-                options={({ route }) => {
-                  const titleMap = {
-                    top: "Select top garment",
-                    bottom: "Select bottom garment",
-                  };
-
-                  return {
-                    title:
-                      titleMap[
-                        (route.params as { type: string })
-                          ?.type as keyof typeof titleMap
-                      ],
-                    presentation: "modal",
-                    animation: "default",
-                  };
-                }}
-              />
-              <Stack.Screen name="+not-found" />
-            </Stack>
+            <RootContent />
             <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
           </GarmentsProvider>
         </ThemeProvider>

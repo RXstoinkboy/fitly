@@ -4,10 +4,9 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Link, LinkProps, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
-import { ArrowLeft, ArrowRight } from '@tamagui/lucide-icons'
 
 import { useColorScheme } from "react-native";
 import { TamaguiProvider } from "tamagui";
@@ -17,58 +16,9 @@ import { GarmentsProvider } from "@/context/garment-context";
 import { useGetStatus } from "@/queries/onboarding/get-status";
 import { OnboardingStatus, OnboardingStep } from "@/lib/onboarding/types";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { Text } from "tamagui";
-import { ComponentProps, ReactNode } from "react";
-import { Button } from "@/components/v2/ui/button";
-import { useUpdateStatus } from "@/queries/onboarding/update-status";
-import { useUpdateStep } from "@/queries/onboarding/update-step";
+import { ComponentProps } from "react";
 import { useGetStep } from "@/queries/onboarding/get-step";
-
-type NextProps = {
-  children?: ReactNode,
-  href?: LinkProps['href'],
-  step?: OnboardingStep,
-}
-
-// TODO: this will go to /components
-const Next = ({
-  children = 'Next',
-  ...props
-}: NextProps) => {
-  const updateStatus = useUpdateStatus();
-  const updateStep = useUpdateStep();
-
-  const onNavigate = () => {
-    if (!props.step) {
-      return;
-    }
-    if (props.step === OnboardingStep.Finish) {
-      updateStatus.mutate(OnboardingStatus.Completed);
-    }
-
-    updateStep.mutate(props.step);
-  }
-
-  return (<Link href={props.href ? props.href : `/onboarding/${props.step ?? OnboardingStep.Welcome}`} asChild>
-    <Button iconAfter={<ArrowRight />} ghost paddingSize={0} onPress={onNavigate}>
-      <Text>{children}</Text>
-    </Button>
-  </Link>)
-}
-
-const Back = ({
-  step
-}: {
-  step: OnboardingStep,
-}) => {
-  const updateStep = useUpdateStep();
-
-  return (<Link href={`/onboarding/${step}`} asChild>
-    <Button icon={<ArrowLeft />} ghost paddingSize={0} onPress={() => { updateStep.mutate(step); }}>
-      <Text>Back</Text>
-    </Button>
-  </Link>)
-}
+import { Back, Next } from "@/components/onboarding/navigation";
 
 const stackScreenBaseOptions: ComponentProps<typeof Stack.Screen>['options'] = {
   headerTitleAlign: 'center',

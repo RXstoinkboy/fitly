@@ -6,5 +6,13 @@ module.exports = defineConfig([
   expoConfig,
   {
     ignores: ['dist/*'],
+    plugins: ['prettier'],
+    rules: {
+      'prettier/prettier': 'error',
+    },
+    parserOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+    },
   },
 ]);

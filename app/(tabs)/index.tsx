@@ -9,12 +9,15 @@ import {
 } from "@/components/ui";
 import { Link } from "expo-router";
 import { useGetModelsList } from "@/queries/models/get-models-list";
-import { Share2, Shirt } from "@tamagui/lucide-icons";
+import { Shirt } from "@tamagui/lucide-icons";
 import { useContext, useState } from "react";
 import { GarmentsContext } from "@/context/garment-context";
 import { useGetGeneratedImagesList } from "@/queries/image-generation/get-generated-images-list";
 import * as FileSystem from "expo-file-system";
 import { paths } from "@/constants/paths";
+import { useUpdateStatus } from "@/queries/onboarding/update-status";
+import { useUpdateStep } from "@/queries/onboarding/update-step";
+import { OnboardingStatus, OnboardingStep } from "@/lib/onboarding/types";
 
 export default function HomeScreen() {
   const models = useGetModelsList();
@@ -39,10 +42,18 @@ export default function HomeScreen() {
     );
     console.log("dir", dir);
   };
+  const updateStatus = useUpdateStatus();
+  const updateStep = useUpdateStep();
+
+  const reset = () => {
+    updateStatus.mutate(OnboardingStatus.InProgress);
+    updateStep.mutate(OnboardingStep.Welcome);
+  }
   return (
     <LinearGradient colors={["$color2", "$color6"]} start={{ x: 0.2, y: 0.1 }} end={{ x: 0.8, y: .8 }}>
       <SafeAreaView height={"100%"} bg="$accent11">
         {/*<Button onPress={debugFn}>Debug</Button>*/}
+        {/* <Button onPress={reset}>Reset storage</Button> */}
         <YStack flex={1}>
           {!models.data?.length ? (
             <AddModelPhoto />

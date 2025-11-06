@@ -1,8 +1,8 @@
 export enum OnboardingStep {
-    Welcome = "WELCOME",
-    SelectUserPhoto = "SELECT_USER_PHOTO",
-    SelectGarments = "SELECT_GARMENTS",
-    Finish = "FINISH",
+    Welcome = "welcome",
+    SelectUserPhoto = "select-user-photo",
+    SelectGarments = "select-garments",
+    Finish = "finish",
 }
 
 export enum OnboardingStatus {

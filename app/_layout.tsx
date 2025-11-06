@@ -17,7 +17,6 @@ import { useGetStatus } from "@/queries/onboarding/get-status";
 import { OnboardingStatus, OnboardingStep } from "@/lib/onboarding/types";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ComponentProps } from "react";
-import { useGetStep } from "@/queries/onboarding/get-step";
 import { Back, Next } from "@/components/onboarding/navigation";
 
 const stackScreenBaseOptions: ComponentProps<typeof Stack.Screen>['options'] = {
@@ -27,7 +26,6 @@ const stackScreenBaseOptions: ComponentProps<typeof Stack.Screen>['options'] = {
 
 const RootContent = () => {
   const { data } = useGetStatus();
-  const step = useGetStep();
   const isOnboarded = data === OnboardingStatus.Completed;
 
   return <Stack screenOptions={
@@ -38,30 +36,21 @@ const RootContent = () => {
         title: 'Welcome!',
         headerRight: () => <Next step={OnboardingStep.SelectUserPhoto} />,
       }}
-        initialParams={{
-          step: 1
-        }}
       />
       <Stack.Screen name="onboarding/select-user-photo" options={{
         title: 'Prepare photo',
         headerRight: () => <Next step={OnboardingStep.SelectGarments} />,
         headerLeft: () => <Back step={OnboardingStep.Welcome} />,
-      }} initialParams={{
-        step: 2
       }} />
       <Stack.Screen name="onboarding/select-garments" options={{
         title: "Photo is ready",
         headerRight: () => <Next step={OnboardingStep.Finish} />,
         headerLeft: () => <Back step={OnboardingStep.SelectUserPhoto} />,
-      }} initialParams={{
-        step: 3
       }} />
       <Stack.Screen name="onboarding/finish" options={{
         title: 'Congratulations!',
         headerRight: () => <Next href={'/(tabs)'}>Done!</Next>,
         headerLeft: () => <Back step={OnboardingStep.SelectGarments} />,
-      }} initialParams={{
-        step: 4
       }} />
     </Stack.Protected>
     <Stack.Protected guard={isOnboarded}>

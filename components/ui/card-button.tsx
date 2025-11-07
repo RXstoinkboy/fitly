@@ -1,5 +1,3 @@
 export const CardButton = () => {
-    <Button>
-
-    </Button>
-}
+  <Button></Button>;
+};

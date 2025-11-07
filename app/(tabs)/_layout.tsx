@@ -1,7 +1,7 @@
-import { Tabs } from "expo-router";
-import React from "react";
-import { Platform } from "react-native";
-import { GalleryHorizontalEnd, Wand2 } from "@tamagui/lucide-icons";
+import { Tabs } from 'expo-router';
+import React from 'react';
+import { Platform } from 'react-native';
+import { GalleryHorizontalEnd, Wand2 } from '@tamagui/lucide-icons';
 
 export default function TabLayout() {
   return (
@@ -10,30 +10,27 @@ export default function TabLayout() {
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
-            position: "absolute",
+            position: 'absolute',
           },
           default: {},
         }),
-      }}
-    >
+      }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: "Generate",
+          title: 'Generate',
           headerShown: false,
-          animation: "shift",
+          animation: 'shift',
           tabBarIcon: ({ color, size }) => <Wand2 color={color} size={size} />,
         }}
       />
       <Tabs.Screen
         name="gallery"
         options={{
-          title: "Gallery",
+          title: 'Gallery',
           headerShown: false,
-          animation: "shift",
-          tabBarIcon: ({ color, size }) => (
-            <GalleryHorizontalEnd color={color} size={size} />
-          ),
+          animation: 'shift',
+          tabBarIcon: ({ color, size }) => <GalleryHorizontalEnd color={color} size={size} />,
         }}
       />
     </Tabs>

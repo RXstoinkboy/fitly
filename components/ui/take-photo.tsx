@@ -1,12 +1,8 @@
-import { Camera } from "@tamagui/lucide-icons";
-import { Button } from "./button";
-import { takePhoto } from "@/lib/take-photo";
+import { Camera } from '@tamagui/lucide-icons';
+import { Button } from './button';
+import { takePhoto } from '@/lib/take-photo';
 
-export const TakePhoto = ({
-  onSuccess,
-}: {
-  onSuccess?: (photo: string) => void;
-}) => {
+export const TakePhoto = ({ onSuccess }: { onSuccess?: (photo: string) => void }) => {
   const onCamera = async () => {
     const image = await takePhoto();
 
@@ -16,7 +12,7 @@ export const TakePhoto = ({
   };
 
   return (
-    <Button card={"outlined"} icon={Camera} onPress={onCamera}>
+    <Button card={'outlined'} icon={Camera} onPress={onCamera}>
       Take photo
     </Button>
   );

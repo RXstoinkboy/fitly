@@ -1,2 +1,2 @@
-export * from './back'
-export * from './next'
+export * from './back';
+export * from './next';

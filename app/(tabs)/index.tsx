@@ -16,8 +16,7 @@ import { useGetGeneratedImagesList } from "@/queries/image-generation/get-genera
 import * as FileSystem from "expo-file-system";
 import { paths } from "@/constants/paths";
 import { useUpdateStatus } from "@/queries/onboarding/update-status";
-import { useUpdateStep } from "@/queries/onboarding/update-step";
-import { OnboardingStatus, OnboardingStep } from "@/lib/onboarding/types";
+import { OnboardingStatus } from "@/lib/onboarding/types";
 
 export default function HomeScreen() {
   const models = useGetModelsList();
@@ -43,11 +42,9 @@ export default function HomeScreen() {
     console.log("dir", dir);
   };
   const updateStatus = useUpdateStatus();
-  const updateStep = useUpdateStep();
 
   const reset = () => {
     updateStatus.mutate(OnboardingStatus.InProgress);
-    updateStep.mutate(OnboardingStep.Welcome);
   }
   return (
     <LinearGradient colors={["$color2", "$color6"]} start={{ x: 0.2, y: 0.1 }} end={{ x: 0.8, y: .8 }}>

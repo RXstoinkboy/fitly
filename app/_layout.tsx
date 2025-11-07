@@ -14,10 +14,9 @@ import { tamaguiConfig } from "../tamagui.config";
 import { QueryClientProvider } from "@/lib/query-provider";
 import { GarmentsProvider } from "@/context/garment-context";
 import { useGetStatus } from "@/queries/onboarding/get-status";
-import { OnboardingStatus, OnboardingStep } from "@/lib/onboarding/types";
+import { OnboardingStatus } from "@/lib/onboarding/types";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ComponentProps } from "react";
-import { Back, Next } from "@/components/onboarding/navigation";
 
 const stackScreenBaseOptions: ComponentProps<typeof Stack.Screen>['options'] = {
   headerTitleAlign: 'center',
@@ -28,38 +27,29 @@ const RootContent = () => {
   const { data } = useGetStatus();
   const isOnboarded = data === OnboardingStatus.Completed;
 
-  return <Stack screenOptions={
-    stackScreenBaseOptions
-  }>
-    <Stack.Protected guard={!isOnboarded}>
-      <Stack.Screen name="onboarding/welcome" options={{
-        title: 'Welcome!',
-        headerRight: () => <Next step={OnboardingStep.SelectUserPhoto} />,
-      }}
-      />
-      <Stack.Screen name="onboarding/select-user-photo" options={{
-        title: 'Prepare photo',
-        headerRight: () => <Next step={OnboardingStep.SelectGarments} />,
-        headerLeft: () => <Back step={OnboardingStep.Welcome} />,
-      }} />
-      <Stack.Screen name="onboarding/select-garments" options={{
-        title: "Photo is ready",
-        headerRight: () => <Next step={OnboardingStep.Finish} />,
-        headerLeft: () => <Back step={OnboardingStep.SelectUserPhoto} />,
-      }} />
-      <Stack.Screen name="onboarding/finish" options={{
-        title: 'Congratulations!',
-        headerRight: () => <Next href={'/(tabs)'}>Done!</Next>,
-        headerLeft: () => <Back step={OnboardingStep.SelectGarments} />,
-      }} />
-    </Stack.Protected>
-    <Stack.Protected guard={isOnboarded}>
-      <Stack.Screen name="(tabs)" />
-    </Stack.Protected>
-    <Stack.Screen name="+not-found" />
-    {/* TODO: clothes selection drawer */}
-    {/* TODO: modal with image zoom -n */}
-  </Stack>
+  return (
+    <Stack screenOptions={stackScreenBaseOptions}>
+      <Stack.Protected guard={!isOnboarded}>
+        <Stack.Screen
+          name="onboarding"
+          options={{
+            headerShown: false
+          }}
+        />
+      </Stack.Protected>
+      <Stack.Protected guard={isOnboarded}>
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false
+          }}
+        />
+      </Stack.Protected>
+      <Stack.Screen name="+not-found" />
+      {/* TODO: clothes selection drawer */}
+      {/* TODO: modal with image zoom -n */}
+    </Stack>
+  )
 }
 
 export default function RootLayout() {

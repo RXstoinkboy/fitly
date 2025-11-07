@@ -5,9 +5,4 @@ export const onboardingKeys = {
         get: () => [...onboardingKeys.status.all(), "get"] as const,
         update: () => [...onboardingKeys.status.all(), "update"] as const,
     },
-    step: {
-        all: () => [...onboardingKeys.all(), "step"] as const,
-        get: () => [...onboardingKeys.step.all(), "get"] as const,
-        update: () => [...onboardingKeys.step.all(), "update"] as const,
-    },
 };

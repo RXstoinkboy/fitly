@@ -12,19 +12,17 @@ import { GarmentsProvider } from '@/context/garment-context';
 import { useGetStatus } from '@/queries/onboarding/get-status';
 import { OnboardingStatus } from '@/lib/onboarding/types';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ComponentProps } from 'react';
-
-const stackScreenBaseOptions: ComponentProps<typeof Stack.Screen>['options'] = {
-  headerTitleAlign: 'center',
-  headerBackVisible: false,
-};
 
 const RootContent = () => {
   const { data } = useGetStatus();
   const isOnboarded = data === OnboardingStatus.Completed;
 
   return (
-    <Stack screenOptions={stackScreenBaseOptions}>
+    <Stack
+      screenOptions={{
+        headerTitleAlign: 'center',
+        headerBackVisible: false,
+      }}>
       <Stack.Protected guard={!isOnboarded}>
         <Stack.Screen
           name="onboarding"

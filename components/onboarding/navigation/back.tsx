@@ -6,7 +6,7 @@ import { Text } from 'tamagui';
 export const Back = ({ href }: { href: LinkProps['href'] }) => {
   return (
     <Link href={href} asChild>
-      <Button icon={<ArrowLeft />} ghost paddingSize={0}>
+      <Button icon={<ArrowLeft />} type="ghost" paddingSize={0}>
         <Text>Back</Text>
       </Button>
     </Link>

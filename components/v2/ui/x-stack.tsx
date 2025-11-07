@@ -1,0 +1,1 @@
+export { XStack } from 'tamagui';

@@ -1,8 +1,9 @@
-import { Back } from '@/components/onboarding/navigation';
-import { Next } from '@/components/onboarding/navigation/next';
+import { Back, Next } from '@/components/onboarding/navigation';
+import { XStack } from '@/components/v2/ui';
 import { OnboardingStatus } from '@/lib/onboarding/types';
 import { useUpdateStatus } from '@/queries/onboarding/update-status';
 import { Stack } from 'expo-router';
+import { getTokens } from 'tamagui';
 
 export default function OnboardingLayout() {
   const updateStatus = useUpdateStatus();
@@ -10,20 +11,22 @@ export default function OnboardingLayout() {
   return (
     <Stack
       screenOptions={{
-        headerTitleAlign: 'center',
+        headerTitle: '',
         headerBackVisible: false,
+        headerBackground: () => <XStack />,
+        contentStyle: {
+          padding: getTokens().space['$4'].val,
+        },
       }}>
       <Stack.Screen
         name="welcome"
         options={{
-          title: 'Welcome!',
           headerRight: () => <Next href={'/onboarding/select-user-photo'} />,
         }}
       />
       <Stack.Screen
         name="select-user-photo"
         options={{
-          title: 'Prepare photo',
           headerRight: () => <Next href={'/onboarding/select-garments'} />,
           headerLeft: () => <Back href={'/onboarding/welcome'} />,
         }}
@@ -31,7 +34,6 @@ export default function OnboardingLayout() {
       <Stack.Screen
         name="select-garments"
         options={{
-          title: 'Photo is ready',
           headerRight: () => <Next href={'/onboarding/finish'} />,
           headerLeft: () => <Back href={'/onboarding/select-user-photo'} />,
         }}
@@ -39,7 +41,6 @@ export default function OnboardingLayout() {
       <Stack.Screen
         name="finish"
         options={{
-          title: 'Congratulations!',
           headerRight: () => (
             <Next href={'/(tabs)'} onPress={() => updateStatus.mutate(OnboardingStatus.Completed)}>
               Done!

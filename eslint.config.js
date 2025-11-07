@@ -16,6 +16,6 @@ module.exports = defineConfig([
         ecmaVersion: 'latest',
         sourceType: 'module',
       },
-    }
+    },
   },
 ]);

@@ -2,22 +2,24 @@ import { styled, Button as TamaguiButton } from 'tamagui';
 
 export const Button = styled(TamaguiButton, {
   variants: {
-    ghost: {
-      true: {
+    type: {
+      ghost: {
         backgroundColor: 'transparent',
         bordderWidth: 0,
         pressStyle: {
           backgroundColor: 'transparent',
           borderWidth: 0,
-          color: 'red',
+          color: '$color8',
         },
       },
     },
-
-    paddingSize: {
-      0: {
-        padding: 0,
+    stretched: {
+      true: {
+        width: '100%',
       },
     },
+  } as const,
+  defaultVariants: {
+    stretched: false,
   },
 });

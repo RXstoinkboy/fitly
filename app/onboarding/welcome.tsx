@@ -1,4 +1,5 @@
 import { YStack, Text, Button } from '@/components/v2/ui';
+import { Link } from 'expo-router';
 
 export default function Onboarding() {
   return (
@@ -9,7 +10,9 @@ export default function Onboarding() {
       <Text type="secondary" text="center">
         You’re one step closer to trying on your favourite styles, right from home
       </Text>
-      <Button stretched>Let&apos;s get started!</Button>
+      <Link href="/onboarding/select-user-photo" asChild>
+        <Button stretched>Let&apos;s get started!</Button>
+      </Link>
     </YStack>
   );
 }

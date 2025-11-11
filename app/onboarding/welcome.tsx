@@ -9,7 +9,7 @@ export default function Onboarding() {
       <Text type="secondary" text="center">
         You’re one step closer to trying on your favourite styles, right from home
       </Text>
-      <Button stretched>Let's get started!</Button>
+      <Button stretched>Let&apos;s get started!</Button>
     </YStack>
   );
 }

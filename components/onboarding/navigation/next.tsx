@@ -13,7 +13,7 @@ type NextProps = {
 export const Next = ({ children = 'Next', onPress, href }: NextProps) => {
   return (
     <Link href={href} asChild>
-      <Button iconAfter={<ArrowRight />} type="ghost" paddingSize={0} onPress={onPress}>
+      <Button iconAfter={<ArrowRight />} type="ghost" onPress={onPress}>
         <Text>{children}</Text>
       </Button>
     </Link>

@@ -3,10 +3,11 @@ import { XStack } from '@/components/v2/ui';
 import { OnboardingStatus } from '@/lib/onboarding/types';
 import { useUpdateStatus } from '@/queries/onboarding/update-status';
 import { Stack } from 'expo-router';
-import { getTokens } from 'tamagui';
+import { getTokens, useTheme } from 'tamagui';
 
 export default function OnboardingLayout() {
   const updateStatus = useUpdateStatus();
+  const theme = useTheme();
 
   return (
     <Stack
@@ -16,6 +17,7 @@ export default function OnboardingLayout() {
         headerBackground: () => <XStack />,
         contentStyle: {
           padding: getTokens().space['$4'].val,
+          backgroundColor: theme.color1.val,
         },
       }}>
       <Stack.Screen

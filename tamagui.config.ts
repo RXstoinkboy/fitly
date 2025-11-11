@@ -1,6 +1,6 @@
-import { createTamagui } from "tamagui";
-import { themes } from "./themes";
-import { defaultConfig } from "@tamagui/config/v4";
+import { createTamagui } from 'tamagui';
+import { themes } from './themes';
+import { defaultConfig } from '@tamagui/config/v4';
 
 export const tamaguiConfig = createTamagui({
   ...defaultConfig,
@@ -13,7 +13,7 @@ export const tamaguiConfig = createTamagui({
 
 export type Conf = typeof tamaguiConfig;
 
-declare module "tamagui" {
+declare module 'tamagui' {
   interface TamaguiCustomConfig extends Conf {}
 }
 

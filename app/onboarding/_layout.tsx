@@ -17,7 +17,7 @@ export default function OnboardingLayout() {
         headerBackground: () => <XStack />,
         contentStyle: {
           padding: getTokens().space['$4'].val,
-          backgroundColor: theme.color.val,
+          backgroundColor: theme.color2.val,
         },
       }}>
       <Stack.Screen

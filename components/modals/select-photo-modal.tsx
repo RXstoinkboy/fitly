@@ -1,6 +1,6 @@
-import { ChevronDown } from '@tamagui/lucide-icons';
 import React, { memo } from 'react';
-import { Button, Input, Sheet } from 'tamagui';
+import { Sheet } from 'tamagui';
+import { Text, YStack } from '@/components/v2/ui';
 
 export const useModal = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -33,25 +33,19 @@ export const SelectPhotoModal = ({ isOpen, setIsOpen }: SelectPhotoModalProps) =
         exitStyle={{ opacity: 0 }}
       />
 
-      <Sheet.Handle />
-      <Sheet.Frame p="$4" content="center" items="center" gap="$5">
-        {/* <SheetContents /> */}
-        <>
-          <Button size="$6" circular icon={ChevronDown} onPress={() => setIsOpen(false)} />
-          <Input width={200} />
-        </>
+      <Sheet.Handle bg={'$color3'} />
+      <Sheet.Frame p="$4" content="center" items="center" gap="$5" bg={'$color3'}>
+        <SheetContents />
       </Sheet.Frame>
     </Sheet>
   );
 };
 
-// in general good to memoize the contents to avoid expensive renders during animations
-const SheetContents = memo(({ modal, isPercent, innerOpen, setInnerOpen, setOpen }: any) => {
+const SheetContents = memo(() => {
   return (
-    <>
-      <Button size="$6" circular icon={ChevronDown} onPress={() => setOpen(false)} />
-      <Input width={200} />
-    </>
+    <YStack>
+      <Text>Siemka</Text>
+    </YStack>
   );
 });
 SheetContents.displayName = 'SheetContents';

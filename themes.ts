@@ -1,8 +1,34 @@
-import { createThemes, defaultComponentThemes } from '@tamagui/theme-builder'
-import * as Colors from '@tamagui/colors'
+import { createThemes, defaultComponentThemes } from '@tamagui/theme-builder';
+import * as Colors from '@tamagui/colors';
 
-const darkPalette = ['hsla(99, 20%, 1%, 1)', 'hsla(99, 20%, 6%, 1)', 'hsla(99, 20%, 12%, 1)', 'hsla(99, 20%, 17%, 1)', 'hsla(99, 20%, 23%, 1)', 'hsla(99, 20%, 28%, 1)', 'hsla(99, 20%, 34%, 1)', 'hsla(99, 20%, 39%, 1)', 'hsla(99, 20%, 45%, 1)', 'hsla(99, 20%, 50%, 1)', 'hsla(0, 15%, 93%, 1)', 'hsla(0, 15%, 99%, 1)']
-const lightPalette = ['hsla(99, 20%, 56%, 1)', 'hsla(99, 20%, 55%, 1)', 'hsla(99, 20%, 55%, 1)', 'hsla(99, 20%, 54%, 1)', 'hsla(99, 20%, 53%, 1)', 'hsla(99, 20%, 53%, 1)', 'hsla(99, 20%, 52%, 1)', 'hsla(99, 20%, 51%, 1)', 'hsla(99, 20%, 51%, 1)', 'hsla(99, 20%, 50%, 1)', 'hsla(0, 15%, 15%, 1)', 'hsla(0, 15%, 1%, 1)']
+const darkPalette = [
+  'hsla(99, 20%, 1%, 1)',
+  'hsla(99, 20%, 6%, 1)',
+  'hsla(99, 20%, 12%, 1)',
+  'hsla(99, 20%, 17%, 1)',
+  'hsla(99, 20%, 23%, 1)',
+  'hsla(99, 20%, 28%, 1)',
+  'hsla(99, 20%, 34%, 1)',
+  'hsla(99, 20%, 39%, 1)',
+  'hsla(99, 20%, 45%, 1)',
+  'hsla(99, 20%, 50%, 1)',
+  'hsla(0, 15%, 93%, 1)',
+  'hsla(0, 15%, 99%, 1)',
+];
+const lightPalette = [
+  'hsla(99, 20%, 56%, 1)',
+  'hsla(99, 20%, 55%, 1)',
+  'hsla(99, 20%, 55%, 1)',
+  'hsla(99, 20%, 54%, 1)',
+  'hsla(99, 20%, 53%, 1)',
+  'hsla(99, 20%, 53%, 1)',
+  'hsla(99, 20%, 52%, 1)',
+  'hsla(99, 20%, 51%, 1)',
+  'hsla(99, 20%, 51%, 1)',
+  'hsla(99, 20%, 50%, 1)',
+  'hsla(0, 15%, 15%, 1)',
+  'hsla(0, 15%, 1%, 1)',
+];
 
 const lightShadows = {
   shadow1: 'rgba(0,0,0,0.04)',
@@ -11,7 +37,7 @@ const lightShadows = {
   shadow4: 'rgba(0,0,0,0.24)',
   shadow5: 'rgba(0,0,0,0.32)',
   shadow6: 'rgba(0,0,0,0.4)',
-}
+};
 
 const darkShadows = {
   shadow1: 'rgba(0,0,0,0.2)',
@@ -20,7 +46,7 @@ const darkShadows = {
   shadow4: 'rgba(0,0,0,0.5)',
   shadow5: 'rgba(0,0,0,0.6)',
   shadow6: 'rgba(0,0,0,0.7)',
-}
+};
 
 // we're adding some example sub-themes for you to show how they are done, "success" "warning", "error":
 
@@ -53,8 +79,34 @@ const builtThemes = createThemes({
 
   accent: {
     palette: {
-      dark: ['hsla(38, 32%, 35%, 1)', 'hsla(38, 32%, 38%, 1)', 'hsla(38, 32%, 41%, 1)', 'hsla(38, 32%, 43%, 1)', 'hsla(38, 32%, 46%, 1)', 'hsla(38, 32%, 49%, 1)', 'hsla(38, 32%, 52%, 1)', 'hsla(38, 32%, 54%, 1)', 'hsla(38, 32%, 57%, 1)', 'hsla(38, 32%, 60%, 1)', 'hsla(250, 50%, 90%, 1)', 'hsla(250, 50%, 95%, 1)'],
-      light: ['hsla(38, 32%, 61%, 1)', 'hsla(38, 32%, 61%, 1)', 'hsla(38, 32%, 62%, 1)', 'hsla(38, 32%, 62%, 1)', 'hsla(38, 32%, 63%, 1)', 'hsla(38, 32%, 63%, 1)', 'hsla(38, 32%, 64%, 1)', 'hsla(38, 32%, 64%, 1)', 'hsla(38, 32%, 65%, 1)', 'hsla(38, 32%, 65%, 1)', 'hsla(250, 50%, 95%, 1)', 'hsla(250, 50%, 95%, 1)'],
+      dark: [
+        'hsla(38, 32%, 35%, 1)',
+        'hsla(38, 32%, 38%, 1)',
+        'hsla(38, 32%, 41%, 1)',
+        'hsla(38, 32%, 43%, 1)',
+        'hsla(38, 32%, 46%, 1)',
+        'hsla(38, 32%, 49%, 1)',
+        'hsla(38, 32%, 52%, 1)',
+        'hsla(38, 32%, 54%, 1)',
+        'hsla(38, 32%, 57%, 1)',
+        'hsla(38, 32%, 60%, 1)',
+        'hsla(250, 50%, 90%, 1)',
+        'hsla(250, 50%, 95%, 1)',
+      ],
+      light: [
+        'hsla(38, 32%, 61%, 1)',
+        'hsla(38, 32%, 61%, 1)',
+        'hsla(38, 32%, 62%, 1)',
+        'hsla(38, 32%, 62%, 1)',
+        'hsla(38, 32%, 63%, 1)',
+        'hsla(38, 32%, 63%, 1)',
+        'hsla(38, 32%, 64%, 1)',
+        'hsla(38, 32%, 64%, 1)',
+        'hsla(38, 32%, 65%, 1)',
+        'hsla(38, 32%, 65%, 1)',
+        'hsla(250, 50%, 95%, 1)',
+        'hsla(250, 50%, 95%, 1)',
+      ],
     },
   },
 
@@ -100,9 +152,9 @@ const builtThemes = createThemes({
   //     template: 'surface3',
   //   },
   // },
-})
+});
 
-export type Themes = typeof builtThemes
+export type Themes = typeof builtThemes;
 
 // the process.env conditional here is optional but saves web client-side bundle
 // size by leaving out themes JS. tamagui automatically hydrates themes from CSS
@@ -110,7 +162,6 @@ export type Themes = typeof builtThemes
 // long as you are using the Vite, Next, Webpack plugins this should just work,
 // but if not you can just export builtThemes directly as themes:
 export const themes: Themes =
-  process.env.TAMAGUI_ENVIRONMENT === 'client' &&
-    process.env.NODE_ENV === 'production'
+  process.env.TAMAGUI_ENVIRONMENT === 'client' && process.env.NODE_ENV === 'production'
     ? ({} as any)
-    : (builtThemes as any)
+    : (builtThemes as any);

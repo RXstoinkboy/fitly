@@ -59,10 +59,10 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider>
-      <TamaguiProvider
-        config={tamaguiConfig}
-        defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}>
+    <TamaguiProvider
+      config={tamaguiConfig}
+      defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}>
+      <QueryClientProvider>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <GarmentsProvider>
             <SafeAreaProvider>
@@ -71,7 +71,7 @@ export default function RootLayout() {
             <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
           </GarmentsProvider>
         </ThemeProvider>
-      </TamaguiProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </TamaguiProvider>
   );
 }

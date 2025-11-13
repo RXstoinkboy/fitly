@@ -1,7 +1,7 @@
 import { YStack, Text, Button } from '@/components/v2/ui';
 import { Link } from 'expo-router';
 
-export default function Onboarding() {
+export default function Welcome() {
   return (
     <YStack flex={1} items={'center'} gap={'$4'}>
       <Text size="xxl" weigth="semiBold">

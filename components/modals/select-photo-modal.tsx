@@ -1,26 +1,18 @@
 import React, { memo } from 'react';
 import { Sheet } from 'tamagui';
 import { Text, YStack } from '@/components/v2/ui';
+import { usePhotoModalStore } from '@/stores/select-photo-modal';
 
-export const useModal = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
-  return { isOpen, setIsOpen, openModal, closeModal };
-};
+export const SelectPhotoModal = () => {
+  const isOpen = usePhotoModalStore((state) => state.visible);
+  const toggle = usePhotoModalStore((state) => state.toggle);
 
-type SelectPhotoModalProps = {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-};
-
-export const SelectPhotoModal = ({ isOpen, setIsOpen }: SelectPhotoModalProps) => {
   return (
     <Sheet
       forceRemoveScrollEnabled={isOpen}
       modal
       open={isOpen}
-      onOpenChange={setIsOpen}
+      onOpenChange={toggle}
       snapPointsMode={'fit'}
       dismissOnSnapToBottom
       zIndex={100_000}

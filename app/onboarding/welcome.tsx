@@ -4,6 +4,7 @@ import { Link } from 'expo-router';
 export default function Welcome() {
   return (
     <YStack flex={1} items={'center'} gap={'$4'}>
+      {/* TODO: add here some attractive stock image */}
       <Text size="xxl" weigth="semiBold">
         Welcome screen
       </Text>

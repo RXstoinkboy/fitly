@@ -1,8 +1,10 @@
 import { YStack, Text, Button } from '@/components/v2/ui';
-import { SelectPhotoModal, useModal } from '@/components/modals';
+import { SelectPhotoModal } from '@/components/modals';
+import { usePhotoModalStore } from '@/stores/select-photo-modal';
 
 export default function SelectUserPhoto() {
-  const { isOpen, closeModal, openModal, setIsOpen } = useModal();
+  const toggle = usePhotoModalStore((state) => state.toggle);
+
   return (
     <>
       <YStack flex={1} items={'center'} gap={'$4'}>
@@ -12,7 +14,7 @@ export default function SelectUserPhoto() {
         <Text type="secondary" text="center">
           This photo will be used to try new outfits. Don’t worry, you can change it anytime
         </Text>
-        <Button stretched onPress={openModal}>
+        <Button stretched onPress={() => toggle()}>
           Select photo
         </Button>
         {/* TODO: change to "Change" / "Go to next step" after photo is selected? */}
@@ -24,7 +26,7 @@ export default function SelectUserPhoto() {
           <Text pl={'$3'}>4. Wear fitted clothes</Text>
         </YStack>
       </YStack>
-      <SelectPhotoModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <SelectPhotoModal />
     </>
   );
 }

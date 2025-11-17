@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Sheet } from 'tamagui';
-import { Text, YStack } from '@/components/v2/ui';
+import { Button, Text, YStack } from '@/components/v2/ui';
 import { usePhotoModalStore } from '@/stores/select-photo-modal';
 
 export const SelectPhotoModal = () => {
@@ -19,7 +19,7 @@ export const SelectPhotoModal = () => {
       unmountChildrenWhenHidden
       animation="quick">
       <Sheet.Overlay
-        animation="lazy"
+        animation="medium"
         bg="$shadow6"
         enterStyle={{ opacity: 0 }}
         exitStyle={{ opacity: 0 }}
@@ -35,8 +35,10 @@ export const SelectPhotoModal = () => {
 
 const SheetContents = memo(() => {
   return (
-    <YStack>
-      <Text>Siemka</Text>
+    <YStack width={'100%'} gap={'$2'}>
+      <Button stretched>Select from gallery</Button>
+      <Text self={'center'}>or</Text>
+      <Button stretched>Use a camera</Button>
     </YStack>
   );
 });

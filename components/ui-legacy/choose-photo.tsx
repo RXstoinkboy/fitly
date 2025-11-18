@@ -1,5 +1,5 @@
 import { GalleryHorizontalEnd } from '@tamagui/lucide-icons';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui-legacy/button';
 import { pickImage } from '@/lib/pick-image-from-file-system';
 
 export const ChoosePhoto = ({ onSuccess }: { onSuccess?: (image: string) => void }) => {

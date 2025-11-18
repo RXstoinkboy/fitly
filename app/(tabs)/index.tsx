@@ -1,7 +1,7 @@
 import { YStack, Image, XStack, H6, View } from 'tamagui';
 import { LinearGradient } from '@tamagui/linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, AddModelPhoto, GenerateImageButton, ImagesCarousel } from '@/components/ui';
+import { Button, AddModelPhoto, GenerateImageButton, ImagesCarousel } from '@/components/ui-legacy';
 import { Link } from 'expo-router';
 import { useGetModelsList } from '@/queries/models/get-models-list';
 import { Shirt } from '@tamagui/lucide-icons';

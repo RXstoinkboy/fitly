@@ -1,7 +1,7 @@
 import { H6, Paragraph, XStack, YStack, Image } from 'tamagui';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ChoosePhoto } from '@/components/ui/choose-photo';
-import { TakePhoto } from '@/components/ui/take-photo';
+import { ChoosePhoto } from '@/components/ui-legacy/choose-photo';
+import { TakePhoto } from '@/components/ui-legacy/take-photo';
 import { useLocalSearchParams } from 'expo-router';
 import { useAddGarment } from '@/queries/garments/add-garment';
 import { useGetGarmentsList } from '@/queries/garments/get-garments-list';

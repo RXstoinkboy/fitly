@@ -10,29 +10,10 @@ export const SelectPhotoModal = () => {
   const toggle = usePhotoModalStore((state) => state.toggle);
 
   return (
-    <Sheet
-      forceRemoveScrollEnabled={isOpen}
-      modal
-      open={isOpen}
-      onOpenChange={toggle}
-      snapPointsMode={'fit'}
-      dismissOnSnapToBottom
-      unmountChildrenWhenHidden
-      animation="quick">
-      <Sheet.Overlay
-        bg={'$shadow3'}
-        animation="medium"
-        enterStyle={{ opacity: 0 }}
-        exitStyle={{ opacity: 0 }}
-      />
-      {/* <Sheet.Handle borderColor={'$borderColor'} borderWidth={1} /> */}
-      <Sheet.Frame
-        p="$4"
-        content="center"
-        items="center"
-        gap="$5"
-        borderColor={'$borderColor'}
-        borderWidth={1}>
+    <Sheet forceRemoveScrollEnabled={isOpen} modal open={isOpen} onOpenChange={toggle}>
+      <Sheet.Overlay />
+      <Sheet.Handle />
+      <Sheet.Frame>
         <SheetContents />
       </Sheet.Frame>
     </Sheet>

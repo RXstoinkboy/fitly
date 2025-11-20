@@ -31,9 +31,15 @@ const getImageFromDevice =
 
 const SheetContents = memo(() => {
   const addModelMutation = useAddModelImage();
+  const toggle = usePhotoModalStore((state) => state.toggle);
 
-  const getImageFromDeviceLibrary = getImageFromDevice(openImageLibrary, addModelMutation.mutate);
-  const getImageFromDeviceCamera = getImageFromDevice(openCamera, addModelMutation.mutate);
+  const onSuccess = (image: string): void => {
+    addModelMutation.mutate(image);
+    toggle(false);
+  };
+
+  const getImageFromDeviceLibrary = getImageFromDevice(openImageLibrary, onSuccess);
+  const getImageFromDeviceCamera = getImageFromDevice(openCamera, onSuccess);
 
   return (
     <YStack width={'100%'} gap={'$2'}>

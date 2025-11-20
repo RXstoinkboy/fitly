@@ -1,8 +1,14 @@
-import { YStack, Text, Button } from '@/components/v2/ui';
+import { YStack, Text, Button, Image, XStack } from '@/components/v2/ui';
+import { useGetModelsList } from '@/queries/models/get-models-list';
 import { usePhotoModalStore } from '@/stores/select-photo-modal';
+import { ImageUp } from '@tamagui/lucide-icons';
+import { Link } from 'expo-router';
+import { View } from 'tamagui';
 
 export default function SelectUserPhoto() {
   const toggle = usePhotoModalStore((state) => state.toggle);
+  const modelsImageList = useGetModelsList();
+  const imageUri = modelsImageList.data?.at(-1);
 
   return (
     <YStack flex={1} items={'center'} gap={'$4'}>
@@ -12,9 +18,37 @@ export default function SelectUserPhoto() {
       <Text type="secondary" text="center">
         This photo will be used to try new outfits. Don’t worry, you can change it anytime
       </Text>
-      <Button type="primary" stretched onPress={() => toggle()}>
-        Select photo
-      </Button>
+      {/* TODO: when no image then show a placeholder */}
+      <View position={'relative'}>
+        <Image
+          source={{ uri: imageUri, width: 300, height: 400 }}
+          rounded={'$7'}
+          aspectRatio={3 / 4}
+        />
+        <Button
+          onPress={() => toggle()}
+          position="absolute"
+          t={10}
+          r={10}
+          rounded={'$radius.12'}
+          icon={<ImageUp />}
+        />
+      </View>
+      {imageUri ? (
+        <XStack width={'100%'} gap="$2">
+          {/* <Button type="ghost" icon={<ImageUp />} /> */}
+          <Link asChild href={'/onboarding/select-garments'}>
+            <Button type="primary" flex={1}>
+              Go next!
+            </Button>
+          </Link>
+        </XStack>
+      ) : (
+        <Button type="primary" stretched onPress={() => toggle()}>
+          Select photo
+        </Button>
+      )}
+
       {/* TODO: change to "Change" / "Go to next step" after photo is selected? */}
       <YStack width={'100%'} items={'flex-start'}>
         <Text>Photo guidelines for best results:</Text>

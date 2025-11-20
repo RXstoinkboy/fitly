@@ -1,7 +1,7 @@
-import { paths } from "@/constants/paths";
-import { getFilesList } from "@/lib/get-files-list";
-import { useQuery } from "@tanstack/react-query";
-import { modelsKeys } from "./keys";
+import { paths } from '@/constants/paths';
+import { getFilesList } from '@/lib/get-files-list';
+import { useQuery } from '@tanstack/react-query';
+import { modelsKeys } from './keys';
 
 export const useGetModelsList = () => {
   return useQuery({

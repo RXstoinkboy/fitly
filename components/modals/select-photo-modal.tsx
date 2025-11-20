@@ -30,12 +30,15 @@ const getImageFromDevice =
   };
 
 const SheetContents = memo(() => {
-  const addModelMutation = useAddModelImage();
+  const addModelMutation = useAddModelImage({
+    onSuccess: () => {
+      toggle(false);
+    },
+  });
   const toggle = usePhotoModalStore((state) => state.toggle);
 
   const onSuccess = (image: string): void => {
     addModelMutation.mutate(image);
-    toggle(false);
   };
 
   const getImageFromDeviceLibrary = getImageFromDevice(openImageLibrary, onSuccess);

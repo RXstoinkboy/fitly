@@ -1,9 +1,9 @@
-import * as ImagePicker from "expo-image-picker";
+import * as ImagePicker from 'expo-image-picker';
 
-export const takePhoto = async () => {
+export const openImageLibrary = async () => {
   // No permissions request is necessary for launching the image library
-  const result = await ImagePicker.launchCameraAsync({
-    mediaTypes: ["images"],
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ['images'],
     allowsEditing: true,
     aspect: [3, 4],
     quality: 1,
@@ -12,6 +12,5 @@ export const takePhoto = async () => {
   if (!result.canceled) {
     return result.assets[0].uri;
   }
-
   return null;
 };

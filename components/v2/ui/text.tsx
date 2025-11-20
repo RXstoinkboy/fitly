@@ -37,7 +37,7 @@ export const Text = styled(TamaguiText, {
     },
     type: {
       secondary: {
-        color: '$color10',
+        color: '$color11',
       },
       primary: {
         color: '$color12',

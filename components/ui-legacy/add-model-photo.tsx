@@ -1,10 +1,10 @@
 import { YStack, H5, H6, XStack } from 'tamagui';
-import { useAddModel } from '@/queries/models/add-model';
+import { useAddModelImage } from '@/queries/models/add-model';
 import { ChoosePhoto } from './choose-photo';
 import { TakePhoto } from './take-photo';
 
 export const AddModelPhoto = () => {
-  const addModel = useAddModel();
+  const addModel = useAddModelImage();
 
   return (
     <YStack p="$4">

@@ -1,20 +1,23 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { modelsKeys } from "./keys";
-import { paths } from "@/constants/paths";
-import { copyFile } from "@/lib/copy-file";
-import * as FileSystem from "expo-file-system";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { modelsKeys } from './keys';
+import { paths } from '@/constants/paths';
+import { copyFile } from '@/lib/copy-file';
+import * as FileSystem from 'expo-file-system';
 
-export const useAddModel = () => {
+// TODO: might extend in future more model metadata
+// TODO: error handling
+// TODO: might extend in future to store multiple model images and allow user to change them
+export const useAddModelImage = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: modelsKeys.add(),
     mutationFn: async (imagePath: string) => {
-      const filename = imagePath.split("/").pop();
+      const filename = imagePath.split('/').pop();
       return copyFile(
         imagePath,
         `${FileSystem.documentDirectory}${paths.fileSystem.models}/`,
-        filename ?? "",
+        filename ?? '',
       );
     },
     onSuccess: () => {

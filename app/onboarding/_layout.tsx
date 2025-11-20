@@ -3,11 +3,10 @@ import { XStack } from '@/components/v2/ui';
 import { OnboardingStatus } from '@/lib/onboarding/types';
 import { useUpdateStatus } from '@/queries/onboarding/update-status';
 import { Stack } from 'expo-router';
-import { getTokens, useTheme } from 'tamagui';
+import { getTokens } from 'tamagui';
 
 export default function OnboardingLayout() {
   const updateStatus = useUpdateStatus();
-  const theme = useTheme();
 
   return (
     <Stack

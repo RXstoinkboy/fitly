@@ -12,6 +12,10 @@ export const Button = styled(TamaguiButton, {
           color: '$color8',
         },
       },
+      primary: {
+        backgroundColor: '$accent1',
+        color: '$accent12',
+      },
     },
     stretched: {
       true: {

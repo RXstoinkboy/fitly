@@ -12,6 +12,7 @@ import { GarmentsProvider } from '@/context/garment-context';
 import { useGetStatus } from '@/queries/onboarding/get-status';
 import { OnboardingStatus } from '@/lib/onboarding/types';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SelectPhotoModal } from '@/components/modals';
 
 const RootContent = () => {
   const { data } = useGetStatus();
@@ -40,8 +41,6 @@ const RootContent = () => {
         />
       </Stack.Protected>
       <Stack.Screen name="+not-found" />
-      {/* TODO: clothes selection drawer */}
-      {/* TODO: modal with image zoom -n */}
     </Stack>
   );
 };
@@ -59,19 +58,22 @@ export default function RootLayout() {
   }
 
   return (
-    <TamaguiProvider
-      config={tamaguiConfig}
-      defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}>
-      <QueryClientProvider>
+    <QueryClientProvider>
+      <TamaguiProvider
+        config={tamaguiConfig}
+        defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <GarmentsProvider>
             <SafeAreaProvider>
               <RootContent />
+              {/* TODO: clothes selection drawer */}
+              {/* TODO: modal with image zoom -n */}
+              <SelectPhotoModal />
             </SafeAreaProvider>
             <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
           </GarmentsProvider>
         </ThemeProvider>
-      </QueryClientProvider>
-    </TamaguiProvider>
+      </TamaguiProvider>
+    </QueryClientProvider>
   );
 }

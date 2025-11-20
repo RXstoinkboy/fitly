@@ -12,7 +12,9 @@ export default function Welcome() {
         You’re one step closer to trying on your favourite styles, right from home
       </Text>
       <Link href="/onboarding/select-user-photo" asChild>
-        <Button stretched>Let&apos;s get started!</Button>
+        <Button type="primary" stretched>
+          Let&apos;s get started!
+        </Button>
       </Link>
     </YStack>
   );

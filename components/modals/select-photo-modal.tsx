@@ -1,7 +1,9 @@
 import React, { memo } from 'react';
-import { Sheet } from 'tamagui';
-import { Button, Text, YStack } from '@/components/v2/ui';
+import { Button, Text, YStack, Sheet } from '@/components/v2/ui';
 import { usePhotoModalStore } from '@/stores/select-photo-modal';
+import { openCamera } from '@/lib/open-camera';
+import { openImageLibrary } from '@/lib/open-image-library';
+import { useAddModelImage } from '@/queries/models/add-model';
 
 export const SelectPhotoModal = () => {
   const isOpen = usePhotoModalStore((state) => state.visible);
@@ -15,33 +17,52 @@ export const SelectPhotoModal = () => {
       onOpenChange={toggle}
       snapPointsMode={'fit'}
       dismissOnSnapToBottom
-      zIndex={100_000}
       unmountChildrenWhenHidden
       animation="quick">
       <Sheet.Overlay
+        bg={'$shadow3'}
         animation="medium"
-        bg="$shadow3"
         enterStyle={{ opacity: 0 }}
         exitStyle={{ opacity: 0 }}
       />
-      {/* <Theme name={'surface2'}> */}
-      <Sheet.Handle />
-      <Sheet.Frame p="$4" content="center" items="center" gap="$5" borderColor={'red'}>
+      {/* <Sheet.Handle borderColor={'$borderColor'} borderWidth={1} /> */}
+      <Sheet.Frame
+        p="$4"
+        content="center"
+        items="center"
+        gap="$5"
+        borderColor={'$borderColor'}
+        borderWidth={1}>
         <SheetContents />
       </Sheet.Frame>
-      {/* </Theme> */}
     </Sheet>
   );
 };
 
+const getImageFromDevice =
+  (imageGetterFn: () => Promise<string | null>, onSuccess: (image: string) => void) => async () => {
+    const selectedImage = await imageGetterFn();
+
+    if (selectedImage) {
+      return onSuccess(selectedImage);
+    }
+  };
+
 const SheetContents = memo(() => {
+  const addModelMutation = useAddModelImage();
+
+  const getImageFromDeviceLibrary = getImageFromDevice(openImageLibrary, addModelMutation.mutate);
+  const getImageFromDeviceCamera = getImageFromDevice(openCamera, addModelMutation.mutate);
+
   return (
     <YStack width={'100%'} gap={'$2'}>
-      <Button stretched borderColor={'red'}>
+      <Button onPress={getImageFromDeviceLibrary} stretched>
         Select from gallery
       </Button>
       <Text self={'center'}>or</Text>
-      <Button stretched>Use a camera</Button>
+      <Button onPress={getImageFromDeviceCamera} stretched>
+        Use a camera
+      </Button>
     </YStack>
   );
 });

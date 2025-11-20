@@ -1,4 +1,4 @@
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from 'expo-file-system';
 
 export const copyFile = async (
   sourcePath: string,
@@ -6,18 +6,35 @@ export const copyFile = async (
   destinationFileName: string,
 ) => {
   try {
-    const dir = `${FileSystem.documentDirectory}${destinationPath}/`;
-    const dirInfo = await FileSystem.getInfoAsync(dir);
-    if (!dirInfo.exists) {
-      await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
+    const docDir = FileSystem.documentDirectory ?? '';
+
+    // Normalize destination directory:
+    // - If caller passed a path that already includes the document directory or a file:// URI,
+    //   use it as-is.
+    // - Otherwise, treat the destinationPath as relative to documentDirectory and prepend it.
+    let destDir = destinationPath;
+    const looksAbsolute =
+      destDir.startsWith(docDir) || destDir.startsWith('file://') || destDir.startsWith('/');
+    if (!looksAbsolute) {
+      destDir = `${docDir}${destDir}`;
     }
+
+    // Ensure trailing slash
+    if (!destDir.endsWith('/')) destDir = `${destDir}/`;
+
+    const dirInfo = await FileSystem.getInfoAsync(destDir);
+    if (!dirInfo.exists) {
+      await FileSystem.makeDirectoryAsync(destDir, { intermediates: true });
+    }
+
+    const to = destDir + destinationFileName;
 
     return FileSystem.copyAsync({
       from: sourcePath,
-      to: destinationPath + destinationFileName,
+      to,
     });
   } catch (error) {
-    console.error("Error copying file:", error);
+    console.error('Error copying file:', error);
     throw error;
   }
 };

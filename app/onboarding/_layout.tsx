@@ -32,7 +32,6 @@ export default function OnboardingLayout() {
           headerLeft: () => <Back href={'/onboarding/welcome'} />,
         }}
       />
-      <Stack.Screen name="user-photo-selected" />
       <Stack.Screen
         name="select-garments"
         options={{

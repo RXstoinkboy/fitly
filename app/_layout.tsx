@@ -68,7 +68,6 @@ export default function RootLayout() {
               <RootContent />
               {/* TODO: clothes selection drawer */}
               {/* TODO: modal with image zoom -n */}
-              <SelectPhotoModal />
             </SafeAreaProvider>
             <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
           </GarmentsProvider>

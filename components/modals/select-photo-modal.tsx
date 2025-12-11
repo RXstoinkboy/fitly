@@ -1,20 +1,35 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { Button, Text, YStack, Sheet } from '@/components/v2/ui';
-import { usePhotoModalStore } from '@/stores/select-photo-modal';
 import { openCamera } from '@/lib/open-camera';
 import { openImageLibrary } from '@/lib/open-image-library';
-import { useAddModelImage } from '@/queries/models/add-model';
 
-export const SelectPhotoModal = () => {
-  const isOpen = usePhotoModalStore((state) => state.visible);
-  const toggle = usePhotoModalStore((state) => state.toggle);
+export const useSelectPhotoModal = () => {
+  const [opened, setOpened] = useState(false);
+  const toggle = (opened?: boolean) => {
+    setOpened((prev) => opened ?? !prev);
+  };
 
+  return {
+    isOpen: opened,
+    toggle,
+  };
+};
+
+export const SelectPhotoModal = ({
+  isOpen,
+  toggle,
+  onSuccess,
+}: {
+  isOpen: boolean;
+  toggle: (visible?: boolean) => void;
+  onSuccess: (image: string) => void;
+}) => {
   return (
     <Sheet forceRemoveScrollEnabled={isOpen} modal open={isOpen} onOpenChange={toggle}>
       <Sheet.Overlay />
       <Sheet.Handle />
       <Sheet.Frame>
-        <SheetContents />
+        <SheetContents onSuccess={onSuccess} />
       </Sheet.Frame>
     </Sheet>
   );
@@ -29,18 +44,7 @@ const getImageFromDevice =
     }
   };
 
-const SheetContents = memo(() => {
-  const addModelMutation = useAddModelImage({
-    onSuccess: () => {
-      toggle(false);
-    },
-  });
-  const toggle = usePhotoModalStore((state) => state.toggle);
-
-  const onSuccess = (image: string): void => {
-    addModelMutation.mutate(image);
-  };
-
+const SheetContents = memo(({ onSuccess }: { onSuccess: (image: string) => void }) => {
   const getImageFromDeviceLibrary = getImageFromDevice(openImageLibrary, onSuccess);
   const getImageFromDeviceCamera = getImageFromDevice(openCamera, onSuccess);
 

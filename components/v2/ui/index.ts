@@ -8,3 +8,4 @@ export * from './square';
 export * from './sheet';
 export * from './image';
 export * from './view';
+export * from './no-image-placeholder';

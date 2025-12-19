@@ -1,4 +1,12 @@
-import { YStack, Text, Button, XStack, Image, Square } from '@/components/v2/ui';
+import {
+  YStack,
+  Text,
+  Button,
+  XStack,
+  Image,
+  Square,
+  NoImagePlaceholder,
+} from '@/components/v2/ui';
 import { SelectPhotoModal, useSelectPhotoModal } from '@/components/modals';
 import { useAddGarment } from '@/queries/garments/add-garment';
 import { GarmentType } from '@/lib/garments/types';
@@ -45,12 +53,7 @@ export default function Onboarding() {
         <Text type="secondary" text="center">
           Now, select first garments to try
         </Text>
-        <XStack
-          borderWidth={1}
-          borderColor={'red'}
-          width={'100%'}
-          gap={'$4'}
-          justify={'space-evenly'}>
+        <XStack width={'100%'} gap={'$4'} justify={'space-evenly'}>
           {images.map((image) => {
             return (
               <Button
@@ -62,14 +65,23 @@ export default function Onboarding() {
                   toggle();
                 }}>
                 <YStack gap={'$2'}>
-                  <Square rounded={'$7'} position="relative" bg={'green'} aspectRatio={1}>
-                    <Image
-                      source={{ uri: image.uri?.at(-1), width: 300, height: 300 }}
-                      width={'100%'}
-                      height={'100%'}
-                      rounded={'$7'}
-                      aspectRatio={1}
-                    />
+                  <Square
+                    rounded={'$7'}
+                    position="relative"
+                    bg={'green'}
+                    aspectRatio={1}
+                    overflow="hidden">
+                    {image.uri?.length ? (
+                      <Image
+                        source={{ uri: image.uri?.at(-1), width: 300, height: 300 }}
+                        width={'100%'}
+                        height={'100%'}
+                        rounded={'$7'}
+                        aspectRatio={1}
+                      />
+                    ) : (
+                      <NoImagePlaceholder />
+                    )}
                   </Square>
                   <Text text={'center'}>{image.title}</Text>
                 </YStack>

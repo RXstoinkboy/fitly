@@ -1,5 +1,5 @@
 import { SelectPhotoModal, useSelectPhotoModal } from '@/components/modals';
-import { View, YStack, Text, Button, Image, XStack } from '@/components/v2/ui';
+import { View, YStack, Text, Button, Image, XStack, ScreenWrapper } from '@/components/v2/ui';
 import { useAddModelImage } from '@/queries/models/add-model';
 import { useGetModelsList } from '@/queries/models/get-models-list';
 import { ImageUp } from '@tamagui/lucide-icons';
@@ -20,7 +20,7 @@ export default function SelectUserPhoto() {
   };
 
   return (
-    <>
+    <ScreenWrapper>
       <YStack flex={1} items={'center'} gap={'$4'}>
         <Text size="xxl" weigth="semiBold">
           Take a photo of yourself
@@ -72,6 +72,6 @@ export default function SelectUserPhoto() {
         </YStack>
       </YStack>
       <SelectPhotoModal isOpen={isOpen} toggle={toggle} onSuccess={onSuccess} />
-    </>
+    </ScreenWrapper>
   );
 }

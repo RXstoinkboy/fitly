@@ -5,14 +5,13 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { useColorScheme } from 'react-native';
-import { TamaguiProvider } from 'tamagui';
+import { TamaguiProvider, View } from 'tamagui';
 import { tamaguiConfig } from '../tamagui.config';
 import { QueryClientProvider } from '@/lib/query-provider';
 import { GarmentsProvider } from '@/context/garment-context';
 import { useGetStatus } from '@/queries/onboarding/get-status';
 import { OnboardingStatus } from '@/lib/onboarding/types';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { SelectPhotoModal } from '@/components/modals';
 
 const RootContent = () => {
   const { data } = useGetStatus();

@@ -13,11 +13,8 @@ export default function OnboardingLayout() {
       screenOptions={{
         headerTitle: '',
         headerBackVisible: false,
-        headerBackground: () => <XStack />,
-        contentStyle: {
-          padding: getTokens().space['$4'].val,
-          //   backgroundColor: theme.color2.val,
-        },
+        headerTransparent: true,
+        headerBackground: () => <XStack bg="red" />,
       }}>
       <Stack.Screen
         name="welcome"

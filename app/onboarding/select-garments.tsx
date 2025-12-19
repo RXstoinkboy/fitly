@@ -6,6 +6,7 @@ import {
   Image,
   Square,
   NoImagePlaceholder,
+  ScreenWrapper,
 } from '@/components/v2/ui';
 import { SelectPhotoModal, useSelectPhotoModal } from '@/components/modals';
 import { useAddGarment } from '@/queries/garments/add-garment';
@@ -48,7 +49,7 @@ export default function Onboarding() {
   const onGenerateImage = () => {};
 
   return (
-    <>
+    <ScreenWrapper>
       <YStack flex={1} items={'center'} gap={'$4'}>
         <Text size="xxl" weigth="semiBold" text={'center'}>
           {'Congratulations! \nYour picture is ready'}
@@ -120,6 +121,6 @@ export default function Onboarding() {
       </YStack>
 
       <SelectPhotoModal isOpen={isOpen} toggle={toggle} onSuccess={addGarment.mutate} />
-    </>
+    </ScreenWrapper>
   );
 }

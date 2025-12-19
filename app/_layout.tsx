@@ -4,8 +4,8 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
-import { useColorScheme } from 'react-native';
-import { TamaguiProvider, View } from 'tamagui';
+import { SafeAreaView, useColorScheme } from 'react-native';
+import { TamaguiProvider } from 'tamagui';
 import { tamaguiConfig } from '../tamagui.config';
 import { QueryClientProvider } from '@/lib/query-provider';
 import { GarmentsProvider } from '@/context/garment-context';
@@ -19,6 +19,7 @@ const RootContent = () => {
 
   return (
     <Stack
+      screenLayout={({ children }) => <SafeAreaView flex={1}>{children}</SafeAreaView>}
       screenOptions={{
         headerTitleAlign: 'center',
         headerBackVisible: false,

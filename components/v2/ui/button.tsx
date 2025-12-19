@@ -15,6 +15,11 @@ export const Button = styled(TamaguiButton, {
       primary: {
         backgroundColor: '$accent1',
         color: '$accent12',
+
+        hoverStyle: {
+          backgroundColor: '$accent2',
+          borderColor: '$accent3',
+        },
       },
     },
     stretched: {

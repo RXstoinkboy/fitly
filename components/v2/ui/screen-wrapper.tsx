@@ -9,7 +9,7 @@ export const ScreenWrapper = ({ children }: { children: ReactNode }) => {
   const theme = useTheme();
 
   return (
-    <View p={'$4'} maxH={Dimensions.get('window').height - HEADER_HEIGHT}>
+    <View p={'$4'} height={Dimensions.get('window').height - HEADER_HEIGHT}>
       <LinearGradient
         position="absolute"
         t={0}

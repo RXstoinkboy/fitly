@@ -60,7 +60,7 @@ export default function Onboarding() {
 
   return (
     <ScreenWrapper>
-      <YStack flex={1} items={'center'} gap={'$4'} borderColor={'yellow'} borderWidth={1}>
+      <YStack flex={1} items={'center'} gap={'$4'}>
         <Text size="xxl" weigth="semiBold" text={'center'}>
           Your picture is ready
         </Text>
@@ -68,12 +68,7 @@ export default function Onboarding() {
           Now, select first garments to try
         </Text>
 
-        <XStack
-          borderColor={'green'}
-          borderWidth={1}
-          width={'100%'}
-          gap={'$4'}
-          justify={'space-evenly'}>
+        <XStack width={'100%'} gap={'$4'} justify={'space-evenly'}>
           {images.map((image) => {
             return (
               <Button

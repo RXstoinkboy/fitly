@@ -1,9 +1,15 @@
 import { YStack, Text } from '.';
+import { ImageOff } from '@tamagui/lucide-icons';
 
-export const NoImagePlaceholder = () => {
+type NoImagePlaceholderProps = {
+  text?: string;
+};
+
+export const NoImagePlaceholder = ({ text = 'No image' }: NoImagePlaceholderProps) => {
   return (
-    <YStack bg={'$color3'} flex={1} width={'100%'} items={'center'} justify={'center'}>
-      <Text type="secondary">No image</Text>
+    <YStack bg={'$color3'} flex={1} width={'100%'} items={'center'} justify={'center'} gap={'$2'}>
+      <ImageOff size={'$6'} color={'$color11'} />
+      <Text type="secondary">{text}</Text>
     </YStack>
   );
 };

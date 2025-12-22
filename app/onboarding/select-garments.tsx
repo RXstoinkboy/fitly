@@ -41,11 +41,13 @@ export default function Onboarding() {
       type: GarmentType.TOP,
       uri: top.data,
       title: 'Top',
+      placeholder: 'Select a top',
     },
     {
       type: GarmentType.BOTTOM,
       uri: bottom.data,
       title: 'Bottom',
+      placeholder: 'Select a bottom',
     },
   ];
 
@@ -62,10 +64,10 @@ export default function Onboarding() {
     <ScreenWrapper>
       <YStack flex={1} items={'center'} gap={'$4'}>
         <Text size="xxl" weigth="semiBold" text={'center'}>
-          Your picture is ready
+          What you&apos;d like to wear?
         </Text>
         <Text type="secondary" text="center">
-          Now, select first garments to try
+          Select garments you want to try on
         </Text>
 
         <XStack width={'100%'} gap={'$4'} justify={'space-evenly'}>
@@ -95,7 +97,7 @@ export default function Onboarding() {
                         aspectRatio={1}
                       />
                     ) : (
-                      <NoImagePlaceholder />
+                      <NoImagePlaceholder text={image.placeholder} />
                     )}
                   </Square>
                   <Text text={'center'}>{image.title}</Text>

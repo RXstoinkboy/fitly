@@ -1,14 +1,22 @@
-import { YStack, Text, ScreenWrapper, Image } from '@/components/v2/ui';
+import { YStack, Text, ScreenWrapper, Image, Button } from '@/components/v2/ui';
+import { OnboardingStatus } from '@/lib/onboarding/types';
 import { useGetGeneratedImagesList } from '@/queries/image-generation/get-generated-images-list';
 import { generatedKeys } from '@/queries/image-generation/keys';
+import { useUpdateStatus } from '@/queries/onboarding/update-status';
 import { useIsMutating } from '@tanstack/react-query';
+import { Link } from 'expo-router';
 
 export default function Onboarding() {
+  const updateStatus = useUpdateStatus();
   const isGenerating = useIsMutating({
     mutationKey: generatedKeys.add(),
   });
   const getGeneratedImagesList = useGetGeneratedImagesList();
   const generatedImage = getGeneratedImagesList.data?.at(-1);
+
+  const onFinish = () => {
+    updateStatus.mutate(OnboardingStatus.Completed);
+  };
 
   return (
     <ScreenWrapper>
@@ -39,6 +47,11 @@ export default function Onboarding() {
             />
           </>
         ) : null}
+        <Link asChild href={'/onboarding/finish'}>
+          <Button type="primary" stretched onPress={onFinish}>
+            Continue
+          </Button>
+        </Link>
       </YStack>
     </ScreenWrapper>
   );

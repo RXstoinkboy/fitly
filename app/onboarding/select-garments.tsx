@@ -17,10 +17,18 @@ import { Link } from 'expo-router';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
 import { Trash } from '@tamagui/lucide-icons';
 import { useRemoveGarment } from '@/queries/garments/remove-garment';
+import { saveToFileSystem } from '@/lib/save-to-file-system';
+import { paths } from '@/constants/paths';
 
 export default function Onboarding() {
   const { isOpen, toggle } = useSelectPhotoModal();
-  const generateImageMutation = useGenerateImageMutation();
+  const generateImageMutation = useGenerateImageMutation({
+    onSuccess: (data) => {
+      if (data) {
+        return saveToFileSystem(paths.fileSystem.generated, data);
+      }
+    },
+  });
   const removeGarment = useRemoveGarment();
 
   const [garmentType, setGarmentType] = useState<GarmentType>(GarmentType.TOP);

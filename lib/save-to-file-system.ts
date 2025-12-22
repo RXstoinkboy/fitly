@@ -1,10 +1,6 @@
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from 'expo-file-system';
 
-export const saveToFileSystem = async (
-  path: string,
-  imageData: string,
-  name?: string,
-) => {
+export const saveToFileSystem = async (path: string, imageData: string, name?: string) => {
   try {
     const dir = `${FileSystem.documentDirectory}${path}/`;
     const dirInfo = await FileSystem.getInfoAsync(dir);
@@ -21,6 +17,6 @@ export const saveToFileSystem = async (
 
     return fileUri;
   } catch (error) {
-    console.error("Error saving to file system:", error);
+    console.error('Error saving to file system:', error);
   }
 };

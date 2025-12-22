@@ -45,7 +45,7 @@ export default function HomeScreen() {
       end={{ x: 0.8, y: 0.8 }}>
       <SafeAreaView height={'100%'} bg="$accent11">
         {/*<Button onPress={debugFn}>Debug</Button>*/}
-        {/* <Button onPress={reset}>Reset storage</Button> */}
+        <Button onPress={reset}>Reset storage</Button>
         <YStack flex={1}>
           {!models.data?.length ? (
             <AddModelPhoto />

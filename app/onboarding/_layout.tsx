@@ -42,11 +42,6 @@ export default function OnboardingLayout() {
       <Stack.Screen
         name="finish"
         options={{
-          headerRight: () => (
-            <Next href={'/(tabs)'} onPress={() => updateStatus.mutate(OnboardingStatus.Completed)}>
-              Done!
-            </Next>
-          ),
           headerLeft: () => <Back href={'/onboarding/select-garments'} />,
         }}
       />

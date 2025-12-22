@@ -16,7 +16,7 @@ export const useGenerateImageMutation = (
     mutationKey: generatedKeys.add(),
     mutationFn: async ({ top, bottom }) => {
       const [modelImageBase64, garmentTopImageBase64, garmentBottomImageBase64] = await Promise.all(
-        [fileUriToBase64(models.data?.[0]), fileUriToBase64(top), fileUriToBase64(bottom)],
+        [fileUriToBase64(models.data?.at(-1)), fileUriToBase64(top), fileUriToBase64(bottom)],
       );
 
       return generateImage({

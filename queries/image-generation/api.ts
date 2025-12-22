@@ -110,11 +110,15 @@ export async function generateImage({
       if (part.inlineData) {
         const imageData = part.inlineData.data;
 
-        console.log('before 1 saving to file system', part);
-        console.log('before 2 saving to file system', parts);
+        // console.log('before 1 saving to file system', part);
+        // console.log('before 2 saving to file system', parts);
 
         if (imageData) {
-          console.log('saving to file system', imageData);
+          console.log(
+            'saving to file system',
+            paths.fileSystem.generated,
+            imageData.substring(0, 100),
+          );
           return saveToFileSystem(paths.fileSystem.generated, imageData);
         }
       }

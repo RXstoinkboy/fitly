@@ -1,7 +1,7 @@
-import { paths } from "@/constants/paths";
-import { getFilesList } from "@/lib/get-files-list";
-import { useQuery } from "@tanstack/react-query";
-import { generatedKeys } from "./keys";
+import { paths } from '@/constants/paths';
+import { getFilesList } from '@/lib/get-files-list';
+import { useQuery } from '@tanstack/react-query';
+import { generatedKeys } from './keys';
 
 export const useGetGeneratedImagesList = () => {
   return useQuery({

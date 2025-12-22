@@ -15,10 +15,13 @@ import { useState } from 'react';
 import { useGetGarmentsList } from '@/queries/garments/get-garments-list';
 import { Link } from 'expo-router';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
+import { Trash } from '@tamagui/lucide-icons';
+import { useRemoveGarment } from '@/queries/garments/remove-garment';
 
 export default function Onboarding() {
   const { isOpen, toggle } = useSelectPhotoModal();
   const generateImageMutation = useGenerateImageMutation();
+  const removeGarment = useRemoveGarment();
 
   const [garmentType, setGarmentType] = useState<GarmentType>(GarmentType.TOP);
   const addGarment = useAddGarment({
@@ -42,12 +45,22 @@ export default function Onboarding() {
       uri: top.data,
       title: 'Top',
       placeholder: 'Select a top',
+      remove: () => {
+        if (top.data?.length) {
+          removeGarment.mutate(top.data.at(-1)!);
+        }
+      },
     },
     {
       type: GarmentType.BOTTOM,
       uri: bottom.data,
       title: 'Bottom',
       placeholder: 'Select a bottom',
+      remove: () => {
+        if (bottom.data?.length) {
+          removeGarment.mutate(bottom.data.at(-1)!);
+        }
+      },
     },
   ];
 
@@ -89,13 +102,23 @@ export default function Onboarding() {
                     aspectRatio={1}
                     overflow="hidden">
                     {image.uri?.length ? (
-                      <Image
-                        source={{ uri: image.uri?.at(-1), width: 300, height: 300 }}
-                        width={'100%'}
-                        height={'100%'}
-                        rounded={'$7'}
-                        aspectRatio={1}
-                      />
+                      <>
+                        <Image
+                          source={{ uri: image.uri?.at(-1), width: 300, height: 300 }}
+                          width={'100%'}
+                          height={'100%'}
+                          rounded={'$7'}
+                          aspectRatio={1}
+                        />
+                        <Button
+                          onPress={image.remove}
+                          position="absolute"
+                          t={'$2'}
+                          r={'$2'}
+                          circular
+                          icon={<Trash />}
+                        />
+                      </>
                     ) : (
                       <NoImagePlaceholder text={image.placeholder} />
                     )}

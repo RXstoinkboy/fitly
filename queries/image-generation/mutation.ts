@@ -3,16 +3,26 @@ import { generateImage } from './api';
 import { generatedKeys } from './keys';
 import { fileUriToBase64 } from '@/lib/file-uri-to-base64';
 import { useGetModelsList } from '../models/get-models-list';
+import { saveToFileSystem } from '@/lib/save-to-file-system';
+import { paths } from '@/constants/paths';
 
 type GenerateImageParams = { top?: string; bottom?: string };
 
 export const useGenerateImageMutation = (
-  options: UseMutationOptions<string | undefined, Error, GenerateImageParams> = {},
+  options: UseMutationOptions<
+    { generatedImageBase64: string; mimeType: string } | undefined,
+    Error,
+    GenerateImageParams
+  > = {},
 ) => {
   const queryClient = useQueryClient();
   const models = useGetModelsList();
 
-  return useMutation<string | undefined, Error, GenerateImageParams>({
+  return useMutation<
+    { generatedImageBase64: string; mimeType: string } | undefined,
+    Error,
+    GenerateImageParams
+  >({
     mutationKey: generatedKeys.add(),
     mutationFn: async ({ top, bottom }) => {
       const [modelImageBase64, garmentTopImageBase64, garmentBottomImageBase64] = await Promise.all(
@@ -26,6 +36,11 @@ export const useGenerateImageMutation = (
       });
     },
     onSuccess: (data, variables, result, context) => {
+      if (data) {
+        console.log('data', data);
+        saveToFileSystem(paths.fileSystem.generated, data.generatedImageBase64);
+      }
+
       options.onSuccess?.(data, variables, result, context);
     },
     onError: (error, variables, result, context) => {

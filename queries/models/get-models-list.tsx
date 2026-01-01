@@ -1,5 +1,5 @@
 import { paths } from '@/constants/paths';
-import { getFilesList } from '@/lib/get-files-list';
+import { getFilesList } from '@/utils/get-files-list';
 import { useQuery } from '@tanstack/react-query';
 import { modelsKeys } from './keys';
 

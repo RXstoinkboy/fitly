@@ -1,9 +1,9 @@
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { generateImage } from './api';
 import { generatedKeys } from './keys';
-import { fileUriToBase64 } from '@/lib/file-uri-to-base64';
+import { fileUriToBase64 } from '@/utils/file-uri-to-base64';
 import { useGetModelsList } from '../models/get-models-list';
-import { saveToFileSystem } from '@/lib/save-to-file-system';
+import { saveToFileSystem } from '@/utils/save-to-file-system';
 import { paths } from '@/constants/paths';
 
 type GenerateImageParams = { top?: string; bottom?: string };

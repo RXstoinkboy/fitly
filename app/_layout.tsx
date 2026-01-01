@@ -7,7 +7,7 @@ import 'react-native-reanimated';
 import { SafeAreaView, useColorScheme } from 'react-native';
 import { TamaguiProvider } from 'tamagui';
 import { tamaguiConfig } from '../tamagui.config';
-import { QueryClientProvider } from '@/lib/query-provider';
+import { QueryClientProvider } from '@/queries/provider';
 import { GarmentsProvider } from '@/context/garment-context';
 import { useGetStatus } from '@/queries/onboarding/get-status';
 import { OnboardingStatus } from '@/lib/onboarding/types';

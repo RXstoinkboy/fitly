@@ -1,6 +1,6 @@
 import { Camera } from '@tamagui/lucide-icons';
 import { Button } from './button';
-import { openCamera } from '@/lib/open-camera';
+import { openCamera } from '@/utils/open-camera';
 
 export const TakePhoto = ({ onSuccess }: { onSuccess?: (photo: string) => void }) => {
   const onCamera = async () => {

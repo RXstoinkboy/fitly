@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react';
 import { Button, Text, YStack, Sheet } from '@/components/v2/ui';
-import { openCamera } from '@/lib/open-camera';
-import { openImageLibrary } from '@/lib/open-image-library';
+import { openCamera } from '@/utils/open-camera';
+import { openImageLibrary } from '@/utils/open-image-library';
 
 export const useSelectPhotoModal = () => {
   const [opened, setOpened] = useState(false);

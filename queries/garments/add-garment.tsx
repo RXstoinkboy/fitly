@@ -1,7 +1,7 @@
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { garmentsKeys } from './keys';
 import { paths } from '@/constants/paths';
-import { copyFile } from '@/lib/copy-file';
+import { copyFile } from '@/utils/copy-file';
 import * as FileSystem from 'expo-file-system';
 import { GarmentType } from '@/lib/garments/types';
 

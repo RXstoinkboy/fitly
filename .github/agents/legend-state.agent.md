@@ -1,7 +1,7 @@
 ---
 name: LegendExpert
 description: 'Expert in Legend-State v3 performance and reactive patterns.'
-tools: ['githubRepo', 'search']
+tools: ['edit', 'search', 'changes', 'githubRepo']
 ---
 
 # Legend-State v3 Expert Agent

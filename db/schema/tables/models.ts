@@ -9,8 +9,8 @@ export const modelsSchema = tableSchema({
     { name: 'file_path', type: 'string' },
     { name: 'is_current', type: 'boolean' },
 
-    { name: 'updated_at', type: 'number', isOptional: true },
-    { name: 'created_at', type: 'number', isOptional: true },
+    { name: 'updated_at', type: 'number' },
+    { name: 'created_at', type: 'number' },
     { name: 'deleted_at', type: 'number', isOptional: true },
   ],
 });

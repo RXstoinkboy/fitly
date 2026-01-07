@@ -1,7 +1,7 @@
 import { Collection, Model, Q } from '@nozbe/watermelondb';
-import { text, date, children } from '@nozbe/watermelondb/decorators';
+import { text, date, children, lazy } from '@nozbe/watermelondb/decorators';
 import { Associations } from '@nozbe/watermelondb/Model';
-import OutfitCloth from './OutfitCloth';
+import OutfitCloth from './outfitCloth';
 import Outfit from './outfit';
 
 export default class Cloth extends Model {
@@ -21,14 +21,8 @@ export default class Cloth extends Model {
 
   @children('outfits_clothes') outfitClothes!: Collection<OutfitCloth>;
 
-  async getOutfits(): Promise<Outfit[]> {
-    const joinRows = await this.outfitClothes.query().fetch();
-    const outfitIds = joinRows.map((j) => j.outfitId);
-    if (outfitIds.length === 0) return [];
-
-    return this.collections
-      .get<Outfit>('outfits')
-      .query(Q.where('id', Q.oneOf(outfitIds)))
-      .fetch();
-  }
+  @lazy
+  outfits = this.collections
+    .get<Outfit>('outfits')
+    .query(Q.on('outfits_clothes', 'cloth_id', this.id));
 }

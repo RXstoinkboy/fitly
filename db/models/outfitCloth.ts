@@ -1,5 +1,5 @@
 import { Model } from '@nozbe/watermelondb';
-import { field, relation } from '@nozbe/watermelondb/decorators';
+import { field, immutableRelation } from '@nozbe/watermelondb/decorators';
 import Outfit from './outfit';
 import Cloth from './cloth';
 
@@ -10,6 +10,6 @@ export default class OutfitCloth extends Model {
   @field('cloth_id') clothId!: string;
   @field('role') role?: string;
 
-  @relation('outfits', 'outfit_id') outfit!: Outfit;
-  @relation('clothes', 'cloth_id') cloth!: Cloth;
+  @immutableRelation('outfits', 'outfit_id') outfit!: Outfit;
+  @immutableRelation('clothes', 'cloth_id') cloth!: Cloth;
 }

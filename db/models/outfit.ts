@@ -1,8 +1,9 @@
 import { Collection, Model, Q } from '@nozbe/watermelondb';
-import { text, date, immutableRelation, children } from '@nozbe/watermelondb/decorators';
+import { text, date, immutableRelation, children, lazy } from '@nozbe/watermelondb/decorators';
 import { Associations } from '@nozbe/watermelondb/Model';
+import OutfitCloth from './outfitCloth';
 import Cloth from './cloth';
-import OutfitCloth from './OutfitCloth';
+import ModelPhoto from './model';
 
 export default class Outfit extends Model {
   static table = 'outfits';
@@ -19,17 +20,11 @@ export default class Outfit extends Model {
   @date('created_at') createdAt!: number | null;
   @date('deleted_at') deletedAt!: number | null;
 
-  @immutableRelation('models', 'model_id') model!: Model;
+  @immutableRelation('models', 'model_id') model!: ModelPhoto;
   @children('outfits_clothes') outfitClothes!: Collection<OutfitCloth>;
 
-  async getClothes(): Promise<Cloth[]> {
-    const joinRows = await this.outfitClothes.query().fetch();
-    const clothIds = joinRows.map((j) => j.clothId);
-    if (clothIds.length === 0) return [];
-
-    return this.collections
-      .get<Cloth>('clothes')
-      .query(Q.where('id', Q.oneOf(clothIds)))
-      .fetch();
-  }
+  @lazy
+  clothes = this.collections
+    .get<Cloth>('clothes')
+    .query(Q.on('outfits_clothes', 'outfit_id', this.id));
 }

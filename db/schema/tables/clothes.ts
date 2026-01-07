@@ -9,8 +9,8 @@ export const clothesSchema = tableSchema({
     { name: 'file_path', type: 'string' },
     { name: 'type', type: 'string' }, // e.g., 'top', 'bottom', 'shoe', etc.
 
-    { name: 'updated_at', type: 'number', isOptional: true },
-    { name: 'created_at', type: 'number', isOptional: true },
+    { name: 'updated_at', type: 'number' },
+    { name: 'created_at', type: 'number' },
     { name: 'deleted_at', type: 'number', isOptional: true },
   ],
 });

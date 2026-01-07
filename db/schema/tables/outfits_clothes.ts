@@ -6,6 +6,6 @@ export const outfitsClothesSchema = tableSchema({
     { name: 'outfit_id', type: 'string', isIndexed: true },
     { name: 'cloth_id', type: 'string', isIndexed: true },
 
-    { name: 'created_at', type: 'number', isOptional: true },
+    { name: 'created_at', type: 'number' },
   ],
 });

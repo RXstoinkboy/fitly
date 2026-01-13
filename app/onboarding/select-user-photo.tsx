@@ -1,23 +1,25 @@
 import { SelectPhotoModal, useSelectPhotoModal } from '@/components/modals';
 import { View, YStack, Text, Button, Image, XStack, ScreenWrapper } from '@/components/v2/ui';
-import { useAddModelImage } from '@/queries/models/add-model';
-import { useGetModelsList } from '@/queries/models/get-models-list';
+import { ImageSource, useModels, useOnboarding } from '@/state';
 import { ImageUp } from '@tamagui/lucide-icons';
 import { Link } from 'expo-router';
+import { useEffect } from 'react';
 
 export default function SelectUserPhoto() {
-  const modelsImageList = useGetModelsList();
-  const imageUri = modelsImageList.data?.at(-1);
-  const { isOpen, toggle } = useSelectPhotoModal();
-  const addModelMutation = useAddModelImage({
-    onSuccess: () => {
-      toggle(false);
-    },
-  });
+  const { setOnboardingStep } = useOnboarding();
 
-  const onSuccess = (image: string): void => {
-    addModelMutation.mutate(image);
+  const { currentModel, addModel, setCurrentModel } = useModels();
+  const { isOpen, toggle } = useSelectPhotoModal();
+
+  const handleAddModel = async (image: string, source: ImageSource): Promise<void> => {
+    const id = await addModel(image, source);
+    setCurrentModel(id);
+    toggle(false);
   };
+
+  useEffect(() => {
+    setOnboardingStep(1);
+  }, []);
 
   return (
     <ScreenWrapper>
@@ -31,7 +33,7 @@ export default function SelectUserPhoto() {
         {/* TODO: when no image then show a placeholder */}
         <View position={'relative'}>
           <Image
-            source={{ uri: imageUri, width: 300, height: 400 }}
+            source={{ uri: currentModel?.filePath, width: 300, height: 400 }}
             rounded={'$7'}
             aspectRatio={3 / 4}
           />
@@ -44,7 +46,7 @@ export default function SelectUserPhoto() {
             icon={<ImageUp />}
           />
         </View>
-        {imageUri ? (
+        {currentModel?.filePath ? (
           <XStack width={'100%'} gap="$2">
             <Link asChild href={'/onboarding/select-garments'}>
               <Button type="primary" flex={1}>
@@ -71,7 +73,7 @@ export default function SelectUserPhoto() {
           <Text pl={'$3'}>4. Wear fitted clothes</Text>
         </YStack>
       </YStack>
-      <SelectPhotoModal isOpen={isOpen} toggle={toggle} onSuccess={onSuccess} />
+      <SelectPhotoModal isOpen={isOpen} toggle={toggle} onSuccess={handleAddModel} />
     </ScreenWrapper>
   );
 }

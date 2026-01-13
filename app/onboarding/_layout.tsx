@@ -1,22 +1,19 @@
 import { Back, Next } from '@/components/onboarding/navigation';
 import { XStack } from '@/components/v2/ui';
-import { HEADER_HEIGHT } from '@/constants/dimensions';
-import { OnboardingStatus } from '@/lib/onboarding/types';
-import { useUpdateStatus } from '@/queries/onboarding/update-status';
 import { Stack } from 'expo-router';
-import { StyleProp } from 'react-native';
 
 export default function OnboardingLayout() {
-  const updateStatus = useUpdateStatus();
+  // const updateStatus = useUpdateStatus();
 
   return (
     <Stack
       screenOptions={{
-        headerTitle: '',
-        headerBackVisible: false,
-        headerStyle: {
-          height: HEADER_HEIGHT,
-        } as StyleProp<{ backgroundColor?: string; height?: number }>,
+        headerShown: false,
+        // headerTitle: '',
+        // headerBackVisible: false,
+        // headerStyle: {
+        //   height: HEADER_HEIGHT,
+        // } as StyleProp<{ backgroundColor?: string; height?: number }>,
         headerBackground: () => <XStack />,
       }}>
       <Stack.Screen

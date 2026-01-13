@@ -1,7 +1,15 @@
 import { YStack, Text, Button, ScreenWrapper } from '@/components/v2/ui';
+import { useOnboarding } from '@/state';
 import { Link } from 'expo-router';
+import { useEffect } from 'react';
 
 export default function Welcome() {
+  const { setOnboardingStep } = useOnboarding();
+
+  useEffect(() => {
+    setOnboardingStep(0);
+  }, []);
+
   return (
     <ScreenWrapper>
       <YStack flex={1} items={'center'} gap={'$4'} bg="transparent">

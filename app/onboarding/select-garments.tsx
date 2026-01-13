@@ -1,77 +1,73 @@
-import {
-  YStack,
-  Text,
-  Button,
-  XStack,
-  Image,
-  Square,
-  NoImagePlaceholder,
-  ScreenWrapper,
-} from '@/components/v2/ui';
+import { YStack, Text, Button, XStack, Image, Square, ScreenWrapper } from '@/components/v2/ui';
 import { SelectPhotoModal, useSelectPhotoModal } from '@/components/modals';
-import { useAddGarment } from '@/queries/garments/add-garment';
 import { GarmentType } from '@/lib/garments/types';
-import { useState } from 'react';
-import { useGetGarmentsList } from '@/queries/garments/get-garments-list';
+import { memo, useEffect, useState } from 'react';
 import { Link } from 'expo-router';
-import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
-import { Trash } from '@tamagui/lucide-icons';
-import { useRemoveGarment } from '@/queries/garments/remove-garment';
+import { Plus, Trash } from '@tamagui/lucide-icons';
+import { ImageSource, useGarments, useOnboarding, useSelectedGarments } from '@/state';
+import { getToken, ScrollView } from 'tamagui';
 
 export default function Onboarding() {
+  const { setOnboardingStep } = useOnboarding();
+  const { addGarment, removeGarment } = useGarments();
+  const { selectedGarments, toggleSelection } = useSelectedGarments();
   const { isOpen, toggle } = useSelectPhotoModal();
-  const generateImageMutation = useGenerateImageMutation();
-  const removeGarment = useRemoveGarment();
+  const [tempImage, setTempImage] = useState<{ filePath: string; source: ImageSource }>();
 
-  const [garmentType, setGarmentType] = useState<GarmentType>(GarmentType.TOP);
-  const addGarment = useAddGarment({
-    type: garmentType,
-    options: {
-      onSuccess: () => {
-        toggle(false);
-      },
-    },
-  });
-  const top = useGetGarmentsList({
-    type: GarmentType.TOP,
-  });
-  const bottom = useGetGarmentsList({
-    type: GarmentType.BOTTOM,
-  });
+  // const images = [
+  //   {
+  //     type: GarmentType.TOP,
+  //     uri: top.data,
+  //     title: 'Top',
+  //     placeholder: 'Select a top',
+  //     remove: () => {
+  //       if (top.data?.length) {
+  //         removeGarment.mutate(top.data.at(-1)!);
+  //       }
+  //     },
+  //   },
+  //   {
+  //     type: GarmentType.BOTTOM,
+  //     uri: bottom.data,
+  //     title: 'Bottom',
+  //     placeholder: 'Select a bottom',
+  //     remove: () => {
+  //       if (bottom.data?.length) {
+  //         removeGarment.mutate(bottom.data.at(-1)!);
+  //       }
+  //     },
+  //   },
+  // ];
 
-  const images = [
-    {
-      type: GarmentType.TOP,
-      uri: top.data,
-      title: 'Top',
-      placeholder: 'Select a top',
-      remove: () => {
-        if (top.data?.length) {
-          removeGarment.mutate(top.data.at(-1)!);
-        }
-      },
-    },
-    {
-      type: GarmentType.BOTTOM,
-      uri: bottom.data,
-      title: 'Bottom',
-      placeholder: 'Select a bottom',
-      remove: () => {
-        if (bottom.data?.length) {
-          removeGarment.mutate(bottom.data.at(-1)!);
-        }
-      },
-    },
-  ];
-
-  const isAnyImageSelected = images.some((img) => img.uri?.length);
+  const isAnyImageSelected = selectedGarments.length > 0;
 
   const onGenerateImage = () => {
-    generateImageMutation.mutate({
-      top: top.data?.at(-1),
-      bottom: bottom.data?.at(-1),
-    });
+    // TODO:
   };
+
+  const onSuccess = (filePath: string, source: ImageSource) => {
+    setTempImage({ filePath, source });
+  };
+
+  const onAddGarment = async (
+    filePath: string,
+    source: ImageSource,
+    type: GarmentType,
+  ): Promise<void> => {
+    const id = await addGarment(filePath, source, type);
+    toggleSelection(id, true);
+    toggle(false);
+  };
+
+  useEffect(() => {
+    if (!isOpen) {
+      setTempImage(undefined);
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    setOnboardingStep(2);
+  }, []);
 
   return (
     <ScreenWrapper>
@@ -83,52 +79,75 @@ export default function Onboarding() {
           Select garments you want to try on
         </Text>
 
-        <XStack width={'100%'} gap={'$4'} justify={'space-evenly'}>
-          {images.map((image) => {
-            return (
-              <Button
-                asChild
-                key={image.type}
-                flex={1}
-                onPress={() => {
-                  setGarmentType(image.type);
-                  toggle();
-                }}>
-                <YStack gap={'$2'}>
-                  <Square
-                    rounded={'$7'}
-                    position="relative"
-                    bg={'green'}
-                    aspectRatio={1}
-                    overflow="hidden">
-                    {image.uri?.length ? (
-                      <>
-                        <Image
-                          source={{ uri: image.uri?.at(-1), width: 300, height: 300 }}
-                          width={'100%'}
-                          height={'100%'}
-                          rounded={'$7'}
-                          aspectRatio={1}
-                        />
-                        <Button
-                          onPress={image.remove}
-                          position="absolute"
-                          t={'$2'}
-                          r={'$2'}
-                          circular
-                          icon={<Trash />}
-                        />
-                      </>
-                    ) : (
-                      <NoImagePlaceholder text={image.placeholder} />
-                    )}
-                  </Square>
-                  <Text text={'center'}>{image.title}</Text>
-                </YStack>
-              </Button>
-            );
-          })}
+        <XStack width={'100%'} justify={'space-evenly'}>
+          <ScrollView horizontal>
+            <Button
+              asChild
+              onPress={() => {
+                // setGarmentType(image.type);
+                toggle();
+              }}>
+              <YStack gap={'$2'}>
+                <Square
+                  height="$12"
+                  borderColor={'$borderColor'}
+                  bg="$accent12"
+                  borderWidth={'$1'}
+                  borderStyle="dashed"
+                  rounded={'$5'}
+                  position="relative"
+                  aspectRatio={1}
+                  overflow="hidden">
+                  <Plus />
+                </Square>
+                <Text text={'center'}>{'Add something'}</Text>
+              </YStack>
+            </Button>
+            {selectedGarments
+              .sort((a, b) => Number(b.updatedAt) - Number(a.updatedAt))
+              .map((image) => {
+                return (
+                  <Button asChild key={image.id}>
+                    <YStack gap={'$2'} ml={'$4'}>
+                      <Square
+                        rounded={'$5'}
+                        height={'$12'}
+                        position="relative"
+                        aspectRatio={1}
+                        overflow="hidden">
+                        <>
+                          <Image
+                            source={{
+                              uri: image.filePath,
+                              width: getToken('$12'),
+                              height: getToken('$12'),
+                            }}
+                            width={'100%'}
+                            height={'100%'}
+                            rounded={'$7'}
+                            aspectRatio={1}
+                          />
+                          <Button
+                            onPress={() => {
+                              toggleSelection(image.id, false);
+                              removeGarment(image.id, image.type);
+                            }}
+                            position="absolute"
+                            t={'$2'}
+                            r={'$2'}
+                            circular
+                            icon={<Trash />}
+                          />
+                        </>
+                      </Square>
+                      <Text text={'center'}>{image.type}</Text>
+                    </YStack>
+                  </Button>
+                );
+              })}
+          </ScrollView>
         </XStack>
+        {/* TODO: or maybe even hide it when there are no clothes added yet */}
         <Link asChild href={'/onboarding/finish'}>
           <Button type="primary" stretched disabled={!isAnyImageSelected} onPress={onGenerateImage}>
             Try this look!
@@ -136,7 +155,39 @@ export default function Onboarding() {
         </Link>
       </YStack>
 
-      <SelectPhotoModal isOpen={isOpen} toggle={toggle} onSuccess={addGarment.mutate} />
+      <SelectPhotoModal isOpen={isOpen} toggle={toggle} onSuccess={onSuccess}>
+        {tempImage ? <SheetContents image={tempImage} onSuccess={onAddGarment} /> : null}
+      </SelectPhotoModal>
     </ScreenWrapper>
   );
 }
+
+const SheetContents = memo(
+  ({
+    image,
+    onSuccess,
+  }: {
+    image: { filePath: string; source: ImageSource };
+    onSuccess: (filePath: string, source: ImageSource, type: GarmentType) => Promise<void>;
+  }) => {
+    const onTop = () => {
+      onSuccess(image.filePath, image.source, GarmentType.TOP);
+    };
+    const onBottom = () => {
+      onSuccess(image.filePath, image.source, GarmentType.BOTTOM);
+    };
+
+    return (
+      <YStack width={'100%'} gap={'$2'}>
+        <Text>Pick a garment type</Text>
+        <Button onPress={onTop} stretched>
+          Top
+        </Button>
+        <Button onPress={onBottom} stretched>
+          Bottom
+        </Button>
+      </YStack>
+    );
+  },
+);
+SheetContents.displayName = 'SheetContents';

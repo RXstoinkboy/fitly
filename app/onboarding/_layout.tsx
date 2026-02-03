@@ -3,8 +3,8 @@ import { XStack } from '@/components/v2/ui';
 import { Stack } from 'expo-router';
 
 export default function OnboardingLayout() {
-  // const updateStatus = useUpdateStatus();
-
+  // TODO: refactor set onboarding step to use path names instead of numbers
+  // TODO: redirect to current step when user was in progress
   return (
     <Stack
       screenOptions={{

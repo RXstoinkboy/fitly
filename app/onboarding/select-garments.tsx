@@ -4,45 +4,53 @@ import { GarmentType } from '@/lib/garments/types';
 import { memo, useEffect, useState } from 'react';
 import { Link } from 'expo-router';
 import { Plus, Trash } from '@tamagui/lucide-icons';
-import { ImageSource, useGarments, useOnboarding, useSelectedGarments } from '@/state';
+import {
+  ImageSource,
+  useGarments,
+  useGeneratedImages,
+  useModels,
+  useOnboarding,
+  useSelectedGarments,
+} from '@/state';
 import { getToken, ScrollView } from 'tamagui';
+import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
 
 export default function Onboarding() {
   const { setOnboardingStep } = useOnboarding();
   const { addGarment, removeGarment } = useGarments();
-  const { selectedGarments, toggleSelection } = useSelectedGarments();
+  const { selectedGarments, toggleSelection, clearSelection } = useSelectedGarments();
   const { isOpen, toggle } = useSelectPhotoModal();
+  const { addGeneratedImage } = useGeneratedImages();
+  const { currentModelId } = useModels();
+  const { mutate } = useGenerateImageMutation({
+    onSuccess: (data) => {
+      if (data && currentModelId) {
+        const garmentIds = selectedGarments.map((g) => g.id);
+        addGeneratedImage(data.filePath, currentModelId, garmentIds);
+      }
+    },
+    onError: (error) => {
+      console.error('Failed to generate image:', error);
+    },
+  });
   const [tempImage, setTempImage] = useState<{ filePath: string; source: ImageSource }>();
-
-  // const images = [
-  //   {
-  //     type: GarmentType.TOP,
-  //     uri: top.data,
-  //     title: 'Top',
-  //     placeholder: 'Select a top',
-  //     remove: () => {
-  //       if (top.data?.length) {
-  //         removeGarment.mutate(top.data.at(-1)!);
-  //       }
-  //     },
-  //   },
-  //   {
-  //     type: GarmentType.BOTTOM,
-  //     uri: bottom.data,
-  //     title: 'Bottom',
-  //     placeholder: 'Select a bottom',
-  //     remove: () => {
-  //       if (bottom.data?.length) {
-  //         removeGarment.mutate(bottom.data.at(-1)!);
-  //       }
-  //     },
-  //   },
-  // ];
 
   const isAnyImageSelected = selectedGarments.length > 0;
 
   const onGenerateImage = () => {
-    // TODO:
+    if (!currentModelId) {
+      console.error('No model selected');
+      return;
+    }
+
+    const topGarment = selectedGarments.find((g) => g.type === 'top');
+    const bottomGarment = selectedGarments.find((g) => g.type === 'bottom');
+
+    mutate({
+      top: topGarment?.filePath,
+      bottom: bottomGarment?.filePath,
+    });
+    clearSelection();
   };
 
   const onSuccess = (filePath: string, source: ImageSource) => {

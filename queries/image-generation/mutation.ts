@@ -8,37 +8,45 @@ import { paths } from '@/constants/paths';
 
 type GenerateImageParams = { top?: string; bottom?: string };
 
+type GenerateImageResult = {
+  generatedImageBase64: string;
+  mimeType: string;
+  filePath: string;
+};
+
 export const useGenerateImageMutation = (
-  options: UseMutationOptions<
-    { generatedImageBase64: string; mimeType: string } | undefined,
-    Error,
-    GenerateImageParams
-  > = {},
+  options: UseMutationOptions<GenerateImageResult | undefined, Error, GenerateImageParams> = {},
 ) => {
   const queryClient = useQueryClient();
   const models = useGetModelsList();
 
-  return useMutation<
-    { generatedImageBase64: string; mimeType: string } | undefined,
-    Error,
-    GenerateImageParams
-  >({
+  return useMutation<GenerateImageResult | undefined, Error, GenerateImageParams>({
     mutationKey: generatedKeys.add(),
     mutationFn: async ({ top, bottom }) => {
       const [modelImageBase64, garmentTopImageBase64, garmentBottomImageBase64] = await Promise.all(
         [fileUriToBase64(models.data?.at(-1)), fileUriToBase64(top), fileUriToBase64(bottom)],
       );
 
-      return generateImage({
+      const result = await generateImage({
         modelImageBase64,
         garmentTopImageBase64,
         garmentBottomImageBase64,
       });
+
+      if (!result) {
+        return undefined;
+      }
+
+      const filePath = saveToFileSystem(paths.fileSystem.generated, result.generatedImageBase64);
+
+      return {
+        ...result,
+        filePath,
+      };
     },
     onSuccess: (data, variables, result, context) => {
       if (data) {
-        console.log('data', data);
-        saveToFileSystem(paths.fileSystem.generated, data.generatedImageBase64);
+        console.log('Generated image saved to:', data.filePath);
       }
 
       options.onSuccess?.(data, variables, result, context);

@@ -1,13 +1,13 @@
 import { YStack, Text, ScreenWrapper, Image, Button } from '@/components/v2/ui';
-import { OnboardingStatus } from '@/lib/onboarding/types';
 import { useGetGeneratedImagesList } from '@/queries/image-generation/get-generated-images-list';
 import { generatedKeys } from '@/queries/image-generation/keys';
-import { useUpdateStatus } from '@/queries/onboarding/update-status';
+import { useOnboarding } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { Link } from 'expo-router';
+import { useEffect } from 'react';
 
 export default function Onboarding() {
-  const updateStatus = useUpdateStatus();
+  const { setOnboardingStep, completeOnboarding } = useOnboarding();
   const isGenerating = useIsMutating({
     mutationKey: generatedKeys.add(),
   });
@@ -15,8 +15,12 @@ export default function Onboarding() {
   const generatedImage = getGeneratedImagesList.data?.at(-1);
 
   const onFinish = () => {
-    updateStatus.mutate(OnboardingStatus.Completed);
+    completeOnboarding();
   };
+
+  useEffect(() => {
+    setOnboardingStep(3);
+  }, []);
 
   return (
     <ScreenWrapper>
@@ -47,7 +51,7 @@ export default function Onboarding() {
             />
           </>
         ) : null}
-        <Link asChild href={'/onboarding/finish'}>
+        <Link asChild href={'/(tabs)'}>
           <Button type="primary" stretched onPress={onFinish}>
             Continue
           </Button>

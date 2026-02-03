@@ -9,13 +9,11 @@ import { TamaguiProvider } from 'tamagui';
 import { tamaguiConfig } from '../tamagui.config';
 import { QueryClientProvider } from '@/queries/provider';
 import { GarmentsProvider } from '@/context/garment-context';
-import { useGetStatus } from '@/queries/onboarding/get-status';
-import { OnboardingStatus } from '@/lib/onboarding/types';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useOnboarding } from '@/state';
 
 const RootContent = () => {
-  const { data } = useGetStatus();
-  const isOnboarded = data === OnboardingStatus.Completed;
+  const { isCompleted } = useOnboarding();
 
   return (
     <Stack
@@ -24,7 +22,7 @@ const RootContent = () => {
         headerTitleAlign: 'center',
         headerBackVisible: false,
       }}>
-      <Stack.Protected guard={!isOnboarded}>
+      <Stack.Protected guard={!isCompleted}>
         <Stack.Screen
           name="onboarding"
           options={{
@@ -32,7 +30,7 @@ const RootContent = () => {
           }}
         />
       </Stack.Protected>
-      <Stack.Protected guard={isOnboarded}>
+      <Stack.Protected guard={isCompleted}>
         <Stack.Screen
           name="(tabs)"
           options={{

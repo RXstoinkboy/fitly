@@ -2,7 +2,7 @@ import { YStack, Text, Button, XStack, Image, Square, ScreenWrapper } from '@/co
 import { SelectPhotoModal, useSelectPhotoModal } from '@/components/modals';
 import { GarmentType } from '@/lib/garments/types';
 import { memo, useEffect, useState } from 'react';
-import { Link } from 'expo-router';
+import { Link, usePathname } from 'expo-router';
 import { Plus, Trash } from '@tamagui/lucide-icons';
 import {
   ImageSource,
@@ -16,6 +16,7 @@ import { getToken, ScrollView } from 'tamagui';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
 
 export default function Onboarding() {
+  const pathname = usePathname();
   const { setOnboardingStep } = useOnboarding();
   const { addGarment, removeGarment } = useGarments();
   const { selectedGarments, toggleSelection, clearSelection } = useSelectedGarments();
@@ -74,7 +75,7 @@ export default function Onboarding() {
   }, [isOpen]);
 
   useEffect(() => {
-    setOnboardingStep(2);
+    setOnboardingStep(pathname);
   }, []);
 
   return (
@@ -160,6 +161,10 @@ export default function Onboarding() {
           <Button type="primary" stretched disabled={!isAnyImageSelected} onPress={onGenerateImage}>
             Try this look!
           </Button>
+        </Link>
+        {/* TODO: move it to some less visible place (same for other steps too) */}
+        <Link asChild href={'/onboarding/select-user-photo'}>
+          <Button type="ghost">Back</Button>
         </Link>
       </YStack>
 

@@ -1,13 +1,14 @@
 import { YStack, Text, Button, ScreenWrapper } from '@/components/v2/ui';
 import { useOnboarding } from '@/state';
-import { Link } from 'expo-router';
+import { Link, useNavigation, usePathname } from 'expo-router';
 import { useEffect } from 'react';
 
 export default function Welcome() {
   const { setOnboardingStep } = useOnboarding();
+  const pathname = usePathname();
 
   useEffect(() => {
-    setOnboardingStep(0);
+    setOnboardingStep(pathname);
   }, []);
 
   return (

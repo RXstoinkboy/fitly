@@ -1,25 +1,26 @@
 import { YStack, Text, ScreenWrapper, Image, Button } from '@/components/v2/ui';
-import { useGetGeneratedImagesList } from '@/queries/image-generation/get-generated-images-list';
 import { generatedKeys } from '@/queries/image-generation/keys';
-import { useOnboarding } from '@/state';
+import { useGeneratedImages, useOnboarding } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
-import { Link } from 'expo-router';
+import { Link, usePathname } from 'expo-router';
 import { useEffect } from 'react';
 
 export default function Onboarding() {
   const { setOnboardingStep, completeOnboarding } = useOnboarding();
+  const pathname = usePathname();
   const isGenerating = useIsMutating({
     mutationKey: generatedKeys.add(),
   });
-  const getGeneratedImagesList = useGetGeneratedImagesList();
-  const generatedImage = getGeneratedImagesList.data?.at(-1);
+  const { images } = useGeneratedImages();
+  const generatedImage = images.length > 0 ? images.at(-1)?.filePath : null;
 
   const onFinish = () => {
+    // TODO: show paywall
     completeOnboarding();
   };
 
   useEffect(() => {
-    setOnboardingStep(3);
+    setOnboardingStep(pathname);
   }, []);
 
   return (
@@ -55,6 +56,9 @@ export default function Onboarding() {
           <Button type="primary" stretched onPress={onFinish}>
             Continue
           </Button>
+        </Link>
+        <Link asChild href={'/onboarding/select-garments'}>
+          <Button type="ghost">Back</Button>
         </Link>
       </YStack>
     </ScreenWrapper>

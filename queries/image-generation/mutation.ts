@@ -37,7 +37,10 @@ export const useGenerateImageMutation = (
         return undefined;
       }
 
-      const filePath = saveToFileSystem(paths.fileSystem.generated, result.generatedImageBase64);
+      const filePath = await saveToFileSystem(
+        paths.fileSystem.generated,
+        result.generatedImageBase64,
+      );
 
       return {
         ...result,

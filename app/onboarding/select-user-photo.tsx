@@ -2,11 +2,12 @@ import { SelectPhotoModal, useSelectPhotoModal } from '@/components/modals';
 import { View, YStack, Text, Button, Image, XStack, ScreenWrapper } from '@/components/v2/ui';
 import { ImageSource, useModels, useOnboarding } from '@/state';
 import { ImageUp } from '@tamagui/lucide-icons';
-import { Link } from 'expo-router';
+import { Link, usePathname } from 'expo-router';
 import { useEffect } from 'react';
 
 export default function SelectUserPhoto() {
   const { setOnboardingStep } = useOnboarding();
+  const pathname = usePathname();
 
   const { currentModel, addModel, setCurrentModel } = useModels();
   const { isOpen, toggle } = useSelectPhotoModal();
@@ -18,7 +19,7 @@ export default function SelectUserPhoto() {
   };
 
   useEffect(() => {
-    setOnboardingStep(1);
+    setOnboardingStep(pathname);
   }, []);
 
   return (

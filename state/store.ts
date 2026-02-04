@@ -528,8 +528,8 @@ const actions = {
   /**
    * Set onboarding step
    */
-  setOnboardingStep: (step: number) => {
-    store$.onboarding.currentStep.set(step);
+  setOnboardingStep: (path: string) => {
+    store$.onboarding.currentStep.set(path);
   },
 
   /**
@@ -537,7 +537,7 @@ const actions = {
    */
   resetOnboarding: () => {
     store$.onboarding.isCompleted.set(false);
-    store$.onboarding.currentStep.set(0);
+    store$.onboarding.currentStep.set('/onboarding/welcome');
   },
 };
 

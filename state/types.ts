@@ -99,7 +99,7 @@ export type AppState = {
   // App metadata (persisted)
   onboarding: {
     isCompleted: boolean;
-    currentStep: number;
+    currentStep: string;
   };
 
   // User preferences (persisted)

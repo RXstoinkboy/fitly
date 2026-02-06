@@ -9,9 +9,7 @@ import { useContext, useState } from 'react';
 import { GarmentsContext } from '@/context/garment-context';
 import { useGetGeneratedImagesList } from '@/queries/image-generation/get-generated-images-list';
 import * as FileSystem from 'expo-file-system';
-import { paths } from '@/constants/paths';
-import { useUpdateStatus } from '@/queries/onboarding/update-status';
-import { OnboardingStatus } from '@/lib/onboarding/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeScreen() {
   const models = useGetModelsList();
@@ -20,23 +18,19 @@ export default function HomeScreen() {
   const images = [...(models.data ?? []), ...(generatedImages.data ?? [])];
   const [galleryWrapperHeight, setGalleryWrapperHeight] = useState(0);
 
-  console.log('generatedImages', generatedImages.data);
+  const reset = async () => {
+    // Clear AsyncStorage (includes TanStack Query cache and onboarding status)
+    await AsyncStorage.clear();
 
-  const debugFn = async () => {
-    console.log('debugFn called', `${FileSystem.documentDirectory}${paths.fileSystem.generated}`);
-    const info = await FileSystem.getInfoAsync(
-      `${FileSystem.documentDirectory}${paths.fileSystem.generated}`,
-    );
-    console.log('info', info);
-    const dir = await FileSystem.readDirectoryAsync(
-      `${FileSystem.documentDirectory}${paths.fileSystem.generated}`,
-    );
-    console.log('dir', dir);
-  };
-  const updateStatus = useUpdateStatus();
+    // Clear all images from FileSystem
+    const docDir = FileSystem.documentDirectory!;
+    const items = await FileSystem.readDirectoryAsync(docDir);
 
-  const reset = () => {
-    updateStatus.mutate(OnboardingStatus.InProgress);
+    for (const item of items) {
+      await FileSystem.deleteAsync(`${docDir}${item}`, { idempotent: true });
+    }
+
+    console.log('All dev data cleared!');
   };
   return (
     <LinearGradient

@@ -1,6 +1,6 @@
 import { YStack, Text, Button, ScreenWrapper } from '@/components/v2/ui';
 import { useOnboarding } from '@/state';
-import { Link, useNavigation, usePathname } from 'expo-router';
+import { Link, usePathname } from 'expo-router';
 import { useEffect } from 'react';
 
 export default function Welcome() {

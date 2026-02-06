@@ -31,13 +31,16 @@ export default function SelectUserPhoto() {
         <Text type="secondary" text="center">
           This photo will be used to try new outfits. Don’t worry, you can change it anytime
         </Text>
-        {/* TODO: when no image then show a placeholder */}
         <View position={'relative'}>
-          <Image
-            source={{ uri: currentModel?.filePath, width: 300, height: 400 }}
-            rounded={'$7'}
-            aspectRatio={3 / 4}
-          />
+          {/* TODO: when no image then show a placeholder */}
+          {currentModel ? (
+            <Image
+              source={{ uri: currentModel?.filePath, width: 300, height: 400 }}
+              rounded={'$7'}
+              aspectRatio={3 / 4}
+            />
+          ) : null}
+
           <Button
             onPress={() => toggle()}
             position="absolute"

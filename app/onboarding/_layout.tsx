@@ -12,6 +12,7 @@ export default function OnboardingLayout() {
   if (currentStep && !isCompleted && isAtRoot) {
     return <Redirect href={currentStep as Href} />;
   }
+
   return (
     <Stack
       screenOptions={{

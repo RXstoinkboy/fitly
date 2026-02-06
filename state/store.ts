@@ -36,7 +36,7 @@ export const store$ = observable<AppState>({
   outfits: {},
   onboarding: {
     isCompleted: false,
-    currentStep: 0,
+    currentStep: '/onboarding/welcome',
   },
   preferences: {
     selectedModelId: null,
@@ -58,6 +58,9 @@ syncObservable(store$, {
   persist: {
     name: 'virtual-try-on',
     plugin: ObservablePersistMMKV,
+    options: {
+      exclude: ['ui'], // Exclude ephemeral UI state from persistence
+    },
   },
 });
 

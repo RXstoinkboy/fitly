@@ -10,3 +10,4 @@ export * from './image';
 export * from './view';
 export * from './no-image-placeholder';
 export * from './screen-wrapper';
+export * from './spinner';

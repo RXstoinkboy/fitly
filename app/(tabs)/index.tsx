@@ -59,6 +59,10 @@ export default function HomeScreen() {
     }
   }, [isGenerating]);
 
+  useEffect(() => {
+    scroll();
+  }, []);
+
   return (
     <>
       <LinearGradient
@@ -73,19 +77,8 @@ export default function HomeScreen() {
               <AddModelPhoto />
             ) : (
               <YStack flex={1} minW={'100%'}>
-                <ScrollView
-                  ref={ref}
-                  borderColor={'red'}
-                  borderWidth={'$1'}
-                  horizontal
-                  showsHorizontalScrollIndicator>
-                  <XStack
-                    borderColor={'green'}
-                    borderWidth={'$1'}
-                    minW={'100%'}
-                    gap={'$4'}
-                    paddingInline={'$4'}
-                    justify={'flex-end'}>
+                <ScrollView ref={ref} horizontal showsHorizontalScrollIndicator>
+                  <XStack minW={'100%'} gap={'$4'} paddingInline={'$4'} justify={'flex-end'}>
                     {/* onLayout={(event) => {
                     const { height } = event.nativeEvent.layout;
                     setGalleryWrapperHeight(height);

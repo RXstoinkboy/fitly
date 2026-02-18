@@ -1,7 +1,5 @@
 import { Wand2 } from '@tamagui/lucide-icons';
-import { Spinner } from 'tamagui';
-import { Button } from './button';
-import { Text } from '@/components/v2/ui';
+import { Button, Spinner } from '@/components/v2/ui';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
 import { useGeneratedImages, useModels, useSelectedGarments } from '@/state';
 import { useEffect, useState } from 'react';
@@ -51,8 +49,10 @@ export const GenerateImageButton = () => {
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
+    let intervalTime = 3000;
 
     if (isPending) {
+      setLoadingState(0);
       interval = setInterval(() => {
         setLoadingState((prev) => {
           if (prev === null) {
@@ -65,7 +65,7 @@ export const GenerateImageButton = () => {
 
           return prev + 1;
         });
-      }, 2000);
+      }, intervalTime);
     } else {
       setLoadingState(null);
     }
@@ -75,19 +75,13 @@ export const GenerateImageButton = () => {
   }, [isPending]);
 
   return (
-    <>
-      <Text>{isPending ? 'PENDING' : 'IDLE'}</Text>
-      <Button
-        buttonSize="lg"
-        rounded={'$radius.12'}
-        flex={1}
-        primary
-        disabled={isPending}
-        icon={isPending ? Spinner : Wand2}
-        onPress={onGenerateImage}
-        elevation={'$2'}>
-        {isPending ? loadingStates[loadingState ?? 0] : 'Create'}
-      </Button>
-    </>
+    <Button
+      type="primary"
+      stretched
+      disabled={isPending}
+      icon={isPending ? Spinner : Wand2}
+      onPress={onGenerateImage}>
+      {isPending ? loadingStates[loadingState ?? 0] : 'Create'}
+    </Button>
   );
 };

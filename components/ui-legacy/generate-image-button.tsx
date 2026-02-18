@@ -2,12 +2,8 @@ import { Wand2 } from '@tamagui/lucide-icons';
 import { Spinner } from 'tamagui';
 import { Button } from './button';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
-import { fileUriToBase64 } from '@/utils/file-uri-to-base64';
-import { saveToFileSystem } from '@/utils/save-to-file-system';
-import { paths } from '@/constants/paths';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { GarmentsContext } from '@/context/garment-context';
-import { useGetModelsList } from '@/queries/models/get-models-list';
+import { useGeneratedImages, useModels, useSelectedGarments } from '@/state';
+import { useEffect, useState } from 'react';
 
 const loadingStates = [
   'Sending images...',
@@ -18,52 +14,40 @@ const loadingStates = [
 ];
 
 export const GenerateImageButton = () => {
-  const { bottom, top } = useContext(GarmentsContext);
   const [loadingState, setLoadingState] = useState<string | null>(null);
-  const models = useGetModelsList();
+
+  const { addGeneratedImage } = useGeneratedImages();
+  const { currentModelId } = useModels();
+  const selectedGarments = useSelectedGarments();
+
   const { mutate, isPending } = useGenerateImageMutation({
     onSuccess: (data) => {
-      if (data) {
-        return saveToFileSystem(paths.fileSystem.generated, data);
+      if (data && currentModelId) {
+        addGeneratedImage(data.filePath, currentModelId, selectedGarments.selectedIds);
       }
     },
     onError: (error) => {
-      // Handle error
+      console.error('Failed to generate image:', error);
+      throw error;
     },
   });
-
-  const updateLoadingState = useCallback((index: number) => {
-    setTimeout(() => {
-      setLoadingState(loadingStates[index]);
-      if (index < loadingStates.length - 1) {
-        updateLoadingState(index + 1);
-      }
-    }, 1500);
-  }, []);
-
-  useEffect(() => {
-    if (isPending) {
-      setLoadingState(loadingStates[Math.floor(Math.random() * loadingStates.length)]);
-    } else {
-      setLoadingState(null);
+  const onGenerateImage = () => {
+    if (!currentModelId) {
+      console.error('No model selected');
+      return;
     }
-  }, [isPending]);
 
-  const handleGenerate = async () => {
-    updateLoadingState(0);
-    // Convert URIs to base64 strings
-    const [modelImageBase64, garmentTopImageBase64, garmentBottomImageBase64] = await Promise.all([
-      fileUriToBase64(models.data?.[0]),
-      fileUriToBase64(top),
-      fileUriToBase64(bottom),
-    ]);
+    const topGarment = selectedGarments.selectedGarments.find((g) => g.type === 'top');
+    const bottomGarment = selectedGarments.selectedGarments.find((g) => g.type === 'bottom');
 
     mutate({
-      modelImageBase64,
-      garmentTopImageBase64,
-      garmentBottomImageBase64,
+      top: topGarment?.filePath,
+      bottom: bottomGarment?.filePath,
     });
+    selectedGarments.clearSelection();
   };
+
+  useEffect(() => {}, [isPending]);
 
   return (
     <Button
@@ -71,10 +55,11 @@ export const GenerateImageButton = () => {
       rounded={'$radius.12'}
       flex={1}
       primary
+      disabled={isPending}
       icon={isPending ? Spinner : Wand2}
-      onPress={handleGenerate}
+      onPress={onGenerateImage}
       elevation={'$2'}>
-      {isPending ? loadingStates[Math.floor(Math.random() * loadingStates.length)] : 'Create'}
+      {isPending ? 'Creating...' : 'Create'}
     </Button>
   );
 };

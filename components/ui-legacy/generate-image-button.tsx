@@ -1,6 +1,7 @@
 import { Wand2 } from '@tamagui/lucide-icons';
 import { Spinner } from 'tamagui';
 import { Button } from './button';
+import { Text } from '@/components/v2/ui';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
 import { useGeneratedImages, useModels, useSelectedGarments } from '@/state';
 import { useEffect, useState } from 'react';
@@ -14,7 +15,7 @@ const loadingStates = [
 ];
 
 export const GenerateImageButton = () => {
-  const [loadingState, setLoadingState] = useState<string | null>(null);
+  const [loadingState, setLoadingState] = useState<number | null>(null);
 
   const { addGeneratedImage } = useGeneratedImages();
   const { currentModelId } = useModels();
@@ -31,6 +32,7 @@ export const GenerateImageButton = () => {
       throw error;
     },
   });
+
   const onGenerateImage = () => {
     if (!currentModelId) {
       console.error('No model selected');
@@ -47,19 +49,45 @@ export const GenerateImageButton = () => {
     selectedGarments.clearSelection();
   };
 
-  useEffect(() => {}, [isPending]);
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (isPending) {
+      interval = setInterval(() => {
+        setLoadingState((prev) => {
+          if (prev === null) {
+            return 0;
+          }
+
+          if (prev >= loadingStates.length - 1) {
+            return prev;
+          }
+
+          return prev + 1;
+        });
+      }, 2000);
+    } else {
+      setLoadingState(null);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isPending]);
 
   return (
-    <Button
-      buttonSize="lg"
-      rounded={'$radius.12'}
-      flex={1}
-      primary
-      disabled={isPending}
-      icon={isPending ? Spinner : Wand2}
-      onPress={onGenerateImage}
-      elevation={'$2'}>
-      {isPending ? 'Creating...' : 'Create'}
-    </Button>
+    <>
+      <Text>{isPending ? 'PENDING' : 'IDLE'}</Text>
+      <Button
+        buttonSize="lg"
+        rounded={'$radius.12'}
+        flex={1}
+        primary
+        disabled={isPending}
+        icon={isPending ? Spinner : Wand2}
+        onPress={onGenerateImage}
+        elevation={'$2'}>
+        {isPending ? loadingStates[loadingState ?? 0] : 'Create'}
+      </Button>
+    </>
   );
 };

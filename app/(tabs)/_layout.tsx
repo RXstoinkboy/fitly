@@ -21,7 +21,7 @@ export default function TabLayout() {
           title: 'Generate',
           headerShown: false,
           animation: 'shift',
-          tabBarIcon: ({ color, size }) => <Wand2 color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => <Wand2 color={color as any} size={size} />,
         }}
       />
       <Tabs.Screen
@@ -30,7 +30,9 @@ export default function TabLayout() {
           title: 'Gallery',
           headerShown: false,
           animation: 'shift',
-          tabBarIcon: ({ color, size }) => <GalleryHorizontalEnd color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <GalleryHorizontalEnd color={color as any} size={size} />
+          ),
         }}
       />
     </Tabs>

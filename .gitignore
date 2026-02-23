@@ -41,3 +41,5 @@ android/
 
 .env
 supabase/functions/.env
+backend/.env
+backend/node_modules/

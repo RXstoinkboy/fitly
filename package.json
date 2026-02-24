@@ -1,6 +1,7 @@
 {
   "name": "@virtual-try-on/root",
   "private": true,
+  "packageManager": "npm@11.3.0",
   "workspaces": [
     "apps/*"
   ],

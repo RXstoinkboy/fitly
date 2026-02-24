@@ -1,5 +1,9 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
+# tools
+.vscode/
+.idea/
+
 # dependencies
 node_modules/
 
@@ -11,6 +15,7 @@ node_modules/
 *.pem
 
 # local env files
+.env
 .env*.local
 
 # typescript

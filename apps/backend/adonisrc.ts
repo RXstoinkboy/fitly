@@ -9,10 +9,7 @@ export default defineConfig({
   | List of ace commands to register from packages.
   |
   */
-  commands: [
-    () => import('@adonisjs/core/commands'),
-    () => import('@adonisjs/lucid/commands'),
-  ],
+  commands: [() => import('@adonisjs/core/commands'), () => import('@adonisjs/lucid/commands')],
 
   /*
   |--------------------------------------------------------------------------
@@ -40,8 +37,5 @@ export default defineConfig({
   | Files to import after the application has booted.
   |
   */
-  preloads: [
-    () => import('#start/kernel'),
-    () => import('#start/routes'),
-  ],
+  preloads: [() => import('#start/kernel'), () => import('#start/routes')],
 })

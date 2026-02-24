@@ -1,4 +1,4 @@
-import { HttpContext, ExceptionHandler, errors } from '@adonisjs/core/http'
+import { type HttpContext, ExceptionHandler, errors } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 
 export default class HttpExceptionHandler extends ExceptionHandler {

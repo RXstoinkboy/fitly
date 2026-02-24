@@ -17,5 +17,5 @@ export const imageGenerationValidator = vine.compile(
     garmentTopImageBase64: vine.string().optional(),
     garmentBottomImageBase64: vine.string().optional(),
     garmentFullBodyImageBase64: vine.string().optional(),
-  })
+  }),
 )

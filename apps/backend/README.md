@@ -36,23 +36,24 @@ cp .env.example .env
 
 Edit `.env` and set the required values:
 
-| Variable | Required | Description |
-|---|---|---|
-| `NODE_ENV` | Yes | `development`, `production`, or `test` |
-| `PORT` | Yes | HTTP server port (default: `3333`) |
-| `HOST` | Yes | HTTP server host (default: `0.0.0.0`) |
-| `APP_KEY` | Yes | Random 32-byte hex secret for encryption |
-| `LOG_LEVEL` | Yes | `info`, `debug`, `warn`, `error`, etc. |
-| `GOOGLE_API_KEY` | Yes | Google GenAI API key |
-| `GOOGLE_GENAI_ENDPOINT` | No | Override the default Gemini model endpoint |
-| `API_KEY` | No | Secret to protect endpoints. Leave empty to disable auth. |
-| `DB_HOST` | Yes | PostgreSQL host (default: `localhost`) |
-| `DB_PORT` | Yes | PostgreSQL port (default: `5432`) |
-| `DB_USER` | Yes | PostgreSQL user |
-| `DB_PASSWORD` | No | PostgreSQL password |
-| `DB_DATABASE` | Yes | PostgreSQL database name (default: `virtual_try_on`) |
+| Variable                | Required | Description                                               |
+| ----------------------- | -------- | --------------------------------------------------------- |
+| `NODE_ENV`              | Yes      | `development`, `production`, or `test`                    |
+| `PORT`                  | Yes      | HTTP server port (default: `3333`)                        |
+| `HOST`                  | Yes      | HTTP server host (default: `0.0.0.0`)                     |
+| `APP_KEY`               | Yes      | Random 32-byte hex secret for encryption                  |
+| `LOG_LEVEL`             | Yes      | `info`, `debug`, `warn`, `error`, etc.                    |
+| `GOOGLE_API_KEY`        | Yes      | Google GenAI API key                                      |
+| `GOOGLE_GENAI_ENDPOINT` | No       | Override the default Gemini model endpoint                |
+| `API_KEY`               | No       | Secret to protect endpoints. Leave empty to disable auth. |
+| `DB_HOST`               | Yes      | PostgreSQL host (default: `localhost`)                    |
+| `DB_PORT`               | Yes      | PostgreSQL port (default: `5432`)                         |
+| `DB_USER`               | Yes      | PostgreSQL user                                           |
+| `DB_PASSWORD`           | No       | PostgreSQL password                                       |
+| `DB_DATABASE`           | Yes      | PostgreSQL database name (default: `virtual_try_on`)      |
 
 To generate a secure `APP_KEY`:
+
 ```bash
 node -e "const crypto = require('crypto'); console.log(crypto.randomBytes(32).toString('hex'));"
 ```
@@ -78,6 +79,7 @@ The server starts at `http://0.0.0.0:3333` by default.
 Creates an anonymous user and returns an access token. No credentials required.
 
 **Response (201):**
+
 ```json
 {
   "token": "<opaque access token>",
@@ -92,10 +94,12 @@ Use the returned `token` as `Bearer` token in subsequent authenticated requests.
 Generates a virtual try-on image using Google's Gemini model.
 
 **Headers:**
+
 - `Content-Type: application/json`
-- `x-api-key: <API_KEY>` *(required only if `API_KEY` is set in `.env`)*
+- `x-api-key: <API_KEY>` _(required only if `API_KEY` is set in `.env`)_
 
 **Request Body:**
+
 ```json
 {
   "modelImageBase64": "<base64 string>",
@@ -111,6 +115,7 @@ Generates a virtual try-on image using Google's Gemini model.
 - At least one garment image is required.
 
 **Response (200):**
+
 ```json
 {
   "generatedImageBase64": "<base64 string>",
@@ -119,6 +124,7 @@ Generates a virtual try-on image using Google's Gemini model.
 ```
 
 **Error Responses:**
+
 - `400` – Bad request (missing garment images or validation failure)
 - `401` – Unauthorized (invalid or missing API key)
 - `502` – Google GenAI request failed
@@ -128,6 +134,7 @@ Generates a virtual try-on image using Google's Gemini model.
 Returns server health status.
 
 **Response (200):**
+
 ```json
 { "status": "ok" }
 ```

@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "packageManager": "npm",
   "scripts": {
     "dev": "tsx bin/server.ts",
     "build": "tsc",
     "start": "node bin/server.js",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
@@ -30,12 +35,16 @@
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.8.2",
+    "@adonisjs/eslint-config": "^3.0.0",
     "@adonisjs/tsconfig": "^1.4.1",
     "@swc/core": "^1.7.26",
     "@types/luxon": "^3.7.1",
     "@types/node": "^22.5.4",
     "@types/pg": "^8.16.0",
+    "eslint": "^9.39.3",
+    "eslint-config-prettier": "^9.1.2",
     "hot-hook": "^0.3.1",
+    "prettier": "^3.8.1",
     "tsx": "^4.21.0",
     "typescript": "~5.8.3"
   },

@@ -7,14 +7,17 @@ AdonisJS v6 API server for the Fitly virtual try-on app.
 - **Framework**: AdonisJS v6
 - **Runtime**: Node.js 20+
 - **Language**: TypeScript
+- **Database**: PostgreSQL via Lucid ORM
+- **Auth**: AdonisJS Auth with access tokens
 - **Validation**: VineJS
 
 ## Features
 
+- `POST /api/v1/auth/anonymous` – Create an anonymous user and receive an access token
 - `POST /api/v1/images/generate` – Generate a virtual try-on image using Google GenAI
 - `GET /api/v1/health` – Health check endpoint
 - Optional API key authentication via `x-api-key` header
-- Request validation with detailed error messages
+- CORS enabled for all origins
 
 ## Getting Started
 
@@ -43,13 +46,24 @@ Edit `.env` and set the required values:
 | `GOOGLE_API_KEY` | Yes | Google GenAI API key |
 | `GOOGLE_GENAI_ENDPOINT` | No | Override the default Gemini model endpoint |
 | `API_KEY` | No | Secret to protect endpoints. Leave empty to disable auth. |
+| `DB_HOST` | Yes | PostgreSQL host (default: `localhost`) |
+| `DB_PORT` | Yes | PostgreSQL port (default: `5432`) |
+| `DB_USER` | Yes | PostgreSQL user |
+| `DB_PASSWORD` | No | PostgreSQL password |
+| `DB_DATABASE` | Yes | PostgreSQL database name (default: `virtual_try_on`) |
 
 To generate a secure `APP_KEY`:
 ```bash
 node -e "const crypto = require('crypto'); console.log(crypto.randomBytes(32).toString('hex'));"
 ```
 
-### 3. Start the development server
+### 3. Run database migrations
+
+```bash
+node ace migration:run
+```
+
+### 4. Start the development server
 
 ```bash
 npm run dev
@@ -58,6 +72,20 @@ npm run dev
 The server starts at `http://0.0.0.0:3333` by default.
 
 ## API Reference
+
+### `POST /api/v1/auth/anonymous`
+
+Creates an anonymous user and returns an access token. No credentials required.
+
+**Response (201):**
+```json
+{
+  "token": "<opaque access token>",
+  "userId": "<uuid>"
+}
+```
+
+Use the returned `token` as `Bearer` token in subsequent authenticated requests.
 
 ### `POST /api/v1/images/generate`
 

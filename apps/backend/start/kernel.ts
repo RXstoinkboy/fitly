@@ -12,6 +12,7 @@ server.errorHandler(() => import('#middleware/exception_handler'))
  * request, including the ones where no route is found.
  */
 server.use([
+  () => import('@adonisjs/cors/cors_middleware'),
   () => import('@adonisjs/core/bodyparser_middleware'),
 ])
 
@@ -20,4 +21,5 @@ server.use([
  */
 export const middleware = router.named({
   apiKey: () => import('#middleware/api_key_middleware'),
+  auth: () => import('@adonisjs/auth/initialize_auth_middleware'),
 })

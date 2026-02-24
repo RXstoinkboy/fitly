@@ -9,7 +9,10 @@ export default defineConfig({
   | List of ace commands to register from packages.
   |
   */
-  commands: [() => import('@adonisjs/core/commands')],
+  commands: [
+    () => import('@adonisjs/core/commands'),
+    () => import('@adonisjs/lucid/commands'),
+  ],
 
   /*
   |--------------------------------------------------------------------------
@@ -22,7 +25,11 @@ export default defineConfig({
   */
   providers: [
     () => import('@adonisjs/core/providers/app_provider'),
+    () => import('@adonisjs/core/providers/hash_provider'),
     () => import('@adonisjs/core/providers/vinejs_provider'),
+    () => import('@adonisjs/lucid/database_provider'),
+    () => import('@adonisjs/auth/auth_provider'),
+    () => import('@adonisjs/cors/cors_provider'),
   ],
 
   /*

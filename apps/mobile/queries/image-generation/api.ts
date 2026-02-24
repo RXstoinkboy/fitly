@@ -1,9 +1,13 @@
 import { ImageGenerationInput } from './types';
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3333';
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
 const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
 
 export const generateImage = async (payload: ImageGenerationInput) => {
+  if (!API_URL) {
+    throw new Error('EXPO_PUBLIC_API_URL is not configured.');
+  }
+
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
@@ -12,7 +16,7 @@ export const generateImage = async (payload: ImageGenerationInput) => {
     headers['x-api-key'] = API_KEY;
   }
 
-  const response = await fetch(`${API_URL}/api/generate-image`, {
+  const response = await fetch(`${API_URL}/api/v1/images/generate`, {
     method: 'POST',
     headers,
     body: JSON.stringify(payload),

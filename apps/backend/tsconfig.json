@@ -5,6 +5,7 @@
       "#controllers/*": ["./app/controllers/*.js"],
       "#middleware/*": ["./app/middleware/*.js"],
       "#validators/*": ["./app/validators/*.js"],
+      "#types/*": ["./app/types/*.js"],
       "#config/*": ["./config/*.js"],
       "#start/*": ["./start/*.js"]
     }

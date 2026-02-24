@@ -37,19 +37,4 @@ export default defineConfig({
     () => import('#start/kernel'),
     () => import('#start/routes'),
   ],
-
-  /*
-  |--------------------------------------------------------------------------
-  | Directories
-  |--------------------------------------------------------------------------
-  |
-  | Override the default directory paths used by AdonisJS.
-  |
-  */
-  directories: {
-    controllers: 'app/controllers',
-    middleware: 'app/middleware',
-    validators: 'app/validators',
-    config: 'config',
-  },
 })

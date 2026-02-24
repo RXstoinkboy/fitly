@@ -1,6 +1,6 @@
-# Fitly Backend
+# @virtual-try-on/backend
 
-AdonisJS v6 API server for the Fitly virtual try-on app. Replaces the Supabase Edge Function for AI image generation.
+AdonisJS v6 API server for the Fitly virtual try-on app.
 
 ## Tech Stack
 
@@ -8,13 +8,12 @@ AdonisJS v6 API server for the Fitly virtual try-on app. Replaces the Supabase E
 - **Runtime**: Node.js 20+
 - **Language**: TypeScript
 - **Validation**: VineJS
-- **AI**: Google Generative AI (Gemini)
 
 ## Features
 
-- `POST /api/generate-image` – Generate a virtual try-on image using Google GenAI
-- `GET /health` – Health check endpoint
-- API key authentication (optional, via `x-api-key` header)
+- `POST /api/v1/images/generate` – Generate a virtual try-on image using Google GenAI
+- `GET /api/v1/health` – Health check endpoint
+- Optional API key authentication via `x-api-key` header
 - Request validation with detailed error messages
 
 ## Getting Started
@@ -22,7 +21,7 @@ AdonisJS v6 API server for the Fitly virtual try-on app. Replaces the Supabase E
 ### 1. Install dependencies
 
 ```bash
-cd backend
+cd apps/backend
 npm install
 ```
 
@@ -39,9 +38,10 @@ Edit `.env` and set the required values:
 | `NODE_ENV` | Yes | `development`, `production`, or `test` |
 | `PORT` | Yes | HTTP server port (default: `3333`) |
 | `HOST` | Yes | HTTP server host (default: `0.0.0.0`) |
-| `APP_KEY` | Yes | Random 32-byte secret for encryption |
+| `APP_KEY` | Yes | Random 32-byte hex secret for encryption |
 | `LOG_LEVEL` | Yes | `info`, `debug`, `warn`, `error`, etc. |
 | `GOOGLE_API_KEY` | Yes | Google GenAI API key |
+| `GOOGLE_GENAI_ENDPOINT` | No | Override the default Gemini model endpoint |
 | `API_KEY` | No | Secret to protect endpoints. Leave empty to disable auth. |
 
 To generate a secure `APP_KEY`:
@@ -55,11 +55,11 @@ node -e "const crypto = require('crypto'); console.log(crypto.randomBytes(32).to
 npm run dev
 ```
 
-The server starts at `http://localhost:3333` by default.
+The server starts at `http://0.0.0.0:3333` by default.
 
 ## API Reference
 
-### `POST /api/generate-image`
+### `POST /api/v1/images/generate`
 
 Generates a virtual try-on image using Google's Gemini model.
 
@@ -80,7 +80,7 @@ Generates a virtual try-on image using Google's Gemini model.
 
 - `modelImageBase64` – **Required**. Base64-encoded photo of the person.
 - `mimeType` – Optional. Defaults to `image/jpeg`.
-- At least one garment image is required: `garmentTopImageBase64`, `garmentBottomImageBase64`, or `garmentFullBodyImageBase64`.
+- At least one garment image is required.
 
 **Response (200):**
 ```json
@@ -95,7 +95,7 @@ Generates a virtual try-on image using Google's Gemini model.
 - `401` – Unauthorized (invalid or missing API key)
 - `502` – Google GenAI request failed
 
-### `GET /health`
+### `GET /api/v1/health`
 
 Returns server health status.
 
@@ -106,14 +106,18 @@ Returns server health status.
 
 ## Frontend Configuration
 
-In the React Native app, set these environment variables (in the root `.env`):
+In the Expo app, set these environment variables (`apps/mobile/.env`):
 
 ```
+# For iOS simulator / Android emulator on the same machine:
 EXPO_PUBLIC_API_URL=http://localhost:3333
+
+# For physical devices, use your machine's LAN IP address (not localhost —
+# on a real device, localhost refers to the device itself, not your dev machine):
+EXPO_PUBLIC_API_URL=http://192.168.1.x:3333
+
 EXPO_PUBLIC_API_KEY=your_api_key_here
 ```
-
-For production, replace `localhost:3333` with your deployed server URL.
 
 ## Production Build
 

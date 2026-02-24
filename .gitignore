@@ -3,27 +3,8 @@
 # dependencies
 node_modules/
 
-# Expo
-.expo/
-dist/
-web-build/
-expo-env.d.ts
-
-# Native
-*.orig.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-
-# Metro
-.metro-health-check*
-
-# debug
-npm-debug.*
-yarn-debug.*
-yarn-error.*
+# Turborepo
+.turbo/
 
 # macOS
 .DS_Store
@@ -35,11 +16,36 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-app-example
-android/
-.tamagui/
+# ── apps/mobile ──────────────────────────────────
+# Expo
+apps/mobile/.expo/
+apps/mobile/dist/
+apps/mobile/web-build/
+apps/mobile/expo-env.d.ts
 
-.env
-supabase/functions/.env
-backend/.env
-backend/node_modules/
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+apps/mobile/android/
+apps/mobile/.tamagui/
+apps/mobile/app-example/
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Mobile env
+apps/mobile/.env
+apps/mobile/supabase/functions/.env
+
+# ── apps/backend ─────────────────────────────────
+apps/backend/.env
+apps/backend/build/

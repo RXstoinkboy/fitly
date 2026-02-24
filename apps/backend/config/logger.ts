@@ -7,7 +7,7 @@ const loggerConfig = defineConfig({
   loggers: {
     app: {
       enabled: true,
-      name: 'fitly-backend',
+      name: '@virtual-try-on/backend',
       level: env.get('LOG_LEVEL'),
       transport: {
         targets: [

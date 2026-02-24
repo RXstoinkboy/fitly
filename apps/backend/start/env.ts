@@ -13,8 +13,15 @@ export default await Env.create(new URL('../', import.meta.url), {
   GOOGLE_API_KEY: Env.schema.string(),
 
   /**
+   * Google GenAI REST endpoint for image generation.
+   * Defaults to the Gemini 2.5 Flash Preview model endpoint.
+   */
+  GOOGLE_GENAI_ENDPOINT: Env.schema.string.optional(),
+
+  /**
    * Optional API key for authenticating client requests.
-   * Leave empty to disable API key auth.
+   * When set, every request must include an `x-api-key` header with this value.
+   * Leave unset to disable API key authentication.
    */
   API_KEY: Env.schema.string.optional(),
 })

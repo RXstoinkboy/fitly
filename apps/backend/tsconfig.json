@@ -1,0 +1,14 @@
+{
+  "extends": "@adonisjs/tsconfig/tsconfig.app.json",
+  "compilerOptions": {
+    "paths": {
+      "#controllers/*": ["./app/controllers/*.js"],
+      "#middleware/*": ["./app/middleware/*.js"],
+      "#validators/*": ["./app/validators/*.js"],
+      "#models/*": ["./app/models/*.js"],
+      "#types/*": ["./app/types/*.js"],
+      "#config/*": ["./config/*.js"],
+      "#start/*": ["./start/*.js"]
+    }
+  }
+}

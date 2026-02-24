@@ -1,50 +1,44 @@
-# Welcome to your Expo app 👋
+# Virtual Try-On (Fitly)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A Turborepo monorepo for the Fitly AI-powered virtual garment try-on app.
 
-## Get started
+## Structure
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+apps/
+  mobile/    — React Native / Expo mobile app
+  backend/   — AdonisJS v6 API server (image generation)
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Getting Started
 
-## Learn more
+```bash
+# Install all dependencies from the root
+npm install
 
-To learn more about developing your project with Expo, look at the following resources:
+# Start all apps in development mode
+npm run dev
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+# Or start individual apps
+cd apps/mobile && npm run start
+cd apps/backend && npm run dev
+```
 
-## Join the community
+## Apps
 
-Join our community of developers creating universal apps.
+### `apps/mobile`
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Expo/React Native app. See `apps/mobile/ROUTES.md` for route details.
+
+**Env vars** (copy `apps/mobile/.env.example` to `apps/mobile/.env`):
+- `EXPO_PUBLIC_API_URL` — Backend URL (use your machine's LAN IP for physical devices, e.g. `http://192.168.1.x:3333`)
+- `EXPO_PUBLIC_API_KEY` — Optional API key matching the backend `API_KEY`
+
+### `apps/backend`
+
+AdonisJS v6 REST API. See `apps/backend/README.md` for full setup instructions.
+
+**Env vars** (copy `apps/backend/.env.example` to `apps/backend/.env`):
+- `GOOGLE_API_KEY` — Google GenAI API key
+- `APP_KEY` — 32-byte random hex secret
+- `API_KEY` — Optional request authentication key

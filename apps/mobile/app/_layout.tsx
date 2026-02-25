@@ -37,6 +37,13 @@ const RootContent = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="image-viewer"
+          options={{
+            presentation: 'fullScreenModal',
+            headerShown: false,
+          }}
+        />
       </Stack.Protected>
       <Stack.Screen name="+not-found" />
     </Stack>
@@ -65,7 +72,6 @@ export default function RootLayout() {
             <SafeAreaProvider>
               <RootContent />
               {/* TODO: clothes selection drawer */}
-              {/* TODO: modal with image zoom -n */}
             </SafeAreaProvider>
             <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
           </GarmentsProvider>

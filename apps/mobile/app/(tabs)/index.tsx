@@ -1,8 +1,7 @@
-import { YStack, XStack, H6, ScrollView, Square, Spinner } from 'tamagui';
+import { YStack, XStack, H6, Square, Spinner } from 'tamagui';
 import { LinearGradient } from '@tamagui/linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, AddModelPhoto, GenerateImageButton } from '@/components/ui-legacy';
-import { Image } from '@/components/v2/ui';
+import { Button, AddModelPhoto, GenerateImageButton, ImagesCarousel } from '@/components/ui-legacy';
 import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SelectGarment, useSelectGarment } from '@/components/garments';
@@ -10,11 +9,11 @@ import { SelectGarmentType, SelectPhotoModal } from '@/components/modals';
 import { useGeneratedImages, useModels } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { generatedKeys } from '@/queries/image-generation/keys';
-import { useEffect, useRef } from 'react';
+import { useWindowDimensions } from 'react-native';
 
 export default function HomeScreen() {
   const { currentModel } = useModels();
-  const { images } = useGeneratedImages();
+  const { images, deleteGeneratedImagePermanently } = useGeneratedImages();
   const {
     tempImage,
     onImageSelected,
@@ -24,7 +23,8 @@ export default function HomeScreen() {
     garments,
   } = useSelectGarment();
 
-  // const [galleryWrapperHeight, setGalleryWrapperHeight] = useState(0);
+  const { height: windowHeight } = useWindowDimensions();
+  const carouselHeight = windowHeight * 0.55;
 
   const reset = async () => {
     // Clear AsyncStorage (includes TanStack Query cache and onboarding status)
@@ -45,24 +45,6 @@ export default function HomeScreen() {
     mutationKey: generatedKeys.add(),
   });
 
-  const ref = useRef<ScrollView>(null);
-
-  const scroll = () => {
-    if (ref.current) {
-      ref.current.scrollToEnd({ animated: true }); // Adjust the scroll amount as needed
-    }
-  };
-
-  useEffect(() => {
-    if (isGenerating) {
-      scroll();
-    }
-  }, [isGenerating]);
-
-  useEffect(() => {
-    scroll();
-  }, []);
-
   return (
     <>
       <LinearGradient
@@ -77,29 +59,20 @@ export default function HomeScreen() {
               <AddModelPhoto />
             ) : (
               <YStack flex={1} minW={'100%'}>
-                <ScrollView ref={ref} horizontal showsHorizontalScrollIndicator>
-                  <XStack minW={'100%'} gap={'$4'} paddingInline={'$4'} justify={'flex-end'}>
-                    {/* onLayout={(event) => {
-                    const { height } = event.nativeEvent.layout;
-                    setGalleryWrapperHeight(height);
-                  }}> */}
-                    {images.map((image) => (
-                      <Image
-                        key={image.id}
-                        source={{ uri: image.filePath, width: 300, height: 400 }}
-                        rounded={'$7'}
-                        aspectRatio={3 / 4}
-                      />
-                    ))}
-                    {isGenerating ? (
-                      <Square width={300} height={400} rounded={'$7'} bg={'$color6'}>
-                        <Spinner size="large" />
-                      </Square>
-                    ) : null}
-
-                    {/* <ImagesCarousel height={galleryWrapperHeight ?? 0} images={images} /> */}
-                  </XStack>
-                </ScrollView>
+                <YStack flex={1} justify="center" items="center">
+                  {images.length > 0 ? (
+                    <ImagesCarousel
+                      height={carouselHeight}
+                      images={images}
+                      onRemove={deleteGeneratedImagePermanently}
+                    />
+                  ) : null}
+                  {isGenerating ? (
+                    <Square width={300} height={400} rounded={'$7'} bg={'$color6'}>
+                      <Spinner size="large" />
+                    </Square>
+                  ) : null}
+                </YStack>
                 {currentModel ? (
                   <YStack gap="$4" px="$6">
                     <YStack gap={'$4'}>

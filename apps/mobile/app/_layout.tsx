@@ -39,6 +39,13 @@ const RootContent = () => {
         />
       </Stack.Protected>
       <Stack.Screen name="+not-found" />
+      <Stack.Screen
+        name="image-detail/[id]"
+        options={{
+          presentation: 'modal',
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };

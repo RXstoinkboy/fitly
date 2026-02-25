@@ -11,3 +11,5 @@ export * from './view';
 export * from './no-image-placeholder';
 export * from './screen-wrapper';
 export * from './spinner';
+export * from './tabs';
+export * from './popover';

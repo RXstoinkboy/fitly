@@ -1,40 +1,39 @@
 import React from 'react';
-import { Modal, Share, Dimensions } from 'react-native';
+import { Share, Dimensions } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image, XStack, YStack, Button } from '@/components/v2/ui';
 import { X, Share2, Trash2 } from '@tamagui/lucide-icons';
 
-type ImageDetailModalProps = {
-  imageUri: string | null;
+type ImageDetailContentProps = {
+  imageUri: string;
   isGenerated: boolean;
   onClose: () => void;
-  onRemove: (uri: string) => void;
+  onRemove: () => void;
 };
 
 const { width, height } = Dimensions.get('window');
 
-export const ImageDetailModal = ({
+export const ImageDetailContent = ({
   imageUri,
   isGenerated,
   onClose,
   onRemove,
-}: ImageDetailModalProps) => {
+}: ImageDetailContentProps) => {
   const handleShare = async () => {
-    if (!imageUri) return;
     try {
       await Share.share({ url: imageUri });
     } catch (_) {}
   };
 
   const handleRemove = () => {
-    if (!imageUri) return;
-    onRemove(imageUri);
+    onRemove();
     onClose();
   };
 
   return (
-    <Modal visible={!!imageUri} transparent animationType="fade" onRequestClose={onClose}>
-      <YStack flex={1} bg="rgba(0,0,0,0.95)" items="center" justify="center">
-        <XStack position="absolute" t={50} r={16} gap="$3" zIndex={10}>
+    <YStack flex={1} bg="$color1">
+      <SafeAreaView style={{ flex: 1 }}>
+        <XStack justify="flex-end" gap="$3" px="$4" py="$2">
           {isGenerated ? (
             <Button
               type="ghost"
@@ -59,15 +58,17 @@ export const ImageDetailModal = ({
             onPress={onClose}
           />
         </XStack>
-        {imageUri ? (
-          <Image
-            source={{ uri: imageUri, width, height: height * 0.8 }}
-            width={width}
-            height={height * 0.8}
-            resizeMode="contain"
-          />
-        ) : null}
-      </YStack>
-    </Modal>
+        <Image
+          source={{ uri: imageUri, width, height: height * 0.8 }}
+          width={width}
+          height={height * 0.8}
+          resizeMode="contain"
+        />
+        {/* TODO: Add expandable bottom sheet with scroll showing the list of garments used to
+            generate this image. This will later enable a 'remix' feature where the user can
+            pick this generated image and swap individual garments to create variations. */}
+      </SafeAreaView>
+    </YStack>
   );
 };
+

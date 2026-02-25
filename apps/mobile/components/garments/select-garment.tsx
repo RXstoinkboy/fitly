@@ -1,15 +1,15 @@
-import { Plus, Trash } from '@tamagui/lucide-icons';
+import { Plus, Trash } from '@/icons';
 import { ScrollView, getToken } from 'tamagui';
 import { Button, XStack, YStack, Square, Text, Image } from '@/components/v2/ui';
 import { GarmentImage, GarmentType, ImageSource } from '@/state/types';
 import { useGarments, useSelectedGarments } from '@/state';
 import { useState, useEffect } from 'react';
-import { useSelectPhotoModal } from '../modals';
+import { useSelectPhotoSheet } from '../modals';
 
 export const useSelectGarment = () => {
   const garments = useGarments();
   const selectedGarments = useSelectedGarments();
-  const selectPhotoModal = useSelectPhotoModal();
+  const selectPhotoSheet = useSelectPhotoSheet();
   const [tempImage, setTempImage] = useState<{ filePath: string; source: ImageSource }>();
 
   const onImageSelected = (filePath: string, source: ImageSource) => {
@@ -23,20 +23,20 @@ export const useSelectGarment = () => {
   ): Promise<void> => {
     const id = await garments.addGarment(filePath, source, type);
     selectedGarments.toggleSelection(id, true);
-    selectPhotoModal.toggle(false);
+    selectPhotoSheet.toggle(false);
   };
 
   useEffect(() => {
-    if (!selectPhotoModal.isOpen) {
+    if (!selectPhotoSheet.isOpen) {
       setTempImage(undefined);
     }
-  }, [selectPhotoModal.isOpen]);
+  }, [selectPhotoSheet.isOpen]);
 
   return {
     tempImage,
     onImageSelected,
     handleAddGarment,
-    selectPhotoModal,
+    selectPhotoSheet,
     selectedGarments,
     garments,
   };

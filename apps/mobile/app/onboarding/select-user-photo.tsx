@@ -1,26 +1,28 @@
-import { SelectPhotoModal, useSelectPhotoModal } from '@/components/modals';
+import { useMount } from '@/hooks';
+import { SelectPhotoSheet, useSelectPhotoSheet } from '@/components/modals';
+import { PhotoGuidelinesInfoButton, PhotoGuidelinesSheet, usePhotoGuidelinesSheet } from '@/components/onboarding';
 import { View, YStack, Text, Button, Image, XStack, ScreenWrapper } from '@/components/v2/ui';
 import { ImageSource, useModels, useOnboarding } from '@/state';
-import { ImageUp } from '@tamagui/lucide-icons';
+import { ImageUp } from '@/icons';
 import { Link, usePathname } from 'expo-router';
-import { useEffect } from 'react';
 
 export default function SelectUserPhoto() {
   const { setOnboardingStep } = useOnboarding();
   const pathname = usePathname();
 
   const { currentModel, addModel, setCurrentModel } = useModels();
-  const { isOpen, toggle } = useSelectPhotoModal();
+  const selectPhotoSheet = useSelectPhotoSheet();
+  const photoGuidelinesSheet = usePhotoGuidelinesSheet();
 
   const handleAddModel = async (image: string, source: ImageSource): Promise<void> => {
     const id = await addModel(image, source);
     setCurrentModel(id);
-    toggle(false);
+    selectPhotoSheet.toggle(false);
   };
 
-  useEffect(() => {
+  useMount(() => {
     setOnboardingStep(pathname);
-  }, []);
+  });
 
   return (
     <ScreenWrapper>
@@ -42,7 +44,7 @@ export default function SelectUserPhoto() {
           ) : null}
 
           <Button
-            onPress={() => toggle()}
+            onPress={() => selectPhotoSheet.toggle()}
             position="absolute"
             t={10}
             r={10}
@@ -63,21 +65,16 @@ export default function SelectUserPhoto() {
             type="primary"
             stretched
             onPress={() => {
-              toggle();
+              selectPhotoSheet.toggle();
             }}>
             Select photo
           </Button>
         )}
 
-        <YStack width={'100%'} items={'flex-start'}>
-          <Text>Photo guidelines for best results:</Text>
-          <Text pl={'$3'}>1. Plain background</Text>
-          <Text pl={'$3'}>2. Good lightning</Text>
-          <Text pl={'$3'}>3. Full body visible</Text>
-          <Text pl={'$3'}>4. Wear fitted clothes</Text>
-        </YStack>
+        <PhotoGuidelinesInfoButton onPress={() => photoGuidelinesSheet.toggle()} />
       </YStack>
-      <SelectPhotoModal isOpen={isOpen} toggle={toggle} onSuccess={handleAddModel} />
+      <SelectPhotoSheet isOpen={selectPhotoSheet.isOpen} toggle={selectPhotoSheet.toggle} onSuccess={handleAddModel} />
+      <PhotoGuidelinesSheet isOpen={photoGuidelinesSheet.isOpen} toggle={photoGuidelinesSheet.toggle} />
     </ScreenWrapper>
   );
 }

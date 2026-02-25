@@ -1,6 +1,6 @@
+import { useMount } from '@/hooks';
 import { YStack, Text, Button, ScreenWrapper } from '@/components/v2/ui';
-import { SelectGarmentType, SelectPhotoModal } from '@/components/modals';
-import { useEffect } from 'react';
+import { SelectGarmentType, SelectPhotoSheet } from '@/components/modals';
 import { Link, usePathname } from 'expo-router';
 import { useGeneratedImages, useModels, useOnboarding } from '@/state';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
@@ -13,7 +13,7 @@ export default function Onboarding() {
     tempImage,
     onImageSelected,
     handleAddGarment,
-    selectPhotoModal,
+    selectPhotoSheet,
     selectedGarments,
     garments,
   } = useSelectGarment();
@@ -49,9 +49,9 @@ export default function Onboarding() {
     selectedGarments.clearSelection();
   };
 
-  useEffect(() => {
+  useMount(() => {
     setOnboardingStep(pathname);
-  }, []);
+  });
 
   return (
     <ScreenWrapper>
@@ -66,7 +66,7 @@ export default function Onboarding() {
         <SelectGarment
           removeGarment={garments.removeGarment}
           selectedGarments={selectedGarments.selectedGarments}
-          toggle={selectPhotoModal.toggle}
+          toggle={selectPhotoSheet.toggle}
           toggleSelection={selectedGarments.toggleSelection}
         />
         {/* TODO: or maybe even hide it when there are no clothes added yet */}
@@ -81,12 +81,12 @@ export default function Onboarding() {
         </Link>
       </YStack>
 
-      <SelectPhotoModal
-        isOpen={selectPhotoModal.isOpen}
-        toggle={selectPhotoModal.toggle}
+      <SelectPhotoSheet
+        isOpen={selectPhotoSheet.isOpen}
+        toggle={selectPhotoSheet.toggle}
         onSuccess={onImageSelected}>
         {tempImage ? <SelectGarmentType image={tempImage} onSuccess={handleAddGarment} /> : null}
-      </SelectPhotoModal>
+      </SelectPhotoSheet>
     </ScreenWrapper>
   );
 }

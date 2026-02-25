@@ -1,3 +1,4 @@
+import { useMount } from '@/hooks';
 import { YStack, XStack, H6, ScrollView, Square, Spinner } from 'tamagui';
 import { LinearGradient } from '@tamagui/linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -6,7 +7,7 @@ import { Image } from '@/components/v2/ui';
 import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SelectGarment, useSelectGarment } from '@/components/garments';
-import { SelectGarmentType, SelectPhotoModal } from '@/components/modals';
+import { SelectGarmentType, SelectPhotoSheet } from '@/components/modals';
 import { useGeneratedImages, useModels } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { generatedKeys } from '@/queries/image-generation/keys';
@@ -19,7 +20,7 @@ export default function HomeScreen() {
     tempImage,
     onImageSelected,
     handleAddGarment,
-    selectPhotoModal,
+    selectPhotoSheet,
     selectedGarments,
     garments,
   } = useSelectGarment();
@@ -59,9 +60,9 @@ export default function HomeScreen() {
     }
   }, [isGenerating]);
 
-  useEffect(() => {
+  useMount(() => {
     scroll();
-  }, []);
+  });
 
   return (
     <>
@@ -108,7 +109,7 @@ export default function HomeScreen() {
                         <SelectGarment
                           removeGarment={garments.removeGarment}
                           selectedGarments={selectedGarments.selectedGarments}
-                          toggle={selectPhotoModal.toggle}
+                          toggle={selectPhotoSheet.toggle}
                           toggleSelection={selectedGarments.toggleSelection}
                         />
                       </YStack>
@@ -123,12 +124,12 @@ export default function HomeScreen() {
           </YStack>
         </SafeAreaView>
       </LinearGradient>
-      <SelectPhotoModal
-        isOpen={selectPhotoModal.isOpen}
-        toggle={selectPhotoModal.toggle}
+      <SelectPhotoSheet
+        isOpen={selectPhotoSheet.isOpen}
+        toggle={selectPhotoSheet.toggle}
         onSuccess={onImageSelected}>
         {tempImage ? <SelectGarmentType image={tempImage} onSuccess={handleAddGarment} /> : null}
-      </SelectPhotoModal>
+      </SelectPhotoSheet>
     </>
   );
 }

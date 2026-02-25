@@ -4,7 +4,7 @@ import { openCamera } from '@/utils/open-camera';
 import { openImageLibrary } from '@/utils/open-image-library';
 import { ImageSource } from '@/state';
 
-export const useSelectPhotoModal = () => {
+export const useSelectPhotoSheet = () => {
   const [opened, setOpened] = useState(false);
   const toggle = (opened?: boolean) => {
     setOpened((prev) => opened ?? !prev);
@@ -16,7 +16,7 @@ export const useSelectPhotoModal = () => {
   };
 };
 
-export const SelectPhotoModal = ({
+export const SelectPhotoSheet = ({
   children,
   isOpen,
   toggle,

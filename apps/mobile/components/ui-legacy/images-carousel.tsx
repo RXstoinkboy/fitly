@@ -9,7 +9,7 @@ import Animated, {
   FadeInDown,
 } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
-import { Share2 } from '@tamagui/lucide-icons';
+import { Share2 } from '@/icons';
 import { Button } from './button';
 
 const SlideItem = ({ imageUri }: { imageUri: string }) => {

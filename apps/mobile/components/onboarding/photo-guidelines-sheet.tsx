@@ -1,9 +1,9 @@
 import React, { memo, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button, Sheet, Text, YStack } from '@/components/v2/ui';
-import { Info } from '@tamagui/lucide-icons';
+import { Info } from '@/icons';
 
-const PHOTO_GUIDELINES_SEEN_KEY = 'photo_guidelines_seen';
+import { PHOTO_GUIDELINES_SEEN_KEY } from '@/lib/storage-keys';
 
 export const usePhotoGuidelinesSheet = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +24,10 @@ export const usePhotoGuidelinesSheet = () => {
   return { isOpen, toggle };
 };
 
+// TODO: Style improvements needed:
+// - Title should be bold and larger than the guideline items
+// - Guideline items should use regular font weight
+// - Consider adding an example stock photo that follows these guidelines
 const SheetContents = memo(() => (
   <YStack width={'100%'} gap={'$2'}>
     <Text size="l" weigth="semiBold">

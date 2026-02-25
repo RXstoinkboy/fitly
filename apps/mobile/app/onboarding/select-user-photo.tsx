@@ -1,8 +1,8 @@
-import { SelectPhotoModal, useSelectPhotoModal } from '@/components/modals';
+import { SelectPhotoSheet, useSelectPhotoSheet } from '@/components/modals';
 import { PhotoGuidelinesInfoButton, PhotoGuidelinesSheet, usePhotoGuidelinesSheet } from '@/components/onboarding';
 import { View, YStack, Text, Button, Image, XStack, ScreenWrapper } from '@/components/v2/ui';
 import { ImageSource, useModels, useOnboarding } from '@/state';
-import { ImageUp } from '@tamagui/lucide-icons';
+import { ImageUp } from '@/icons';
 import { Link, usePathname } from 'expo-router';
 import { useEffect } from 'react';
 
@@ -11,13 +11,13 @@ export default function SelectUserPhoto() {
   const pathname = usePathname();
 
   const { currentModel, addModel, setCurrentModel } = useModels();
-  const { isOpen, toggle } = useSelectPhotoModal();
-  const { isOpen: isGuidelinesOpen, toggle: toggleGuidelines } = usePhotoGuidelinesSheet();
+  const selectPhotoSheet = useSelectPhotoSheet();
+  const photoGuidelinesSheet = usePhotoGuidelinesSheet();
 
   const handleAddModel = async (image: string, source: ImageSource): Promise<void> => {
     const id = await addModel(image, source);
     setCurrentModel(id);
-    toggle(false);
+    selectPhotoSheet.toggle(false);
   };
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function SelectUserPhoto() {
           ) : null}
 
           <Button
-            onPress={() => toggle()}
+            onPress={() => selectPhotoSheet.toggle()}
             position="absolute"
             t={10}
             r={10}
@@ -65,16 +65,16 @@ export default function SelectUserPhoto() {
             type="primary"
             stretched
             onPress={() => {
-              toggle();
+              selectPhotoSheet.toggle();
             }}>
             Select photo
           </Button>
         )}
 
-        <PhotoGuidelinesInfoButton onPress={() => toggleGuidelines()} />
+        <PhotoGuidelinesInfoButton onPress={() => photoGuidelinesSheet.toggle()} />
       </YStack>
-      <SelectPhotoModal isOpen={isOpen} toggle={toggle} onSuccess={handleAddModel} />
-      <PhotoGuidelinesSheet isOpen={isGuidelinesOpen} toggle={toggleGuidelines} />
+      <SelectPhotoSheet isOpen={selectPhotoSheet.isOpen} toggle={selectPhotoSheet.toggle} onSuccess={handleAddModel} />
+      <PhotoGuidelinesSheet isOpen={photoGuidelinesSheet.isOpen} toggle={photoGuidelinesSheet.toggle} />
     </ScreenWrapper>
   );
 }

@@ -1,5 +1,5 @@
 import { YStack, Text } from '.';
-import { ImageOff } from '@tamagui/lucide-icons';
+import { ImageOff } from '@/icons';
 
 type NoImagePlaceholderProps = {
   text?: string;

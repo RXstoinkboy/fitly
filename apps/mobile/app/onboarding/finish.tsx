@@ -1,9 +1,9 @@
+import { useMount } from '@/hooks';
 import { YStack, Text, ScreenWrapper, Image, Button } from '@/components/v2/ui';
 import { generatedKeys } from '@/queries/image-generation/keys';
 import { useGeneratedImages, useOnboarding } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { Link, usePathname } from 'expo-router';
-import { useEffect } from 'react';
 
 export default function Onboarding() {
   const { setOnboardingStep, completeOnboarding } = useOnboarding();
@@ -19,9 +19,9 @@ export default function Onboarding() {
     completeOnboarding();
   };
 
-  useEffect(() => {
+  useMount(() => {
     setOnboardingStep(pathname);
-  }, []);
+  });
 
   return (
     <ScreenWrapper>

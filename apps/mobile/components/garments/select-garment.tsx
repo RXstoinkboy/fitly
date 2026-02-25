@@ -27,7 +27,7 @@ export const useSelectGarment = () => {
   };
 
   useEffect(() => {
-    if (!selectPhotoModal.isOpen) {
+    if (!selectPhotoSheet.isOpen) {
       setTempImage(undefined);
     }
   }, [selectPhotoSheet.isOpen]);

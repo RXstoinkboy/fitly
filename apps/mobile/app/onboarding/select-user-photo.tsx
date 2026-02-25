@@ -1,10 +1,10 @@
+import { useMount } from '@/hooks';
 import { SelectPhotoSheet, useSelectPhotoSheet } from '@/components/modals';
 import { PhotoGuidelinesInfoButton, PhotoGuidelinesSheet, usePhotoGuidelinesSheet } from '@/components/onboarding';
 import { View, YStack, Text, Button, Image, XStack, ScreenWrapper } from '@/components/v2/ui';
 import { ImageSource, useModels, useOnboarding } from '@/state';
 import { ImageUp } from '@/icons';
 import { Link, usePathname } from 'expo-router';
-import { useEffect } from 'react';
 
 export default function SelectUserPhoto() {
   const { setOnboardingStep } = useOnboarding();
@@ -20,9 +20,9 @@ export default function SelectUserPhoto() {
     selectPhotoSheet.toggle(false);
   };
 
-  useEffect(() => {
+  useMount(() => {
     setOnboardingStep(pathname);
-  }, []);
+  });
 
   return (
     <ScreenWrapper>

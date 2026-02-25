@@ -1,21 +1,21 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button, Sheet, Text, YStack } from '@/components/v2/ui';
 import { Info } from '@/icons';
-
+import { useMount } from '@/hooks';
 import { PHOTO_GUIDELINES_SEEN_KEY } from '@/lib/storage-keys';
 
 export const usePhotoGuidelinesSheet = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
+  useMount(() => {
     AsyncStorage.getItem(PHOTO_GUIDELINES_SEEN_KEY).then((seen) => {
       if (!seen) {
         setIsOpen(true);
         AsyncStorage.setItem(PHOTO_GUIDELINES_SEEN_KEY, 'true');
       }
     });
-  }, []);
+  });
 
   const toggle = (visible?: boolean) => {
     setIsOpen((prev) => visible ?? !prev);

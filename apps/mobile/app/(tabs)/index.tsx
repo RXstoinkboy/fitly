@@ -1,3 +1,4 @@
+import { useMount } from '@/hooks';
 import { YStack, XStack, H6, ScrollView, Square, Spinner } from 'tamagui';
 import { LinearGradient } from '@tamagui/linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -59,9 +60,9 @@ export default function HomeScreen() {
     }
   }, [isGenerating]);
 
-  useEffect(() => {
+  useMount(() => {
     scroll();
-  }, []);
+  });
 
   return (
     <>

@@ -1,6 +1,10 @@
 import { useMount } from '@/hooks';
 import { SelectPhotoSheet, useSelectPhotoSheet } from '@/components/modals';
-import { PhotoGuidelinesInfoButton, PhotoGuidelinesSheet, usePhotoGuidelinesSheet } from '@/components/onboarding';
+import {
+  PhotoGuidelinesInfoButton,
+  PhotoGuidelinesSheet,
+  usePhotoGuidelinesSheet,
+} from '@/components/onboarding';
 import { View, YStack, Text, Button, Image, XStack, ScreenWrapper } from '@/components/v2/ui';
 import { ImageSource, useModels, useOnboarding } from '@/state';
 import { ImageUp } from '@/icons';
@@ -73,8 +77,15 @@ export default function SelectUserPhoto() {
 
         <PhotoGuidelinesInfoButton onPress={() => photoGuidelinesSheet.toggle()} />
       </YStack>
-      <SelectPhotoSheet isOpen={selectPhotoSheet.isOpen} toggle={selectPhotoSheet.toggle} onSuccess={handleAddModel} />
-      <PhotoGuidelinesSheet isOpen={photoGuidelinesSheet.isOpen} toggle={photoGuidelinesSheet.toggle} />
+      <SelectPhotoSheet
+        isOpen={selectPhotoSheet.isOpen}
+        toggle={selectPhotoSheet.toggle}
+        onSuccess={handleAddModel}
+      />
+      <PhotoGuidelinesSheet
+        isOpen={photoGuidelinesSheet.isOpen}
+        toggle={photoGuidelinesSheet.toggle}
+      />
     </ScreenWrapper>
   );
 }

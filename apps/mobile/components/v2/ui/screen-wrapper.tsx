@@ -1,27 +1,14 @@
 import type { ReactNode } from 'react';
 import { LinearGradient } from '@tamagui/linear-gradient';
-import { View } from '.';
-import { Dimensions } from 'react-native';
-import { useTheme } from 'tamagui';
+import { StyleSheet } from 'react-native';
+import { YStack } from './y-stack';
 // import { HEADER_HEIGHT } from '@/constants/dimensions';
 
 export const ScreenWrapper = ({ children }: { children: ReactNode }) => {
-  const theme = useTheme();
-
   return (
-    <View
-      p={'$4'}
-      // pt={HEADER_HEIGHT + getToken('$4', 'space')}
-      height={Dimensions.get('window').height}>
-      <LinearGradient
-        position="absolute"
-        t={0}
-        l={0}
-        colors={[theme.background.val, theme.accent12.val]}
-        width={Dimensions.get('screen').width}
-        height={Dimensions.get('screen').height}
-      />
+    <YStack flex={1} p="$4" position="relative">
+      <LinearGradient colors={['$color3', '$accent10']} style={StyleSheet.absoluteFillObject} />
       {children}
-    </View>
+    </YStack>
   );
 };

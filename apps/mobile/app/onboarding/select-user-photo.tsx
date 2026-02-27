@@ -41,7 +41,9 @@ export default function SelectUserPhoto() {
           {/* TODO: when no image then show a placeholder */}
           {currentModel ? (
             <Image
-              source={{ uri: currentModel?.filePath, width: 300, height: 400 }}
+              src={currentModel?.filePath}
+              width={300}
+              height={400}
               rounded={'$7'}
               aspectRatio={3 / 4}
             />

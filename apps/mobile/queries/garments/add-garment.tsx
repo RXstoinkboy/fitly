@@ -2,7 +2,7 @@ import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react
 import { garmentsKeys } from './keys';
 import { paths } from '@/constants/paths';
 import { copyFile } from '@/utils/copy-file';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { GarmentType } from '@/lib/garments/types';
 
 export const useAddGarment = ({

@@ -1,5 +1,5 @@
 import { Plus, Trash } from '@/icons';
-import { ScrollView, getToken } from 'tamagui';
+import { ScrollView } from 'tamagui';
 import { Button, XStack, YStack, Square, Text, Image } from '@/components/v2/ui';
 import { GarmentImage, GarmentType, ImageSource } from '@/state/types';
 import { useGarments, useSelectedGarments } from '@/state';
@@ -93,11 +93,7 @@ export const SelectGarment = ({
                     overflow="hidden">
                     <>
                       <Image
-                        source={{
-                          uri: image.filePath,
-                          width: getToken('$12'),
-                          height: getToken('$12'),
-                        }}
+                        src={image.filePath}
                         width={'100%'}
                         height={'100%'}
                         rounded={'$7'}

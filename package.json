@@ -14,8 +14,15 @@
   "devDependencies": {
     "turbo": "^2.4.4"
   },
+  "resolutions": {
+    "@tamagui/core": "^2.0.0-rc.19",
+    "@tamagui/web": "^2.0.0-rc.19",
+    "tamagui": "^2.0.0-rc.19"
+  },
   "overrides": {
     "minimatch": "^10.2.1",
-    "react-native-reanimated": "3.19.5"
+    "@tamagui/core": "^2.0.0-rc.19",
+    "@tamagui/web": "^2.0.0-rc.19",
+    "tamagui": "^2.0.0-rc.19"
   }
 }

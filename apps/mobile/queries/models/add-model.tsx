@@ -2,7 +2,7 @@ import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react
 import { modelsKeys } from './keys';
 import { paths } from '@/constants/paths';
 import { copyFile } from '@/utils/copy-file';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 
 // TODO: might extend in future more model metadata
 // TODO: error handling

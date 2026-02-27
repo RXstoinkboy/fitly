@@ -15,7 +15,7 @@ import type {
   ImageSource,
 } from './types';
 import { generateId } from '../utils/generate-id';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { paths } from '@/constants/paths';
 
 // ============================================================================

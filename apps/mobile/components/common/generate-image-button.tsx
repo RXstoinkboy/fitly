@@ -48,7 +48,7 @@ export const GenerateImageButton = () => {
   };
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval> | undefined;
     let intervalTime = 3000;
 
     if (isPending) {
@@ -70,7 +70,9 @@ export const GenerateImageButton = () => {
       setLoadingState(null);
     }
     return () => {
-      clearInterval(interval);
+      if (interval) {
+        clearInterval(interval);
+      }
     };
   }, [isPending]);
 

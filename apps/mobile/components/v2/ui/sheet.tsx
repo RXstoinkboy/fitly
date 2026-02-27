@@ -9,7 +9,7 @@ const rootDefaults = {
   snapPointsMode: 'fit',
   dismissOnSnapToBottom: true,
   unmountChildrenWhenHidden: true,
-  animation: 'quick',
+  transition: 'quick',
 };
 
 const Sheet: any = (props: any) => <TamaguiSheet {...rootDefaults} {...props} />;
@@ -17,7 +17,7 @@ const Sheet: any = (props: any) => <TamaguiSheet {...rootDefaults} {...props} />
 const Overlay = (props: any) => (
   <TamaguiSheet.Overlay
     bg="$shadow3"
-    animation="medium"
+    transition="medium"
     enterStyle={{ opacity: 0 }}
     exitStyle={{ opacity: 0 }}
     {...props}

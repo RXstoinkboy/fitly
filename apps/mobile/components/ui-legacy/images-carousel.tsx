@@ -26,17 +26,12 @@ const SlideItem = ({ imageUri }: { imageUri: string }) => {
         bg="$color6"
         elevationAndroid={'$6'}
         position="relative">
-        <Image
-          source={{ uri: imageUri, width: 300, height: 400 }}
-          width={'100%'}
-          height={'100%'}
-          rounded={'$7'}
-        />
+        <Image src={imageUri} width={'100%'} height={'100%'} rounded={'$7'} />
         <Button
           position="absolute"
           b={10}
           r={10}
-          themeInverse
+          theme="accent"
           elevation={'$1'}
           rounded={'$radius.12'}
           icon={Share2}
@@ -79,7 +74,7 @@ export function ImagesCarousel({ height, images }: { height: number; images: str
         opacity,
       };
     },
-    [PAGE_HEIGHT, PAGE_WIDTH],
+    [images.length, PAGE_WIDTH],
   );
   return (
     <View style={{ flex: 1 }}>

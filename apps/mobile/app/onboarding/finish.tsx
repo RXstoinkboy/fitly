@@ -46,7 +46,9 @@ export default function Onboarding() {
               outfits!
             </Text>
             <Image
-              source={{ uri: generatedImage, width: 300, height: 400 }}
+              src={generatedImage}
+              width={300}
+              height={400}
               rounded={'$7'}
               aspectRatio={3 / 4}
             />

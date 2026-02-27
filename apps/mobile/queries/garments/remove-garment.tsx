@@ -1,6 +1,6 @@
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { garmentsKeys } from './keys';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 
 const remove = async (imagePath: string) => {
   return FileSystem.deleteAsync(imagePath, { idempotent: true });

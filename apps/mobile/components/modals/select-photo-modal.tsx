@@ -29,7 +29,7 @@ export const SelectPhotoSheet = ({
   onSuccess: (image: string, source: ImageSource) => void;
 }) => {
   return (
-    <Sheet forceRemoveScrollEnabled={isOpen} modal open={isOpen} onOpenChange={toggle}>
+    <Sheet disableRemoveScroll={isOpen} modal open={isOpen} onOpenChange={toggle}>
       <Sheet.Overlay />
       <Sheet.Handle />
       <Sheet.Frame>{children ?? <SheetContents onSuccess={onSuccess} />}</Sheet.Frame>

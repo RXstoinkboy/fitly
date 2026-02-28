@@ -48,7 +48,7 @@ export const PhotoGuidelinesSheet = ({
   isOpen: boolean;
   toggle: (visible?: boolean) => void;
 }) => (
-  <Sheet forceRemoveScrollEnabled={isOpen} modal open={isOpen} onOpenChange={toggle}>
+  <Sheet disableRemoveScroll={isOpen} modal open={isOpen} onOpenChange={toggle}>
     <Sheet.Overlay />
     <Sheet.Handle />
     <Sheet.Frame>

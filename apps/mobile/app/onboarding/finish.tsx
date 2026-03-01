@@ -1,9 +1,10 @@
 import { useMount } from '@/hooks';
-import { YStack, Text, ScreenWrapper, Image, Button } from '@/components/v2/ui';
+import { YStack, Text, ScreenWrapper, Image, Button, XStack } from '@/components/v2/ui';
 import { generatedKeys } from '@/queries/image-generation/keys';
 import { useGeneratedImages, useOnboarding } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { Link, usePathname } from 'expo-router';
+import { ArrowLeft } from '@/icons';
 
 export default function Onboarding() {
   const { setOnboardingStep, completeOnboarding } = useOnboarding();
@@ -24,7 +25,16 @@ export default function Onboarding() {
   });
 
   return (
-    <ScreenWrapper>
+    <ScreenWrapper
+      footer={
+        <XStack>
+          <Link asChild href={'/onboarding/select-garments'}>
+            <Button icon={<ArrowLeft />} type="ghost">
+              Back
+            </Button>
+          </Link>
+        </XStack>
+      }>
       <YStack flex={1} items={'center'} gap={'$4'}>
         {isGenerating ? (
           <>

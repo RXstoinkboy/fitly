@@ -1,4 +1,3 @@
-import { Next } from '@/components/onboarding/navigation';
 import { useOnboarding } from '@/state';
 import { type Href, Redirect, Stack, useSegments } from 'expo-router';
 
@@ -22,12 +21,7 @@ export default function OnboardingLayout() {
         //   height: HEADER_HEIGHT,
         // } as StyleProp<{ backgroundColor?: string; height?: number }>,
       }}>
-      <Stack.Screen
-        name="welcome"
-        options={{
-          headerRight: () => <Next href={'/onboarding/select-user-photo'} />,
-        }}
-      />
+      <Stack.Screen name="welcome" />
       <Stack.Screen name="select-user-photo" />
       <Stack.Screen name="select-garments" />
       <Stack.Screen name="finish" />

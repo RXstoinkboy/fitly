@@ -7,7 +7,7 @@ import {
 } from '@/components/onboarding';
 import { View, YStack, Text, Button, Image, XStack, ScreenWrapper } from '@/components/v2/ui';
 import { ImageSource, useModels, useOnboarding } from '@/state';
-import { ImageUp } from '@/icons';
+import { ArrowLeft, ImageUp } from '@/icons';
 import { Link, usePathname } from 'expo-router';
 
 export default function SelectUserPhoto() {
@@ -29,7 +29,16 @@ export default function SelectUserPhoto() {
   });
 
   return (
-    <ScreenWrapper>
+    <ScreenWrapper
+      footer={
+        <XStack>
+          <Link asChild href={'/onboarding/welcome'}>
+            <Button icon={<ArrowLeft />} type="ghost">
+              Back
+            </Button>
+          </Link>
+        </XStack>
+      }>
       <YStack flex={1} items={'center'} gap={'$4'}>
         <Text size="xxl" weigth="semiBold">
           Take a photo of yourself

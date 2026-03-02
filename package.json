@@ -6,7 +6,7 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --ui=tui",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check"

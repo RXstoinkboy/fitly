@@ -34,10 +34,12 @@ const Overlay: React.FC<OverlayProps> = (props) => (
   />
 );
 
-const Handle: React.FC<HandleProps> = (props) => <TamaguiSheet.Handle bg="$accent12" {...props} />;
+const Handle: React.FC<HandleProps> = (props) => (
+  <TamaguiSheet.Handle bg="$background" {...props} />
+);
 
 const Frame: React.FC<FrameProps> = (props) => (
-  <TamaguiSheet.Frame p="$4" content="center" items="center" gap="$5" bg="$accent12" {...props} />
+  <TamaguiSheet.Frame p="$4" content="center" items="center" gap="$5" bg="$background" {...props} />
 );
 
 Sheet.Overlay = Overlay;

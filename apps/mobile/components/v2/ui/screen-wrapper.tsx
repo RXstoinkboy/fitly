@@ -11,7 +11,7 @@ type ScreenWrapperProps = {
 export const ScreenWrapper: FC<ScreenWrapperProps> = ({ children, footer }) => {
   return (
     <YStack flex={1} p="$4" position="relative">
-      <LinearGradient colors={['$color3', '$accent10']} style={StyleSheet.absoluteFillObject} />
+      <LinearGradient colors={['$color1', '$accent1']} style={StyleSheet.absoluteFill} />
       {children}
       {footer}
     </YStack>

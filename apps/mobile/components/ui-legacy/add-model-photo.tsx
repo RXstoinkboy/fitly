@@ -1,11 +1,6 @@
 import { YStack, H5, H6, XStack } from 'tamagui';
-import { useAddModelImage } from '@/queries/models/add-model';
-import { ChoosePhoto } from './choose-photo';
-import { TakePhoto } from './take-photo';
 
 export const AddModelPhoto = () => {
-  const addModel = useAddModelImage();
-
   return (
     <YStack p="$4">
       <YStack gap="$4">
@@ -14,10 +9,7 @@ export const AddModelPhoto = () => {
         </H5>
         <H6 text={'center'}>Upload your favorite photo or take a new one right now.</H6>
       </YStack>
-      <XStack gap={'$4'} p="$4">
-        <ChoosePhoto onSuccess={addModel.mutate} />
-        <TakePhoto onSuccess={addModel.mutate} />
-      </XStack>
+      <XStack gap={'$4'} p="$4"></XStack>
     </YStack>
   );
 };

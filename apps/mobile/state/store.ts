@@ -15,7 +15,7 @@ import type {
   ImageSource,
 } from './types';
 import { generateId } from '../utils/generate-id';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { paths } from '@/constants/paths';
 
 // ============================================================================
@@ -40,6 +40,9 @@ export const store$ = observable<AppState>({
   },
   preferences: {
     selectedModelId: null,
+  },
+  auth: {
+    token: null,
   },
   ui: {
     selectedGarmentIds: [],
@@ -541,6 +544,24 @@ const actions = {
   resetOnboarding: () => {
     store$.onboarding.isCompleted.set(false);
     store$.onboarding.currentStep.set('/onboarding/welcome');
+  },
+
+  // --------------------------------------------------------------------------
+  // Auth Actions
+  // --------------------------------------------------------------------------
+
+  /**
+   * Set authentication token
+   */
+  setAuthToken: (token: string) => {
+    store$.auth.token.set(token);
+  },
+
+  /**
+   * Clear authentication token
+   */
+  clearAuthToken: () => {
+    store$.auth.token.set(null);
   },
 };
 

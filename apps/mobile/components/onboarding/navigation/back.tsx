@@ -1,5 +1,5 @@
 import { Button } from '@/components/v2/ui/button';
-import { ArrowLeft } from '@tamagui/lucide-icons';
+import { ArrowLeft } from '@/icons';
 import { Link, LinkProps } from 'expo-router';
 import { Text } from 'tamagui';
 

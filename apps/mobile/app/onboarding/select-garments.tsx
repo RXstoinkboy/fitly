@@ -1,10 +1,11 @@
-import { YStack, Text, Button, ScreenWrapper } from '@/components/v2/ui';
-import { SelectGarmentType, SelectPhotoModal } from '@/components/modals';
-import { useEffect } from 'react';
+import { useMount } from '@/hooks';
+import { YStack, Text, Button, ScreenWrapper, XStack } from '@/components/v2/ui';
+import { SelectGarmentType, SelectPhotoSheet } from '@/components/modals';
 import { Link, usePathname } from 'expo-router';
 import { useGeneratedImages, useModels, useOnboarding } from '@/state';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
 import { SelectGarment, useSelectGarment } from '@/components/garments';
+import { ArrowLeft } from '@/icons';
 
 export default function Onboarding() {
   const pathname = usePathname();
@@ -13,7 +14,7 @@ export default function Onboarding() {
     tempImage,
     onImageSelected,
     handleAddGarment,
-    selectPhotoModal,
+    selectPhotoSheet,
     selectedGarments,
     garments,
   } = useSelectGarment();
@@ -49,12 +50,21 @@ export default function Onboarding() {
     selectedGarments.clearSelection();
   };
 
-  useEffect(() => {
+  useMount(() => {
     setOnboardingStep(pathname);
-  }, []);
+  });
 
   return (
-    <ScreenWrapper>
+    <ScreenWrapper
+      footer={
+        <XStack>
+          <Link asChild href={'/onboarding/select-user-photo'}>
+            <Button icon={<ArrowLeft />} type="ghost">
+              Back
+            </Button>
+          </Link>
+        </XStack>
+      }>
       <YStack flex={1} items={'center'} gap={'$4'}>
         <Text size="xxl" weigth="semiBold" text={'center'}>
           What you&apos;d like to wear?
@@ -66,7 +76,7 @@ export default function Onboarding() {
         <SelectGarment
           removeGarment={garments.removeGarment}
           selectedGarments={selectedGarments.selectedGarments}
-          toggle={selectPhotoModal.toggle}
+          toggle={selectPhotoSheet.toggle}
           toggleSelection={selectedGarments.toggleSelection}
         />
         {/* TODO: or maybe even hide it when there are no clothes added yet */}
@@ -81,12 +91,12 @@ export default function Onboarding() {
         </Link>
       </YStack>
 
-      <SelectPhotoModal
-        isOpen={selectPhotoModal.isOpen}
-        toggle={selectPhotoModal.toggle}
+      <SelectPhotoSheet
+        isOpen={selectPhotoSheet.isOpen}
+        toggle={selectPhotoSheet.toggle}
         onSuccess={onImageSelected}>
         {tempImage ? <SelectGarmentType image={tempImage} onSuccess={handleAddGarment} /> : null}
-      </SelectPhotoModal>
+      </SelectPhotoSheet>
     </ScreenWrapper>
   );
 }

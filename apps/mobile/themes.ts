@@ -1,156 +1,91 @@
-import { createThemes, defaultComponentThemes, defaultTemplates } from '@tamagui/theme-builder';
-import * as Colors from '@tamagui/colors';
+import { createV5Theme, defaultChildrenThemes } from '@tamagui/config/v5';
+import { v5ComponentThemes } from '@tamagui/themes/v5';
+import { yellow, yellowDark, red, redDark, green, greenDark } from '@tamagui/colors';
 
 const darkPalette = [
-  'hsla(99, 20%, 1%, 1)',
-  'hsla(99, 20%, 6%, 1)',
-  'hsla(99, 20%, 12%, 1)',
-  'hsla(99, 20%, 17%, 1)',
-  'hsla(99, 20%, 23%, 1)',
-  'hsla(99, 20%, 28%, 1)',
-  'hsla(99, 20%, 34%, 1)',
-  'hsla(99, 20%, 39%, 1)',
-  'hsla(99, 20%, 45%, 1)',
-  'hsla(99, 20%, 50%, 1)',
-  'hsla(0, 15%, 93%, 1)',
-  'hsla(0, 15%, 99%, 1)',
+  'hsla(205, 20%, 8%, 1)',
+  'hsla(205, 20%, 12%, 1)',
+  'hsla(205, 19%, 17%, 1)',
+  'hsla(205, 19%, 21%, 1)',
+  'hsla(205, 18%, 25%, 1)',
+  'hsla(205, 18%, 31%, 1)',
+  'hsla(205, 19%, 37%, 1)',
+  'hsla(205, 19%, 43%, 1)',
+  'hsla(205, 20%, 49%, 1)',
+  'hsla(205, 20%, 55%, 1)',
+  'hsla(205, 15%, 85%, 1)',
+  'hsla(205, 10%, 95%, 1)',
 ];
 const lightPalette = [
-  'hsla(99, 20%, 56%, 1)',
-  'hsla(99, 20%, 55%, 1)',
-  'hsla(99, 20%, 55%, 1)',
-  'hsla(99, 20%, 54%, 1)',
-  'hsla(99, 20%, 53%, 1)',
-  'hsla(99, 20%, 53%, 1)',
-  'hsla(99, 20%, 52%, 1)',
-  'hsla(99, 20%, 51%, 1)',
-  'hsla(99, 20%, 51%, 1)',
-  'hsla(99, 20%, 50%, 1)',
-  'hsla(0, 15%, 15%, 1)',
-  'hsla(0, 15%, 1%, 1)',
+  'hsla(205, 15%, 97%, 1)',
+  'hsla(205, 14%, 94%, 1)',
+  'hsla(205, 14%, 91%, 1)',
+  'hsla(205, 13%, 88%, 1)',
+  'hsla(205, 12%, 85%, 1)',
+  'hsla(205, 13%, 77%, 1)',
+  'hsla(205, 13%, 69%, 1)',
+  'hsla(205, 14%, 61%, 1)',
+  'hsla(205, 14%, 53%, 1)',
+  'hsla(205, 15%, 45%, 1)',
+  'hsla(205, 20%, 25%, 1)',
+  'hsla(205, 25%, 12%, 1)',
 ];
 
-const lightShadows = {
-  shadow1: 'rgba(0,0,0,0.04)',
-  shadow2: 'rgba(0,0,0,0.08)',
-  shadow3: 'rgba(0,0,0,0.16)',
-  shadow4: 'rgba(0,0,0,0.24)',
-  shadow5: 'rgba(0,0,0,0.32)',
-  shadow6: 'rgba(0,0,0,0.4)',
+// Your custom accent color theme
+const accentLight = {
+  accent1: 'hsla(195, 60%, 55%, 1)',
+  accent2: 'hsla(196, 61%, 54%, 1)',
+  accent3: 'hsla(198, 63%, 53%, 1)',
+  accent4: 'hsla(199, 64%, 51%, 1)',
+  accent5: 'hsla(200, 65%, 50%, 1)',
+  accent6: 'hsla(202, 66%, 49%, 1)',
+  accent7: 'hsla(204, 67%, 48%, 1)',
+  accent8: 'hsla(206, 68%, 47%, 1)',
+  accent9: 'hsla(208, 69%, 46%, 1)',
+  accent10: 'hsla(210, 70%, 45%, 1)',
+  accent11: 'hsla(210, 60%, 20%, 1)',
+  accent12: 'hsla(215, 50%, 15%, 1)',
 };
 
-const darkShadows = {
-  shadow1: 'rgba(0,0,0,0.2)',
-  shadow2: 'rgba(0,0,0,0.3)',
-  shadow3: 'rgba(0,0,0,0.4)',
-  shadow4: 'rgba(0,0,0,0.5)',
-  shadow5: 'rgba(0,0,0,0.6)',
-  shadow6: 'rgba(0,0,0,0.7)',
+const accentDark = {
+  accent1: 'hsla(195, 50%, 30%, 1)',
+  accent2: 'hsla(196, 51%, 33%, 1)',
+  accent3: 'hsla(198, 53%, 35%, 1)',
+  accent4: 'hsla(199, 54%, 38%, 1)',
+  accent5: 'hsla(200, 55%, 40%, 1)',
+  accent6: 'hsla(202, 56%, 43%, 1)',
+  accent7: 'hsla(204, 57%, 46%, 1)',
+  accent8: 'hsla(206, 58%, 49%, 1)',
+  accent9: 'hsla(208, 59%, 52%, 1)',
+  accent10: 'hsla(210, 60%, 55%, 1)',
+  accent11: 'hsla(210, 50%, 88%, 1)',
+  accent12: 'hsla(215, 40%, 95%, 1)',
 };
 
-// we're adding some example sub-themes for you to show how they are done, "success" "warning", "error":
-
-const builtThemes = createThemes({
-  componentThemes: defaultComponentThemes,
-  templates: defaultTemplates,
-
-  base: {
-    palette: {
-      dark: darkPalette,
-      light: lightPalette,
-    },
-
-    extra: {
-      light: {
-        ...Colors.green,
-        ...Colors.red,
-        ...Colors.yellow,
-        ...lightShadows,
-        shadowColor: lightShadows.shadow1,
-      },
-      dark: {
-        ...Colors.greenDark,
-        ...Colors.redDark,
-        ...Colors.yellowDark,
-        ...darkShadows,
-        shadowColor: darkShadows.shadow1,
-      },
-    },
-  },
-
+const builtThemes = createV5Theme({
+  darkPalette,
+  lightPalette,
+  componentThemes: v5ComponentThemes,
   accent: {
-    palette: {
-      dark: [
-        'hsla(38, 32%, 35%, 1)',
-        'hsla(38, 32%, 38%, 1)',
-        'hsla(38, 32%, 41%, 1)',
-        'hsla(38, 32%, 43%, 1)',
-        'hsla(38, 32%, 46%, 1)',
-        'hsla(38, 32%, 49%, 1)',
-        'hsla(38, 32%, 52%, 1)',
-        'hsla(38, 32%, 54%, 1)',
-        'hsla(38, 32%, 57%, 1)',
-        'hsla(38, 32%, 60%, 1)',
-        'hsla(250, 50%, 90%, 1)',
-        'hsla(250, 50%, 95%, 1)',
-      ],
-      light: [
-        'hsla(38, 32%, 61%, 1)',
-        'hsla(38, 32%, 61%, 1)',
-        'hsla(38, 32%, 62%, 1)',
-        'hsla(38, 32%, 62%, 1)',
-        'hsla(38, 32%, 63%, 1)',
-        'hsla(38, 32%, 63%, 1)',
-        'hsla(38, 32%, 64%, 1)',
-        'hsla(38, 32%, 64%, 1)',
-        'hsla(38, 32%, 65%, 1)',
-        'hsla(38, 32%, 65%, 1)',
-        'hsla(250, 50%, 95%, 1)',
-        'hsla(250, 50%, 95%, 1)',
-      ],
-    },
+    light: accentLight,
+    dark: accentDark,
   },
-
   childrenThemes: {
+    // Include default color themes (blue, red, green, yellow, etc.)
+    ...defaultChildrenThemes,
+
+    // Semantic color themes for warnings, errors, and success states
     warning: {
-      palette: {
-        dark: Object.values(Colors.yellowDark),
-        light: Object.values(Colors.yellow),
-      },
+      light: yellow,
+      dark: yellowDark,
     },
-
     error: {
-      palette: {
-        dark: Object.values(Colors.redDark),
-        light: Object.values(Colors.red),
-      },
+      light: red,
+      dark: redDark,
     },
-
     success: {
-      palette: {
-        dark: Object.values(Colors.greenDark),
-        light: Object.values(Colors.green),
-      },
-    },
-  },
-
-  // optionally add more, can pass palette or template
-
-  grandChildrenThemes: {
-    alt1: {
-      template: 'alt1',
-    },
-    alt2: {
-      template: 'alt2',
-    },
-    surface1: {
-      template: 'surface1',
-    },
-    surface2: {
-      template: 'surface2',
-    },
-    surface3: {
-      template: 'surface3',
+      light: green,
+      dark: greenDark,
     },
   },
 });

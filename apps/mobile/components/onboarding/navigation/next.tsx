@@ -1,4 +1,4 @@
-import { ArrowRight } from '@tamagui/lucide-icons';
+import { ArrowRight } from '@/icons';
 import { LinkProps, Link } from 'expo-router';
 import { ReactNode } from 'react';
 import { Button } from '@/components/v2/ui/button';

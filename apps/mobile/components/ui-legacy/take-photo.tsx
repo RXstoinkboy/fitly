@@ -1,4 +1,4 @@
-import { Camera } from '@tamagui/lucide-icons';
+import { Camera } from '@/icons';
 import { Button } from './button';
 import { openCamera } from '@/utils/open-camera';
 

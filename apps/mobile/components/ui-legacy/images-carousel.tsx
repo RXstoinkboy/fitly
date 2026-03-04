@@ -96,7 +96,7 @@ export function ImagesCarousel({
         opacity,
       };
     },
-    [PAGE_HEIGHT, PAGE_WIDTH],
+    [images.length, PAGE_WIDTH],
   );
 
   return (

@@ -1,4 +1,4 @@
-import { Wand2 } from '@tamagui/lucide-icons';
+import { Wand2 } from '@/icons';
 import { Button, Spinner } from '@/components/v2/ui';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
 import { useGeneratedImages, useModels, useSelectedGarments } from '@/state';
@@ -48,7 +48,7 @@ export const GenerateImageButton = () => {
   };
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval> | undefined;
     let intervalTime = 3000;
 
     if (isPending) {
@@ -70,7 +70,9 @@ export const GenerateImageButton = () => {
       setLoadingState(null);
     }
     return () => {
-      clearInterval(interval);
+      if (interval) {
+        clearInterval(interval);
+      }
     };
   }, [isPending]);
 

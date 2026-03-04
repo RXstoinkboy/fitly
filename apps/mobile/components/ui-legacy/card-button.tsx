@@ -1,3 +1,5 @@
+import { Button } from './button';
+
 export const CardButton = () => {
-  <Button></Button>;
+  return <Button />;
 };

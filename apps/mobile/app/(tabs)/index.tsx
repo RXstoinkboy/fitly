@@ -1,15 +1,27 @@
-import { YStack, XStack, H6, Square, Spinner } from 'tamagui';
-import { LinearGradient } from '@tamagui/linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, AddModelPhoto, GenerateImageButton, ImagesCarousel } from '@/components/ui-legacy';
-import * as FileSystem from 'expo-file-system';
+import { useMount } from '@/hooks';
+import { AddModelPhoto } from '@/components/ui-legacy';
+import {
+  YStack,
+  XStack,
+  Text,
+  ScrollView,
+  Square,
+  Spinner,
+  Image,
+  GenerateImageButton,
+} from '@/components/v2';
+import * as FileSystem from 'expo-file-system/legacy';
+import { ImagesCarousel } from '@/components/ui-legacy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SelectGarment, useSelectGarment } from '@/components/garments';
-import { SelectGarmentType, SelectPhotoModal } from '@/components/modals';
+import { SelectGarmentType, SelectPhotoSheet } from '@/components/modals';
 import { useGeneratedImages, useModels } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { generatedKeys } from '@/queries/image-generation/keys';
 import { useWindowDimensions } from 'react-native';
+import React from 'react';
+import { LinearGradient } from 'react-native-svg';
+import { H6 } from 'tamagui';
 
 export default function HomeScreen() {
   const { currentModel } = useModels();
@@ -18,7 +30,7 @@ export default function HomeScreen() {
     tempImage,
     onImageSelected,
     handleAddGarment,
-    selectPhotoModal,
+    selectPhotoSheet,
     selectedGarments,
     garments,
   } = useSelectGarment();
@@ -51,9 +63,8 @@ export default function HomeScreen() {
         colors={['$color2', '$color6']}
         start={{ x: 0.2, y: 0.1 }}
         end={{ x: 0.8, y: 0.8 }}>
-        <SafeAreaView height={'100%'} bg="$accent11">
           {/*<Button onPress={debugFn}>Debug</Button>*/}
-          <Button onPress={reset}>Reset storage</Button>
+          {/* <Button onPress={reset}>Reset storage</Button> */}
           <YStack flex={1}>
             {!currentModel ? (
               <AddModelPhoto />
@@ -94,14 +105,13 @@ export default function HomeScreen() {
               </YStack>
             )}
           </YStack>
-        </SafeAreaView>
       </LinearGradient>
       <SelectPhotoModal
         isOpen={selectPhotoModal.isOpen}
         toggle={selectPhotoModal.toggle}
         onSuccess={onImageSelected}>
         {tempImage ? <SelectGarmentType image={tempImage} onSuccess={handleAddGarment} /> : null}
-      </SelectPhotoModal>
+      </SelectPhotoSheet>
     </>
   );
 }

@@ -197,3 +197,20 @@ export const useAppState = () => {
     isOnboardingCompleted,
   };
 };
+
+// ============================================================================
+// Auth Hooks
+// ============================================================================
+
+/**
+ * Hook for accessing authentication state
+ */
+export const useAuthState = () => {
+  const token = useValue(state.store.auth.token);
+
+  return {
+    token,
+    setToken: state.actions.setAuthToken,
+    clearToken: state.actions.clearAuthToken,
+  };
+};

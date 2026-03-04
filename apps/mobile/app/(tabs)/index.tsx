@@ -1,8 +1,15 @@
 import { useMount } from '@/hooks';
-import { YStack, XStack, H6, ScrollView, Square, Spinner } from 'tamagui';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, AddModelPhoto, GenerateImageButton } from '@/components/ui-legacy';
-import { Image } from '@/components/v2/ui';
+import { AddModelPhoto } from '@/components/ui-legacy';
+import {
+  YStack,
+  XStack,
+  Text,
+  ScrollView,
+  Square,
+  Spinner,
+  Image,
+  GenerateImageButton,
+} from '@/components/v2';
 import * as FileSystem from 'expo-file-system/legacy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SelectGarment, useSelectGarment } from '@/components/garments';
@@ -65,61 +72,59 @@ export default function HomeScreen() {
 
   return (
     <>
-      <SafeAreaView style={{ height: '100%' }}>
-        {/*<Button onPress={debugFn}>Debug</Button>*/}
-        <Button onPress={reset}>Reset storage</Button>
-        <YStack flex={1} bg="$accent11">
-          {!currentModel ? (
-            <AddModelPhoto />
-          ) : (
-            <YStack flex={1} minW={'100%'}>
-              <ScrollView ref={ref} horizontal showsHorizontalScrollIndicator>
-                <XStack minW={'100%'} gap={'$4'} paddingInline={'$4'} justify={'flex-end'}>
-                  {/* onLayout={(event) => {
+      {/*<Button onPress={debugFn}>Debug</Button>*/}
+      {/* <Button onPress={reset}>Reset storage</Button> */}
+      <YStack flex={1} bg="$background">
+        {!currentModel ? (
+          <AddModelPhoto />
+        ) : (
+          <YStack minW={'100%'}>
+            <ScrollView ref={ref} horizontal showsHorizontalScrollIndicator>
+              <XStack minW={'100%'} gap={'$4'} paddingInline={'$4'} justify={'flex-end'}>
+                {/* onLayout={(event) => {
                     const { height } = event.nativeEvent.layout;
                     setGalleryWrapperHeight(height);
                   }}> */}
-                  {images.map((image) => (
-                    <Image
-                      key={image.id}
-                      src={image.filePath}
-                      width={300}
-                      height={400}
-                      rounded={'$7'}
-                      aspectRatio={3 / 4}
-                    />
-                  ))}
-                  {isGenerating ? (
-                    <Square width={300} height={400} rounded={'$7'} bg={'$color6'}>
-                      <Spinner size="large" />
-                    </Square>
-                  ) : null}
+                {images.map((image) => (
+                  <Image
+                    key={image.id}
+                    src={image.filePath}
+                    width={300}
+                    height={400}
+                    rounded={'$7'}
+                    aspectRatio={3 / 4}
+                  />
+                ))}
+                {isGenerating ? (
+                  <Square width={300} height={400} rounded={'$7'} bg={'$color6'}>
+                    <Spinner size="large" />
+                  </Square>
+                ) : null}
 
-                  {/* <ImagesCarousel height={galleryWrapperHeight ?? 0} images={images} /> */}
-                </XStack>
-              </ScrollView>
-              {currentModel ? (
-                <YStack gap="$4" px="$6">
-                  <YStack gap={'$4'}>
-                    <YStack gap={'$2'}>
-                      <H6 px={'$2'}>Let&apos;s try something on</H6>
-                      <SelectGarment
-                        removeGarment={garments.removeGarment}
-                        selectedGarments={selectedGarments.selectedGarments}
-                        toggle={selectPhotoSheet.toggle}
-                        toggleSelection={selectedGarments.toggleSelection}
-                      />
-                    </YStack>
-                    <XStack justify={'space-evenly'} gap={'$4'}>
-                      <GenerateImageButton />
-                    </XStack>
+                {/* <ImagesCarousel height={galleryWrapperHeight ?? 0} images={images} /> */}
+              </XStack>
+            </ScrollView>
+            {currentModel ? (
+              <YStack gap="$4" px="$6">
+                <YStack gap={'$4'}>
+                  <YStack gap={'$2'}>
+                    <Text px={'$2'}>Let&apos;s try something on</Text>
+                    <SelectGarment
+                      removeGarment={garments.removeGarment}
+                      selectedGarments={selectedGarments.selectedGarments}
+                      toggle={selectPhotoSheet.toggle}
+                      toggleSelection={selectedGarments.toggleSelection}
+                    />
                   </YStack>
+                  <XStack justify={'space-evenly'} gap={'$4'}>
+                    <GenerateImageButton />
+                  </XStack>
                 </YStack>
-              ) : null}
-            </YStack>
-          )}
-        </YStack>
-      </SafeAreaView>
+              </YStack>
+            ) : null}
+          </YStack>
+        )}
+      </YStack>
       <SelectPhotoSheet
         isOpen={selectPhotoSheet.isOpen}
         toggle={selectPhotoSheet.toggle}

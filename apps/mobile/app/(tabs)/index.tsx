@@ -1,13 +1,9 @@
-import { useMount } from '@/hooks';
 import { AddModelPhoto } from '@/components/ui-legacy';
 import {
   YStack,
   XStack,
-  Text,
-  ScrollView,
   Square,
   Spinner,
-  Image,
   GenerateImageButton,
 } from '@/components/v2';
 import * as FileSystem from 'expo-file-system/legacy';
@@ -30,7 +26,6 @@ export default function HomeScreen() {
     tempImage,
     onImageSelected,
     handleAddGarment,
-    selectPhotoSheet,
     selectedGarments,
     garments,
   } = useSelectGarment();
@@ -66,6 +61,7 @@ export default function HomeScreen() {
           {/*<Button onPress={debugFn}>Debug</Button>*/}
           {/* <Button onPress={reset}>Reset storage</Button> */}
           <YStack flex={1}>
+            <>
             {!currentModel ? (
               <AddModelPhoto />
             ) : (
@@ -104,6 +100,7 @@ export default function HomeScreen() {
                 ) : null}
               </YStack>
             )}
+            </>
           </YStack>
       </LinearGradient>
       <SelectPhotoModal

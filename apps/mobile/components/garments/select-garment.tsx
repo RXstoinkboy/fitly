@@ -58,63 +58,59 @@ export const SelectGarment = ({
   return (
     <XStack width={'100%'} justify={'space-evenly'}>
       <ScrollView horizontal>
-        <Button
-          asChild
+        <YStack
+          gap={'$2'}
           onPress={() => {
             toggle();
           }}>
-          <YStack gap={'$2'}>
-            <Square
-              height="$12"
-              borderColor={'$borderColor'}
-              bg="$accent12"
-              borderWidth={'$1'}
-              borderStyle="dashed"
-              rounded={'$5'}
-              position="relative"
-              aspectRatio={1}
-              overflow="hidden">
-              <Plus />
-            </Square>
-            <Text text={'center'}>{'Add something'}</Text>
-          </YStack>
-        </Button>
+          <Square
+            height="$12"
+            borderColor={'$borderColor'}
+            bg="$accent12"
+            borderWidth={'$1'}
+            borderStyle="dashed"
+            rounded={'$5'}
+            position="relative"
+            aspectRatio={1}
+            overflow="hidden">
+            <Plus />
+          </Square>
+          <Text text={'center'}>{'Add something'}</Text>
+        </YStack>
         {selectedGarments
           .sort((a, b) => Number(b.updatedAt) - Number(a.updatedAt))
           .map((image) => {
             return (
-              <Button asChild key={image.id}>
-                <YStack gap={'$2'} ml={'$4'}>
-                  <Square
-                    rounded={'$5'}
-                    height={'$12'}
-                    position="relative"
-                    aspectRatio={1}
-                    overflow="hidden">
-                    <>
-                      <Image
-                        src={image.filePath}
-                        width={'100%'}
-                        height={'100%'}
-                        rounded={'$7'}
-                        aspectRatio={1}
-                      />
-                      <Button
-                        onPress={() => {
-                          toggleSelection(image.id, false);
-                          removeGarment(image.id, image.type);
-                        }}
-                        position="absolute"
-                        t={'$2'}
-                        r={'$2'}
-                        circular
-                        icon={<Trash />}
-                      />
-                    </>
-                  </Square>
-                  <Text text={'center'}>{image.type}</Text>
-                </YStack>
-              </Button>
+              <YStack key={image.id} gap={'$2'} ml={'$4'}>
+                <Square
+                  rounded={'$5'}
+                  height={'$12'}
+                  position="relative"
+                  aspectRatio={1}
+                  overflow="hidden">
+                  <>
+                    <Image
+                      src={image.filePath}
+                      width={'100%'}
+                      height={'100%'}
+                      rounded={'$7'}
+                      aspectRatio={1}
+                    />
+                    <Button
+                      onPress={() => {
+                        toggleSelection(image.id, false);
+                        removeGarment(image.id, image.type);
+                      }}
+                      position="absolute"
+                      t={'$2'}
+                      r={'$2'}
+                      circular
+                      icon={<Trash />}
+                    />
+                  </>
+                </Square>
+                <Text text={'center'}>{image.type}</Text>
+              </YStack>
             );
           })}
       </ScrollView>

@@ -59,9 +59,7 @@ export default function Onboarding() {
       footer={
         <XStack>
           <Link asChild href={'/onboarding/select-user-photo'}>
-            <Button icon={<ArrowLeft />} type="ghost">
-              Back
-            </Button>
+            <Button icon={<ArrowLeft />}>Back</Button>
           </Link>
         </XStack>
       }>
@@ -81,13 +79,13 @@ export default function Onboarding() {
         />
         {/* TODO: or maybe even hide it when there are no clothes added yet */}
         <Link asChild href={'/onboarding/finish'}>
-          <Button type="primary" stretched disabled={!isAnyImageSelected} onPress={onGenerateImage}>
+          <Button disabled={!isAnyImageSelected} onPress={onGenerateImage}>
             Try this look!
           </Button>
         </Link>
         {/* TODO: move it to some less visible place (same for other steps too) */}
         <Link asChild href={'/onboarding/select-user-photo'}>
-          <Button type="ghost">Back</Button>
+          <Button>Back</Button>
         </Link>
       </YStack>
 

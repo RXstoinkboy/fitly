@@ -1,9 +1,9 @@
 import React from 'react';
 import { Pressable, Share } from 'react-native';
-import { Image, View, XStack, getToken } from 'tamagui';
-import { Share2, Trash2 } from '@tamagui/lucide-icons';
-import { Button } from './button';
+import { Share2, Trash2 } from '@/icons';
+import { Button, Image, View, XStack } from '@/components/v2/ui';
 import { GarmentImage } from '@/state/types';
+import { ConfirmationSheet, useConfirmationSheet } from '../modals';
 
 type GeneratedImageCardProps = {
   /** The image content (e.g. a Tamagui Image). Tapping it triggers onPress. */
@@ -29,75 +29,82 @@ export const GeneratedImageCard = ({
   onRemove,
   onPress,
 }: GeneratedImageCardProps) => {
+  const confirmation = useConfirmationSheet();
   const handleShare = async () => {
     try {
-      await Share.share({ url: imageUri, message: 'Check out this outfit!' });
+      // TODO: add image URL to the message, but I think that in order to do it, I have to upload image to backend!
+      await Share.share({ message: 'Check out this outfit!' });
     } catch (error) {
       console.error('Error sharing image:', error);
     }
   };
+  // TODO: fix garment previews - garment ids and not added to generate image data
 
   return (
-    <View
-      rounded={'$7'}
-      width={'80%'}
-      height="90%"
-      justify={'center'}
-      items={'center'}
-      bg="$color6"
-      elevationAndroid={'$6'}
-      position="relative">
-      {/* Image / children – tappable to open full-screen */}
-      <Pressable onPress={onPress} style={{ flex: 1, width: '100%' }}>
-        {children}
-      </Pressable>
+    <>
+      <View
+        rounded={'$7'}
+        width={'90%'}
+        height="100%"
+        justify={'center'}
+        items={'center'}
+        bg="$color6"
+        overflow="hidden"
+        position="relative">
+        <Pressable onPress={onPress} style={{ flex: 1, width: '100%' }}>
+          {children}
+        </Pressable>
 
-      {/* Remove button – top-right corner */}
-      <Button
-        position="absolute"
-        t={'$2'}
-        r={'$2'}
-        circular
-        size={'$2'}
-        themeInverse
-        elevation={'$1'}
-        icon={<Trash2 size={getToken('$1')} />}
-        onPress={onRemove}
-      />
+        <Button
+          position="absolute"
+          t={'$2'}
+          r={'$2'}
+          circular
+          icon={<Trash2 />}
+          onPress={() => confirmation.toggle(true)}
+        />
 
-      {/* Share button – bottom-left corner */}
-      <Button
-        position="absolute"
-        b={'$2'}
-        l={'$2'}
-        circular
-        size={'$2'}
-        themeInverse
-        elevation={'$1'}
-        icon={<Share2 size={getToken('$1')} />}
-        onPress={handleShare}
-      />
+        <Button
+          position="absolute"
+          b={'$2'}
+          l={'$2'}
+          circular
+          icon={<Share2 />}
+          onPress={handleShare}
+        />
 
-      {/* Garment previews – bottom-right corner */}
-      {garments.length > 0 && (
-        <XStack position="absolute" b={'$2'} r={'$2'} gap={'$1'}>
-          {garments.map((garment) => (
-            <Image
-              key={garment.id}
-              source={{
-                uri: garment.filePath,
-                width: getToken('$4'),
-                height: getToken('$4'),
-              }}
-              width={'$4'}
-              height={'$4'}
-              rounded={'$3'}
-              borderWidth={'$0.25'}
-              borderColor={'$color1'}
-            />
-          ))}
-        </XStack>
-      )}
-    </View>
+        {/* Garment previews – bottom-right corner */}
+        {garments.length > 0 && (
+          <XStack position="absolute" b={'$2'} r={'$2'} gap={'$1'}>
+            {garments.map((garment) => (
+              <Image
+                key={garment.id}
+                src={garment.filePath}
+                width={'$4'}
+                height={'$4'}
+                rounded={'$3'}
+                borderWidth={'$0.25'}
+                borderColor={'$color1'}
+              />
+            ))}
+          </XStack>
+        )}
+      </View>
+
+      <ConfirmationSheet type="error" isOpen={confirmation.isOpen} toggle={confirmation.toggle}>
+        <ConfirmationSheet.Title>Delete this image?</ConfirmationSheet.Title>
+        <ConfirmationSheet.Description>This action cannot be undone.</ConfirmationSheet.Description>
+        <ConfirmationSheet.ConfirmButton
+          onPress={() => {
+            onRemove();
+            confirmation.toggle(false);
+          }}>
+          Delete
+        </ConfirmationSheet.ConfirmButton>
+        <ConfirmationSheet.CancelButton onPress={() => confirmation.toggle(false)}>
+          Cancel
+        </ConfirmationSheet.CancelButton>
+      </ConfirmationSheet>
+    </>
   );
 };

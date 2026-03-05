@@ -58,7 +58,7 @@ export const PhotoGuidelinesSheet = ({
 );
 
 export const PhotoGuidelinesInfoButton = ({ onPress }: { onPress: () => void }) => (
-  <Button type="ghost" onPress={onPress} icon={<Info />}>
+  <Button onPress={onPress} icon={<Info />}>
     Photo guidelines
   </Button>
 );

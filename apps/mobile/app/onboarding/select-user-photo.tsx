@@ -33,9 +33,7 @@ export default function SelectUserPhoto() {
       footer={
         <XStack>
           <Link asChild href={'/onboarding/welcome'}>
-            <Button icon={<ArrowLeft />} type="ghost">
-              Back
-            </Button>
+            <Button icon={<ArrowLeft />}>Back</Button>
           </Link>
         </XStack>
       }>
@@ -70,15 +68,11 @@ export default function SelectUserPhoto() {
         {currentModel?.filePath ? (
           <XStack width={'100%'} gap="$2">
             <Link asChild href={'/onboarding/select-garments'}>
-              <Button type="primary" flex={1}>
-                Go next!
-              </Button>
+              <Button flex={1}>Go next!</Button>
             </Link>
           </XStack>
         ) : (
           <Button
-            type="primary"
-            stretched
             onPress={() => {
               selectPhotoSheet.toggle();
             }}>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Image, View, getToken } from 'tamagui';
+import { Image, View } from 'tamagui';
 import { X } from '@tamagui/lucide-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -77,22 +77,16 @@ export default function ImageViewerScreen() {
     <View flex={1} bg="rgba(0,0,0,0.95)" justify="center" items="center">
       <GestureDetector gesture={composedGesture}>
         <Animated.View style={[{ flex: 1, width: '100%' }, animatedStyle]}>
-          <Image
-            source={{ uri: uri as string }}
-            width="100%"
-            height="100%"
-            resizeMode="contain"
-          />
+          <Image src={uri} width="100%" height="100%" objectFit="contain" />
         </Animated.View>
       </GestureDetector>
+
       <Button
         position="absolute"
         t={'$4'}
         r={'$4'}
         circular
-        themeInverse
-        elevation={'$1'}
-        icon={<X size={getToken('$1')} />}
+        icon={<X />}
         onPress={() => router.back()}
       />
     </View>

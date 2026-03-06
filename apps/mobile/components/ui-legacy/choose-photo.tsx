@@ -1,4 +1,4 @@
-import { GalleryHorizontalEnd } from '@tamagui/lucide-icons';
+import { GalleryHorizontalEnd } from '@/icons';
 import { Button } from '@/components/ui-legacy/button';
 import { openImageLibrary } from '@/utils/open-image-library';
 

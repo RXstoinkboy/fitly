@@ -107,6 +107,10 @@ export type AppState = {
     selectedModelId: string | null;
   };
 
+  auth: {
+    token: string | null;
+  };
+
   // UI state (ephemeral - not persisted)
   ui: {
     selectedGarmentIds: string[];

@@ -4,7 +4,7 @@ import { openCamera } from '@/utils/open-camera';
 import { openImageLibrary } from '@/utils/open-image-library';
 import { ImageSource } from '@/state';
 
-export const useSelectPhotoModal = () => {
+export const useSelectPhotoSheet = () => {
   const [opened, setOpened] = useState(false);
   const toggle = (opened?: boolean) => {
     setOpened((prev) => opened ?? !prev);
@@ -16,7 +16,7 @@ export const useSelectPhotoModal = () => {
   };
 };
 
-export const SelectPhotoModal = ({
+export const SelectPhotoSheet = ({
   children,
   isOpen,
   toggle,
@@ -29,7 +29,7 @@ export const SelectPhotoModal = ({
   onSuccess: (image: string, source: ImageSource) => void;
 }) => {
   return (
-    <Sheet forceRemoveScrollEnabled={isOpen} modal open={isOpen} onOpenChange={toggle}>
+    <Sheet disableRemoveScroll={isOpen} modal open={isOpen} onOpenChange={toggle}>
       <Sheet.Overlay />
       <Sheet.Handle />
       <Sheet.Frame>{children ?? <SheetContents onSuccess={onSuccess} />}</Sheet.Frame>
@@ -58,13 +58,9 @@ const SheetContents = memo(
 
     return (
       <YStack width={'100%'} gap={'$2'}>
-        <Button onPress={getImageFromDeviceLibrary} stretched>
-          Select from gallery
-        </Button>
+        <Button onPress={getImageFromDeviceLibrary}>Select from gallery</Button>
         <Text self={'center'}>or</Text>
-        <Button onPress={getImageFromDeviceCamera} stretched>
-          Use a camera
-        </Button>
+        <Button onPress={getImageFromDeviceCamera}>Use a camera</Button>
       </YStack>
     );
   },

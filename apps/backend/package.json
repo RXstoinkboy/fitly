@@ -5,14 +5,16 @@
   "type": "module",
   "packageManager": "npm",
   "scripts": {
-    "dev": "tsx bin/server.ts",
+    "db": "docker compose up -d db",
+    "dev": "npm run db && tsx watch bin/server.ts",
     "build": "tsc",
     "start": "node bin/server.js",
     "type-check": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "ace": "npx tsx bin/console.ts"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
@@ -28,6 +30,7 @@
     "@adonisjs/core": "^6.20.0",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^21.8.2",
+    "@google/genai": "^1.43.0",
     "@vinejs/vine": "^2.1.0",
     "luxon": "^3.7.2",
     "pg": "^8.18.0",

@@ -21,5 +21,5 @@ server.use([
  */
 export const middleware = router.named({
   apiKey: () => import('#middleware/api_key_middleware'),
-  auth: () => import('@adonisjs/auth/initialize_auth_middleware'),
+  auth: () => import('#middleware/auth_middleware'),
 })

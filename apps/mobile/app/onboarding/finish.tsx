@@ -1,9 +1,10 @@
-import { YStack, Text, ScreenWrapper, Image, Button } from '@/components/v2/ui';
+import { useMount } from '@/hooks';
+import { YStack, Text, ScreenWrapper, Image, Button, XStack } from '@/components/v2/ui';
 import { generatedKeys } from '@/queries/image-generation/keys';
 import { useGeneratedImages, useOnboarding } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { Link, usePathname } from 'expo-router';
-import { useEffect } from 'react';
+import { ArrowLeft } from '@/icons';
 
 export default function Onboarding() {
   const { setOnboardingStep, completeOnboarding } = useOnboarding();
@@ -19,12 +20,19 @@ export default function Onboarding() {
     completeOnboarding();
   };
 
-  useEffect(() => {
+  useMount(() => {
     setOnboardingStep(pathname);
-  }, []);
+  });
 
   return (
-    <ScreenWrapper>
+    <ScreenWrapper
+      footer={
+        <XStack>
+          <Link asChild href={'/onboarding/select-garments'}>
+            <Button icon={<ArrowLeft />}>Back</Button>
+          </Link>
+        </XStack>
+      }>
       <YStack flex={1} items={'center'} gap={'$4'}>
         {isGenerating ? (
           <>
@@ -46,19 +54,19 @@ export default function Onboarding() {
               outfits!
             </Text>
             <Image
-              source={{ uri: generatedImage, width: 300, height: 400 }}
+              src={generatedImage}
+              width={300}
+              height={400}
               rounded={'$7'}
               aspectRatio={3 / 4}
             />
           </>
         ) : null}
         <Link asChild href={'/(tabs)'}>
-          <Button type="primary" stretched onPress={onFinish}>
-            Continue
-          </Button>
+          <Button onPress={onFinish}>Continue</Button>
         </Link>
         <Link asChild href={'/onboarding/select-garments'}>
-          <Button type="ghost">Back</Button>
+          <Button>Back</Button>
         </Link>
       </YStack>
     </ScreenWrapper>

@@ -1,29 +1,42 @@
-import { SelectPhotoModal, useSelectPhotoModal } from '@/components/modals';
+import { useMount } from '@/hooks';
+import { SelectPhotoSheet, useSelectPhotoSheet } from '@/components/modals';
+import {
+  PhotoGuidelinesInfoButton,
+  PhotoGuidelinesSheet,
+  usePhotoGuidelinesSheet,
+} from '@/components/modals/photo-guidelines-sheet';
 import { View, YStack, Text, Button, Image, XStack, ScreenWrapper } from '@/components/v2/ui';
 import { ImageSource, useModels, useOnboarding } from '@/state';
-import { ImageUp } from '@tamagui/lucide-icons';
+import { ArrowLeft, ImageUp } from '@/icons';
 import { Link, usePathname } from 'expo-router';
-import { useEffect } from 'react';
 
 export default function SelectUserPhoto() {
   const { setOnboardingStep } = useOnboarding();
   const pathname = usePathname();
 
   const { currentModel, addModel, setCurrentModel } = useModels();
-  const { isOpen, toggle } = useSelectPhotoModal();
+  const selectPhotoSheet = useSelectPhotoSheet();
+  const photoGuidelinesSheet = usePhotoGuidelinesSheet();
 
   const handleAddModel = async (image: string, source: ImageSource): Promise<void> => {
     const id = await addModel(image, source);
     setCurrentModel(id);
-    toggle(false);
+    selectPhotoSheet.toggle(false);
   };
 
-  useEffect(() => {
+  useMount(() => {
     setOnboardingStep(pathname);
-  }, []);
+  });
 
   return (
-    <ScreenWrapper>
+    <ScreenWrapper
+      footer={
+        <XStack>
+          <Link asChild href={'/onboarding/welcome'}>
+            <Button icon={<ArrowLeft />}>Back</Button>
+          </Link>
+        </XStack>
+      }>
       <YStack flex={1} items={'center'} gap={'$4'}>
         <Text size="xxl" weigth="semiBold">
           Take a photo of yourself
@@ -35,14 +48,16 @@ export default function SelectUserPhoto() {
           {/* TODO: when no image then show a placeholder */}
           {currentModel ? (
             <Image
-              source={{ uri: currentModel?.filePath, width: 300, height: 400 }}
+              src={currentModel?.filePath}
+              width={300}
+              height={400}
               rounded={'$7'}
               aspectRatio={3 / 4}
             />
           ) : null}
 
           <Button
-            onPress={() => toggle()}
+            onPress={() => selectPhotoSheet.toggle()}
             position="absolute"
             t={10}
             r={10}
@@ -53,31 +68,29 @@ export default function SelectUserPhoto() {
         {currentModel?.filePath ? (
           <XStack width={'100%'} gap="$2">
             <Link asChild href={'/onboarding/select-garments'}>
-              <Button type="primary" flex={1}>
-                Go next!
-              </Button>
+              <Button flex={1}>Go next!</Button>
             </Link>
           </XStack>
         ) : (
           <Button
-            type="primary"
-            stretched
             onPress={() => {
-              toggle();
+              selectPhotoSheet.toggle();
             }}>
             Select photo
           </Button>
         )}
 
-        <YStack width={'100%'} items={'flex-start'}>
-          <Text>Photo guidelines for best results:</Text>
-          <Text pl={'$3'}>1. Plain background</Text>
-          <Text pl={'$3'}>2. Good lightning</Text>
-          <Text pl={'$3'}>3. Full body visible</Text>
-          <Text pl={'$3'}>4. Wear fitted clothes</Text>
-        </YStack>
+        <PhotoGuidelinesInfoButton onPress={() => photoGuidelinesSheet.toggle()} />
       </YStack>
-      <SelectPhotoModal isOpen={isOpen} toggle={toggle} onSuccess={handleAddModel} />
+      <SelectPhotoSheet
+        isOpen={selectPhotoSheet.isOpen}
+        toggle={selectPhotoSheet.toggle}
+        onSuccess={handleAddModel}
+      />
+      <PhotoGuidelinesSheet
+        isOpen={photoGuidelinesSheet.isOpen}
+        toggle={photoGuidelinesSheet.toggle}
+      />
     </ScreenWrapper>
   );
 }

@@ -70,7 +70,7 @@ export function ImagesCarousel({
           alignItems: 'center',
         }}
         loop={false}
-        defaultIndex={0}
+        defaultIndex={images.length - 1}
         vertical={false}
         width={PAGE_WIDTH}
         height={PAGE_HEIGHT}

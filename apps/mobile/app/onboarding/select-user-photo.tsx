@@ -4,7 +4,7 @@ import {
   PhotoGuidelinesInfoButton,
   PhotoGuidelinesSheet,
   usePhotoGuidelinesSheet,
-} from '@/components/onboarding';
+} from '@/components/modals/photo-guidelines-sheet';
 import { View, YStack, Text, Button, Image, XStack, ScreenWrapper } from '@/components/v2/ui';
 import { ImageSource, useModels, useOnboarding } from '@/state';
 import { ArrowLeft, ImageUp } from '@/icons';

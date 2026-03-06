@@ -58,13 +58,9 @@ const SheetContents = memo(
 
     return (
       <YStack width={'100%'} gap={'$2'}>
-        <Button onPress={getImageFromDeviceLibrary} stretched>
-          Select from gallery
-        </Button>
+        <Button onPress={getImageFromDeviceLibrary}>Select from gallery</Button>
         <Text self={'center'}>or</Text>
-        <Button onPress={getImageFromDeviceCamera} stretched>
-          Use a camera
-        </Button>
+        <Button onPress={getImageFromDeviceCamera}>Use a camera</Button>
       </YStack>
     );
   },

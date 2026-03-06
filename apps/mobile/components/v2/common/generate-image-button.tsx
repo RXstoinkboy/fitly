@@ -77,12 +77,7 @@ export const GenerateImageButton = () => {
   }, [isPending]);
 
   return (
-    <Button
-      type="primary"
-      stretched
-      disabled={isPending}
-      icon={isPending ? Spinner : Wand2}
-      onPress={onGenerateImage}>
+    <Button disabled={isPending} icon={isPending ? Spinner : Wand2} onPress={onGenerateImage}>
       {isPending ? loadingStates[loadingState ?? 0] : 'Create'}
     </Button>
   );

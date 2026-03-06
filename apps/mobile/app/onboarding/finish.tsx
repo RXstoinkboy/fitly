@@ -29,9 +29,7 @@ export default function Onboarding() {
       footer={
         <XStack>
           <Link asChild href={'/onboarding/select-garments'}>
-            <Button icon={<ArrowLeft />} type="ghost">
-              Back
-            </Button>
+            <Button icon={<ArrowLeft />}>Back</Button>
           </Link>
         </XStack>
       }>
@@ -65,12 +63,10 @@ export default function Onboarding() {
           </>
         ) : null}
         <Link asChild href={'/(tabs)'}>
-          <Button type="primary" stretched onPress={onFinish}>
-            Continue
-          </Button>
+          <Button onPress={onFinish}>Continue</Button>
         </Link>
         <Link asChild href={'/onboarding/select-garments'}>
-          <Button type="ghost">Back</Button>
+          <Button>Back</Button>
         </Link>
       </YStack>
     </ScreenWrapper>

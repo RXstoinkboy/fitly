@@ -21,12 +21,8 @@ export const SelectGarmentType = memo(
     return (
       <YStack width={'100%'} gap={'$2'}>
         <Text>Pick a garment type</Text>
-        <Button onPress={onTop} stretched>
-          Top
-        </Button>
-        <Button onPress={onBottom} stretched>
-          Bottom
-        </Button>
+        <Button onPress={onTop}>Top</Button>
+        <Button onPress={onBottom}>Bottom</Button>
       </YStack>
     );
   },

@@ -1,37 +1,26 @@
-import { useMount } from '@/hooks';
-import { AddModelPhoto } from '@/components/ui-legacy';
-import {
-  YStack,
-  XStack,
-  Text,
-  ScrollView,
-  Square,
-  Spinner,
-  Image,
-  GenerateImageButton,
-} from '@/components/v2';
+import { AddModelPhoto, ImagesCarousel } from '@/components/ui-legacy';
+import { YStack, XStack, Square, Spinner, GenerateImageButton, Image } from '@/components/v2';
 import * as FileSystem from 'expo-file-system/legacy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SelectGarment, useSelectGarment } from '@/components/garments';
-import { SelectGarmentType, SelectPhotoSheet } from '@/components/modals';
+import { SelectGarmentType, SelectPhotoSheet, useSelectPhotoSheet } from '@/components/modals';
 import { useGeneratedImages, useModels } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { generatedKeys } from '@/queries/image-generation/keys';
-import { useEffect, useRef } from 'react';
+import { useWindowDimensions } from 'react-native';
+import React from 'react';
+import { H6 } from 'tamagui';
 
 export default function HomeScreen() {
   const { currentModel } = useModels();
-  const { images } = useGeneratedImages();
-  const {
-    tempImage,
-    onImageSelected,
-    handleAddGarment,
-    selectPhotoSheet,
-    selectedGarments,
-    garments,
-  } = useSelectGarment();
+  const { images, deleteGeneratedImagePermanently } = useGeneratedImages();
+  const { tempImage, onImageSelected, handleAddGarment, selectedGarments, garments } =
+    useSelectGarment();
 
-  // const [galleryWrapperHeight, setGalleryWrapperHeight] = useState(0);
+  const selectPhotoSheet = useSelectPhotoSheet();
+
+  const { height: windowHeight } = useWindowDimensions();
+  const carouselHeight = windowHeight * 0.55;
 
   const reset = async () => {
     // Clear AsyncStorage (includes TanStack Query cache and onboarding status)
@@ -52,78 +41,65 @@ export default function HomeScreen() {
     mutationKey: generatedKeys.add(),
   });
 
-  const ref = useRef<ScrollView>(null);
-
-  const scroll = () => {
-    if (ref.current) {
-      ref.current.scrollToEnd({ animated: true }); // Adjust the scroll amount as needed
-    }
-  };
-
-  useEffect(() => {
-    if (isGenerating) {
-      scroll();
-    }
-  }, [isGenerating]);
-
-  useMount(() => {
-    scroll();
-  });
-
   return (
     <>
       {/*<Button onPress={debugFn}>Debug</Button>*/}
       {/* <Button onPress={reset}>Reset storage</Button> */}
-      <YStack flex={1} bg="$background">
-        {!currentModel ? (
-          <AddModelPhoto />
-        ) : (
-          <YStack minW={'100%'}>
-            <ScrollView ref={ref} horizontal showsHorizontalScrollIndicator>
-              <XStack minW={'100%'} gap={'$4'} paddingInline={'$4'} justify={'flex-end'}>
-                {/* onLayout={(event) => {
-                    const { height } = event.nativeEvent.layout;
-                    setGalleryWrapperHeight(height);
-                  }}> */}
-                {images.map((image) => (
-                  <Image
-                    key={image.id}
-                    src={image.filePath}
-                    width={300}
-                    height={400}
-                    rounded={'$7'}
-                    aspectRatio={3 / 4}
+      <YStack flex={1}>
+        <>
+          {!currentModel ? (
+            <AddModelPhoto />
+          ) : (
+            <YStack flex={1} minW={'100%'}>
+              <YStack flex={1} justify="center" items="center">
+                {images.length > 0 ? (
+                  // <>
+                  //   {images.map((image) => (
+                  //     <YStack key={image.id} gap="$4" mb="$4">
+                  //       <H6 px={'$2'}>Generated image</H6>
+                  //       <Image
+                  //         src={image.filePath}
+                  //         width={300}
+                  //         height={400}
+                  //         rounded={'$7'}
+                  //         aspectRatio={3 / 4}
+                  //       />
+                  //     </YStack>
+                  //   ))}
+                  // </>
+                  <ImagesCarousel
+                    height={carouselHeight}
+                    images={images}
+                    onRemove={deleteGeneratedImagePermanently}
                   />
-                ))}
+                ) : null}
                 {isGenerating ? (
                   <Square width={300} height={400} rounded={'$7'} bg={'$color6'}>
                     <Spinner size="large" />
                   </Square>
                 ) : null}
-
-                {/* <ImagesCarousel height={galleryWrapperHeight ?? 0} images={images} /> */}
-              </XStack>
-            </ScrollView>
-            {currentModel ? (
-              <YStack gap="$4" px="$6">
-                <YStack gap={'$4'}>
-                  <YStack gap={'$2'}>
-                    <Text px={'$2'}>Let&apos;s try something on</Text>
-                    <SelectGarment
-                      removeGarment={garments.removeGarment}
-                      selectedGarments={selectedGarments.selectedGarments}
-                      toggle={selectPhotoSheet.toggle}
-                      toggleSelection={selectedGarments.toggleSelection}
-                    />
-                  </YStack>
-                  <XStack justify={'space-evenly'} gap={'$4'}>
-                    <GenerateImageButton />
-                  </XStack>
-                </YStack>
               </YStack>
-            ) : null}
-          </YStack>
-        )}
+              {currentModel ? (
+                <YStack gap="$4" px="$6">
+                  <YStack gap={'$4'}>
+                    <YStack gap={'$2'}>
+                      <H6 px={'$2'}>Let&apos;s try something on</H6>
+                      <SelectGarment
+                        removeGarment={garments.removeGarment}
+                        selectedGarments={selectedGarments.selectedGarments}
+                        toggle={selectPhotoSheet.toggle}
+                        toggleSelection={selectedGarments.toggleSelection}
+                      />
+                    </YStack>
+                    <XStack justify={'space-evenly'} gap={'$4'}>
+                      <GenerateImageButton />
+                    </XStack>
+                  </YStack>
+                </YStack>
+              ) : null}
+            </YStack>
+          )}
+        </>
       </YStack>
       <SelectPhotoSheet
         isOpen={selectPhotoSheet.isOpen}

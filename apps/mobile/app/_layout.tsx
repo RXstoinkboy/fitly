@@ -38,13 +38,6 @@ const RootContent = () => {
             headerShown: false,
           }}
         />
-        <Stack.Screen
-          name="image-viewer"
-          options={{
-            presentation: 'fullScreenModal',
-            headerShown: false,
-          }}
-        />
       </Stack.Protected>
       <Stack.Screen name="+not-found" />
       <Stack.Screen

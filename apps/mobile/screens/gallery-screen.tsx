@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { FlatList, Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from '@tamagui/linear-gradient';
 import { YStack, Tabs, Text } from '@/components/v2/ui';
 import { useGeneratedImages, useTopGarments, useBottomGarments } from '@/state';
 import { GalleryTile } from '@/components/gallery/gallery-tile';
@@ -50,64 +48,60 @@ export const GalleryScreen = () => {
   );
 
   return (
-    <LinearGradient
-      colors={['$color2', '$color6']}
-      start={{ x: 0.2, y: 0.1 }}
-      end={{ x: 0.8, y: 0.8 }}>
-      <SafeAreaView style={{ height: '100%' }}>
-        <Tabs defaultValue="generated" flexDirection="column" flex={1}>
-          <Tabs.List>
-            <Tabs.Tab flex={1} value="generated">
-              <Text>Generated</Text>
-            </Tabs.Tab>
-            <Tabs.Tab flex={1} value="garments">
-              <Text>Garments</Text>
-            </Tabs.Tab>
-          </Tabs.List>
+    <Tabs defaultValue="generated" flexDirection="column" flex={1}>
+      <Tabs.List>
+        <Tabs.Tab flex={1} value="generated">
+          <Text>Generated</Text>
+        </Tabs.Tab>
+        <Tabs.Tab flex={1} value="garments">
+          <Text>Garments</Text>
+        </Tabs.Tab>
+      </Tabs.List>
 
-          <Tabs.Content value="generated" flex={1}>
-            {generatedImages.length === 0 ? (
-              <YStack flex={1} items="center" justify="center">
-                <Text color="$color8">No generated images yet</Text>
-              </YStack>
-            ) : (
-              <FlatList
-                data={generatedImages}
-                keyExtractor={(item) => item.id}
-                renderItem={renderGeneratedItem}
-                numColumns={GRID_COLUMNS}
-                columnWrapperStyle={{ gap: GRID_SPACING }}
-                contentContainerStyle={{ gap: GRID_SPACING, padding: GRID_SPACING }}
-                showsVerticalScrollIndicator={false}
-                style={{ flex: 1 }}
-              />
-            )}
-          </Tabs.Content>
+      <Tabs.Content value="generated" flex={1}>
+        {generatedImages.length === 0 ? (
+          <YStack flex={1} items="center" justify="center">
+            <Text color="$color8">No generated images yet</Text>
+          </YStack>
+        ) : (
+          <FlatList
+            data={generatedImages}
+            keyExtractor={(item) => item.id}
+            renderItem={renderGeneratedItem}
+            numColumns={GRID_COLUMNS}
+            columnWrapperStyle={{ gap: GRID_SPACING }}
+            contentContainerStyle={{ gap: GRID_SPACING, padding: GRID_SPACING }}
+            showsVerticalScrollIndicator={false}
+            style={{ flex: 1 }}
+          />
+        )}
+      </Tabs.Content>
 
-          <Tabs.Content value="garments" flex={1}>
-            <YStack flex={1} position="relative">
-              {garmentImages.length === 0 ? (
-                <YStack flex={1} items="center" justify="center">
-                  <Text color="$color8">No garments yet</Text>
-                </YStack>
-              ) : (
-                <FlatList
-                  data={garmentImages}
-                  keyExtractor={(item) => item.id}
-                  renderItem={renderGarmentItem}
-                  numColumns={GRID_COLUMNS}
-                  columnWrapperStyle={{ gap: GRID_SPACING }}
-                  contentContainerStyle={{ gap: GRID_SPACING, padding: GRID_SPACING, paddingBottom: 80 }}
-                  showsVerticalScrollIndicator={false}
-                  style={{ flex: 1 }}
-                />
-              )}
-              <GalleryFilter filter={garmentFilter} onChange={setGarmentFilter} />
+      <Tabs.Content value="garments" flex={1}>
+        <YStack flex={1} position="relative">
+          {garmentImages.length === 0 ? (
+            <YStack flex={1} items="center" justify="center">
+              <Text color="$color8">No garments yet</Text>
             </YStack>
-          </Tabs.Content>
-        </Tabs>
-      </SafeAreaView>
-    </LinearGradient>
+          ) : (
+            <FlatList
+              data={garmentImages}
+              keyExtractor={(item) => item.id}
+              renderItem={renderGarmentItem}
+              numColumns={GRID_COLUMNS}
+              columnWrapperStyle={{ gap: GRID_SPACING }}
+              contentContainerStyle={{
+                gap: GRID_SPACING,
+                padding: GRID_SPACING,
+                paddingBottom: 80,
+              }}
+              showsVerticalScrollIndicator={false}
+              style={{ flex: 1 }}
+            />
+          )}
+          <GalleryFilter filter={garmentFilter} onChange={setGarmentFilter} />
+        </YStack>
+      </Tabs.Content>
+    </Tabs>
   );
 };
-

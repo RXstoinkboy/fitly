@@ -12,12 +12,7 @@ type GalleryTileProps = {
 export const GalleryTile = ({ item, tileSize, onPress }: GalleryTileProps) => {
   return (
     <Pressable onPress={() => onPress(item)}>
-      <Image
-        source={{ uri: item.filePath, width: tileSize, height: tileSize }}
-        width={tileSize}
-        height={tileSize}
-        resizeMode="cover"
-      />
+      <Image src={item.filePath} width={tileSize} height={tileSize} objectFit="cover" />
     </Pressable>
   );
 };

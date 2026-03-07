@@ -82,7 +82,10 @@ export function ImagesCarousel({
             garments={allGarments}
             onRemove={() => onRemove(item.id)}
             onPress={() =>
-              router.push({ pathname: '/image-viewer', params: { uri: item.filePath } })
+              router.push({
+                pathname: '/image-detail/[id]',
+                params: { id: item.id, type: 'generated' },
+              })
             }
           />
         )}

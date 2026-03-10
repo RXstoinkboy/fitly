@@ -1,22 +1,10 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
-import { GalleryHorizontalEnd, Wand2 } from '@/icons';
+import { GalleryHorizontalEnd, Settings, Wand2 } from '@/icons';
 
 export default function TabLayout() {
   return (
-    <Tabs
-      screenOptions={
-        {
-          // tabBarStyle: Platform.select({
-          //   ios: {
-          //     // Use a transparent background on iOS to show the blur effect
-          //     position: 'absolute',
-          //   },
-          //   default: {},
-          // }),
-        }
-      }>
+    <Tabs>
       <Tabs.Screen
         name="index"
         options={{
@@ -35,6 +23,15 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => (
             <GalleryHorizontalEnd color={color as any} size={size} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          headerShown: false,
+          animation: 'shift',
+          tabBarIcon: ({ color, size }) => <Settings color={color as any} size={size} />,
         }}
       />
     </Tabs>

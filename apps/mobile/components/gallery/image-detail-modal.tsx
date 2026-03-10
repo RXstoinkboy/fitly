@@ -1,6 +1,5 @@
 import React from 'react';
 import { Share } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image, XStack, YStack, Button } from '@/components/v2/ui';
 import { X, Share2, Trash2 } from '@tamagui/lucide-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
@@ -11,7 +10,13 @@ type ImageDetailContentProps = {
   imageUri: string;
   isGenerated: boolean;
   onClose: () => void;
-  onRemove: () => void;
+  onRemove?: () => void;
+  primaryAction?: {
+    label: string;
+    onPress: () => void;
+  };
+  showDelete?: boolean;
+  showShare?: boolean;
 };
 
 const MIN_SCALE = 1;
@@ -22,6 +27,9 @@ export const ImageDetailContent = ({
   isGenerated,
   onClose,
   onRemove,
+  primaryAction,
+  showDelete,
+  showShare,
 }: ImageDetailContentProps) => {
   const confirmation = useConfirmationSheet();
 
@@ -91,10 +99,15 @@ export const ImageDetailContent = ({
   };
 
   const handleRemove = () => {
+    if (!onRemove) return;
+
     onRemove();
     confirmation.toggle(false);
     onClose();
   };
+
+  const shouldShowShare = showShare ?? isGenerated;
+  const shouldShowDelete = showDelete ?? Boolean(onRemove);
 
   return (
     <>
@@ -115,7 +128,7 @@ export const ImageDetailContent = ({
 
         {/* Controls */}
         <XStack justify="flex-end" gap="$3" px="$4" py="$2" position="absolute" t={0} l={0} r={0}>
-          {isGenerated ? (
+          {shouldShowShare ? (
             <Button
               size="$4"
               circular
@@ -123,14 +136,24 @@ export const ImageDetailContent = ({
               onPress={handleShare}
             />
           ) : null}
-          <Button
-            size="$4"
-            circular
-            icon={<Trash2 color="white" size={22} />}
-            onPress={() => confirmation.toggle(true)}
-          />
+          {shouldShowDelete ? (
+            <Button
+              size="$4"
+              circular
+              icon={<Trash2 color="white" size={22} />}
+              onPress={() => confirmation.toggle(true)}
+            />
+          ) : null}
           <Button size="$4" circular icon={<X color="white" size={22} />} onPress={onClose} />
         </XStack>
+
+        {primaryAction ? (
+          <YStack position="absolute" b={20} l={0} r={0} px="$4">
+            <Button size="$5" onPress={primaryAction.onPress}>
+              {primaryAction.label}
+            </Button>
+          </YStack>
+        ) : null}
 
         {/* TODO: Add expandable bottom sheet with scroll showing the list of garments used to
               generate this image. This will later enable a 'remix' feature where the user can
@@ -138,16 +161,20 @@ export const ImageDetailContent = ({
       </YStack>
 
       {/* Delete confirmation */}
-      <ConfirmationSheet type="error" isOpen={confirmation.isOpen} toggle={confirmation.toggle}>
-        <ConfirmationSheet.Title>Delete this image?</ConfirmationSheet.Title>
-        <ConfirmationSheet.Description>This action cannot be undone.</ConfirmationSheet.Description>
-        <ConfirmationSheet.ConfirmButton onPress={handleRemove}>
-          Delete
-        </ConfirmationSheet.ConfirmButton>
-        <ConfirmationSheet.CancelButton onPress={() => confirmation.toggle(false)}>
-          Cancel
-        </ConfirmationSheet.CancelButton>
-      </ConfirmationSheet>
+      {shouldShowDelete ? (
+        <ConfirmationSheet type="error" isOpen={confirmation.isOpen} toggle={confirmation.toggle}>
+          <ConfirmationSheet.Title>Delete this image?</ConfirmationSheet.Title>
+          <ConfirmationSheet.Description>
+            This action cannot be undone.
+          </ConfirmationSheet.Description>
+          <ConfirmationSheet.ConfirmButton onPress={handleRemove}>
+            Delete
+          </ConfirmationSheet.ConfirmButton>
+          <ConfirmationSheet.CancelButton onPress={() => confirmation.toggle(false)}>
+            Cancel
+          </ConfirmationSheet.CancelButton>
+        </ConfirmationSheet>
+      ) : null}
     </>
   );
 };

@@ -38,6 +38,19 @@ const RootContent = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="models-gallery"
+          options={{
+            title: 'Model gallery',
+          }}
+        />
+        <Stack.Screen
+          name="model-detail/[id]"
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+          }}
+        />
       </Stack.Protected>
       <Stack.Screen name="+not-found" />
       <Stack.Screen

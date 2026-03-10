@@ -12,6 +12,7 @@ import { QueryClientProvider } from '@/queries/provider';
 import { GarmentsProvider } from '@/context/garment-context';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useOnboarding } from '@/state';
+import { ShareIntentHandler } from '@/components/share-intent-handler';
 
 const RootContent = () => {
   const { isCompleted } = useOnboarding();
@@ -73,6 +74,7 @@ export default function RootLayout() {
             <GarmentsProvider>
               <SafeAreaProvider>
                 <RootContent />
+                <ShareIntentHandler />
                 {/* TODO: clothes selection drawer */}
                 {/* TODO: modal with image zoom -n */}
               </SafeAreaProvider>

@@ -5,8 +5,17 @@ import { fileUriToBase64 } from '@/utils/file-uri-to-base64';
 import { saveToFileSystem } from '@/utils/save-to-file-system';
 import { paths } from '@/constants/paths';
 import { useModels } from '@/state';
+import { GarmentType } from '@/state/types';
+import { analyticsEvents, captureError, trackEvent } from '@/lib/analytics';
+import { AnalyticsFlow } from '@/lib/analytics/types';
 
-type GenerateImageParams = { top?: string; bottom?: string };
+type GenerateImageParams = {
+  top?: string;
+  bottom?: string;
+  garments?: { ids: string[]; types: GarmentType[]; count: number };
+  context?: AnalyticsFlow;
+  modelId?: string | null;
+};
 
 type GenerateImageResult = {
   generatedImageBase64: string;
@@ -50,12 +59,28 @@ export const useGenerateImageMutation = (
     onSuccess: (data, variables, result, context) => {
       if (data) {
         console.log('Generated image saved to:', data.filePath);
+        trackEvent(analyticsEvents.generation.succeeded(variables.context ?? 'app'), {
+          garmentCount: variables.garments?.count ?? 0,
+          garmentTypes: variables.garments?.types ?? [],
+          modelId: variables.modelId ?? currentModel?.id,
+          flow: variables.context ?? 'app',
+        });
       }
 
       options.onSuccess?.(data, variables, result, context);
     },
     onError: (error, variables, result, context) => {
       console.error('Error generating image:', error);
+      trackEvent(analyticsEvents.generation.failed(variables.context ?? 'app'), {
+        garmentCount: variables.garments?.count ?? 0,
+        garmentTypes: variables.garments?.types ?? [],
+        modelId: variables.modelId ?? currentModel?.id,
+        flow: variables.context ?? 'app',
+      });
+      captureError(error, {
+        event: analyticsEvents.generation.failed(variables.context ?? 'app'),
+        flow: variables.context ?? 'app',
+      });
       options.onError?.(error, variables, result, context);
     },
     onSettled: () => {

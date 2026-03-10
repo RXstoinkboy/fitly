@@ -15,7 +15,7 @@ export default function HomeScreen() {
   const { currentModel } = useModels();
   const { images, deleteGeneratedImagePermanently } = useGeneratedImages();
   const { tempImage, onImageSelected, handleAddGarment, selectedGarments, garments } =
-    useSelectGarment();
+    useSelectGarment('app');
 
   const selectPhotoSheet = useSelectPhotoSheet();
 
@@ -104,7 +104,9 @@ export default function HomeScreen() {
       <SelectPhotoSheet
         isOpen={selectPhotoSheet.isOpen}
         toggle={selectPhotoSheet.toggle}
-        onSuccess={onImageSelected}>
+        onSuccess={onImageSelected}
+        subject="garment"
+        flow="app">
         {tempImage ? <SelectGarmentType image={tempImage} onSuccess={handleAddGarment} /> : null}
       </SelectPhotoSheet>
     </>

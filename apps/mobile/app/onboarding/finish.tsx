@@ -5,6 +5,7 @@ import { useGeneratedImages, useOnboarding } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { Link, usePathname } from 'expo-router';
 import { ArrowLeft } from '@/icons';
+import { analyticsEvents, trackEvent } from '@/lib/analytics';
 
 export default function Onboarding() {
   const { setOnboardingStep, completeOnboarding } = useOnboarding();
@@ -18,10 +19,17 @@ export default function Onboarding() {
   const onFinish = () => {
     // TODO: show paywall
     completeOnboarding();
+    trackEvent(analyticsEvents.onboarding.completed(), {
+      step: pathname,
+      generatedImage: Boolean(generatedImage),
+    });
   };
 
   useMount(() => {
     setOnboardingStep(pathname);
+    trackEvent(analyticsEvents.onboarding.stepViewed(), {
+      step: pathname,
+    });
   });
 
   return (

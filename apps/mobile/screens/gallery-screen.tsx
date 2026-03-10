@@ -7,6 +7,7 @@ import { GalleryFilter } from '@/components/gallery/gallery-filter';
 import { router } from 'expo-router';
 import type { GeneratedImage, GarmentImage } from '@/state/types';
 import type { GarmentFilter, ImageDetailType } from '@/components/gallery/types';
+import { analyticsEvents, trackEvent } from '@/lib/analytics';
 
 const { width } = Dimensions.get('window');
 const GRID_COLUMNS = 3;
@@ -36,7 +37,18 @@ export const GalleryScreen = () => {
   const garmentImages = getFilteredGarments(garmentFilter, topGarments, bottomGarments);
 
   const handlePress = (item: GeneratedImage | GarmentImage, type: ImageDetailType) => {
+    trackEvent(analyticsEvents.gallery.openedItem(type), {
+      itemId: item.id,
+      type,
+    });
     router.push(`/image-detail/${item.id}?type=${type}`);
+  };
+
+  const handleFilterChange = (filter: GarmentFilter) => {
+    setGarmentFilter(filter);
+    trackEvent(analyticsEvents.gallery.filterChanged(), {
+      filter,
+    });
   };
 
   const renderGeneratedItem = ({ item }: { item: GeneratedImage }) => (
@@ -99,7 +111,7 @@ export const GalleryScreen = () => {
               style={{ flex: 1 }}
             />
           )}
-          <GalleryFilter filter={garmentFilter} onChange={setGarmentFilter} />
+          <GalleryFilter filter={garmentFilter} onChange={handleFilterChange} />
         </YStack>
       </Tabs.Content>
     </Tabs>

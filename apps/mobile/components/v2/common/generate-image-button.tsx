@@ -3,6 +3,7 @@ import { Button, Spinner } from '@/components/v2/ui';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
 import { useGeneratedImages, useModels, useSelectedGarments } from '@/state';
 import { useEffect, useState } from 'react';
+import { usePaywall } from '@/hooks';
 
 const loadingStates = [
   'Sending images...',
@@ -18,6 +19,7 @@ export const GenerateImageButton = () => {
   const { addGeneratedImage } = useGeneratedImages();
   const { currentModelId } = useModels();
   const selectedGarments = useSelectedGarments();
+  const { requireSubscription, isPresenting } = usePaywall();
 
   const { mutate, isPending } = useGenerateImageMutation({
     onSuccess: (data) => {
@@ -31,9 +33,14 @@ export const GenerateImageButton = () => {
     },
   });
 
-  const onGenerateImage = () => {
+  const onGenerateImage = async () => {
     if (!currentModelId) {
       console.error('No model selected');
+      return;
+    }
+
+    const isSubscribed = await requireSubscription();
+    if (!isSubscribed) {
       return;
     }
 
@@ -77,7 +84,10 @@ export const GenerateImageButton = () => {
   }, [isPending]);
 
   return (
-    <Button disabled={isPending} icon={isPending ? Spinner : Wand2} onPress={onGenerateImage}>
+    <Button
+      disabled={isPending || isPresenting}
+      icon={isPending ? Spinner : Wand2}
+      onPress={onGenerateImage}>
       {isPending ? loadingStates[loadingState ?? 0] : 'Create'}
     </Button>
   );

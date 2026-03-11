@@ -49,7 +49,7 @@ export function ImagesCarousel({
   onRemove: (id: string) => void;
 }) {
   const { width } = Dimensions.get('window');
-  const PAGE_WIDTH = height * 0.75 || width;
+  const PAGE_WIDTH = width;
   const PAGE_HEIGHT = height;
 
   const router = useRouter();

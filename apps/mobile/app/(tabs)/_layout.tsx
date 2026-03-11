@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { GalleryHorizontalEnd, Settings, Wand2 } from '@/icons';
+import { LayoutGrid, Sparkles, Settings } from '@/icons';
 
 export default function TabLayout() {
   return (
@@ -11,7 +11,7 @@ export default function TabLayout() {
           title: 'Generate',
           headerShown: false,
           animation: 'shift',
-          tabBarIcon: ({ color, size }) => <Wand2 color={color as any} size={size} />,
+          tabBarIcon: ({ color, size }) => <Sparkles color={color as any} size={size} />,
         }}
       />
       <Tabs.Screen
@@ -20,9 +20,7 @@ export default function TabLayout() {
           title: 'Gallery',
           headerShown: false,
           animation: 'shift',
-          tabBarIcon: ({ color, size }) => (
-            <GalleryHorizontalEnd color={color as any} size={size} />
-          ),
+          tabBarIcon: ({ color, size }) => <LayoutGrid color={color as any} size={size} />,
         }}
       />
       <Tabs.Screen

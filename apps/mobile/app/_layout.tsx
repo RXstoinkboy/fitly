@@ -6,7 +6,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { TamaguiProvider } from 'tamagui';
+import { TamaguiProvider, useTheme } from 'tamagui';
 import { tamaguiConfig } from '../tamagui.config';
 import { QueryClientProvider } from '@/queries/provider';
 import { GarmentsProvider } from '@/context/garment-context';
@@ -16,10 +16,15 @@ import { SubscriptionProvider } from '@/components/subscription';
 
 const RootContent = () => {
   const { isCompleted } = useOnboarding();
+  const theme = useTheme();
 
   return (
     <Stack
-      screenLayout={({ children }) => <SafeAreaView style={{ flex: 1 }}>{children}</SafeAreaView>}
+      screenLayout={({ children }) => (
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
+          {children}
+        </SafeAreaView>
+      )}
       screenOptions={{
         headerTitleAlign: 'center',
         headerBackVisible: false,
@@ -36,6 +41,19 @@ const RootContent = () => {
         <Stack.Screen
           name="(tabs)"
           options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="models-gallery"
+          options={{
+            title: 'Model gallery',
+          }}
+        />
+        <Stack.Screen
+          name="model-detail/[id]"
+          options={{
+            presentation: 'modal',
             headerShown: false,
           }}
         />

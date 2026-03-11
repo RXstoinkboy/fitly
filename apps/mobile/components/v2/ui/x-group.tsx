@@ -1,0 +1,1 @@
+export { XGroup } from 'tamagui';

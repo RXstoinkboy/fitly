@@ -1,5 +1,13 @@
 import { AddModelPhoto, ImagesCarousel } from '@/components/ui-legacy';
-import { YStack, XStack, Square, Spinner, GenerateImageButton, Image } from '@/components/v2';
+import {
+  YStack,
+  XStack,
+  Square,
+  Spinner,
+  GenerateImageButton,
+  Image,
+  ScreenWrapper,
+} from '@/components/v2';
 import * as FileSystem from 'expo-file-system/legacy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SelectGarment, useSelectGarment } from '@/components/garments';
@@ -20,7 +28,7 @@ export default function HomeScreen() {
   const selectPhotoSheet = useSelectPhotoSheet();
 
   const { height: windowHeight } = useWindowDimensions();
-  const carouselHeight = windowHeight * 0.55;
+  const carouselHeight = windowHeight * 0.5;
 
   const reset = async () => {
     // Clear AsyncStorage (includes TanStack Query cache and onboarding status)
@@ -37,15 +45,11 @@ export default function HomeScreen() {
     console.log('All dev data cleared!');
   };
 
-  const isGenerating = useIsMutating({
-    mutationKey: generatedKeys.add(),
-  });
-
   return (
     <>
       {/*<Button onPress={debugFn}>Debug</Button>*/}
       {/* <Button onPress={reset}>Reset storage</Button> */}
-      <YStack flex={1}>
+      <ScreenWrapper>
         <>
           {!currentModel ? (
             <AddModelPhoto />
@@ -73,11 +77,6 @@ export default function HomeScreen() {
                     onRemove={deleteGeneratedImagePermanently}
                   />
                 ) : null}
-                {isGenerating ? (
-                  <Square width={300} height={400} rounded={'$7'} bg={'$color6'}>
-                    <Spinner size="large" />
-                  </Square>
-                ) : null}
               </YStack>
               {currentModel ? (
                 <YStack gap="$4" px="$6">
@@ -100,7 +99,7 @@ export default function HomeScreen() {
             </YStack>
           )}
         </>
-      </YStack>
+      </ScreenWrapper>
       <SelectPhotoSheet
         isOpen={selectPhotoSheet.isOpen}
         toggle={selectPhotoSheet.toggle}

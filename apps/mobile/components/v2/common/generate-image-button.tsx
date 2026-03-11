@@ -1,4 +1,4 @@
-import { Wand2 } from '@/icons';
+import { Sparkles } from '@/icons';
 import { Button, Spinner } from '@/components/v2/ui';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
 import { useGeneratedImages, useModels, useSelectedGarments } from '@/state';
@@ -85,8 +85,11 @@ export const GenerateImageButton = () => {
 
   return (
     <Button
+      bg={'$accent1'}
+      size={'$6'}
+      width={'100%'}
       disabled={isPending || isPresenting}
-      icon={isPending ? Spinner : Wand2}
+      icon={isPending ? Spinner : Sparkles}
       onPress={onGenerateImage}>
       {isPending ? loadingStates[loadingState ?? 0] : 'Create'}
     </Button>

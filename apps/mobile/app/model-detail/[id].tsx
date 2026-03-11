@@ -1,6 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { ImageDetailContent } from '@/components/gallery/image-detail-modal';
 import { state } from '@/state';
+import { ImageUp } from '@/icons';
 
 export default function ModelDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -27,6 +28,7 @@ export default function ModelDetailScreen() {
       primaryAction={{
         label: 'Use this model',
         onPress: handleUseAsCurrent,
+        icon: <ImageUp color="white" size={22} />,
       }}
     />
   );

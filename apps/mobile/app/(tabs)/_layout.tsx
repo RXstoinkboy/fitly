@@ -1,10 +1,20 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { LayoutGrid, Sparkles, Settings } from '@/icons';
+import { useTheme } from 'tamagui';
 
 export default function TabLayout() {
+  const theme = useTheme();
+
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: theme.background.val,
+          borderColor: theme.borderColor.val,
+        },
+        tabBarActiveTintColor: theme.accent1.val,
+      }}>
       <Tabs.Screen
         name="index"
         options={{

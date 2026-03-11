@@ -16,3 +16,4 @@ export * from './tabs';
 export * from './popover';
 export * from './x-group';
 export * from './toggle-group';
+export * from './list-item';

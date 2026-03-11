@@ -1,7 +1,7 @@
 import React from 'react';
 import { Share } from 'react-native';
 import { Image, XStack, YStack, Button } from '@/components/v2/ui';
-import { X, Share2, Trash2 } from '@tamagui/lucide-icons';
+import { X, Share2, Trash2, ImageUp } from '@tamagui/lucide-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { ConfirmationSheet, useConfirmationSheet } from '@/components/modals';
@@ -14,6 +14,7 @@ type ImageDetailContentProps = {
   primaryAction?: {
     label: string;
     onPress: () => void;
+    icon?: React.ReactNode;
   };
   showDelete?: boolean;
   showShare?: boolean;
@@ -144,16 +145,15 @@ export const ImageDetailContent = ({
               onPress={() => confirmation.toggle(true)}
             />
           ) : null}
+          {primaryAction ? (
+            <Button size="$4" icon={primaryAction.icon} onPress={primaryAction.onPress}>
+              {primaryAction.label}
+            </Button>
+          ) : null}
           <Button size="$4" circular icon={<X color="white" size={22} />} onPress={onClose} />
         </XStack>
 
-        {primaryAction ? (
-          <YStack position="absolute" b={20} l={0} r={0} px="$4">
-            <Button size="$5" onPress={primaryAction.onPress}>
-              {primaryAction.label}
-            </Button>
-          </YStack>
-        ) : null}
+        {primaryAction ? <YStack position="absolute" b={20} l={0} r={0} px="$4"></YStack> : null}
 
         {/* TODO: Add expandable bottom sheet with scroll showing the list of garments used to
               generate this image. This will later enable a 'remix' feature where the user can

@@ -2,7 +2,6 @@ import { Tabs } from 'expo-router';
 import React, { type FC } from 'react';
 import { LayoutGrid, Sparkles } from '@/icons';
 import { XGroup, YStack, Button } from '@/components/v2/ui';
-import { useTheme } from 'tamagui';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
 const CustomTabs: FC<BottomTabBarProps> = ({ state, navigation }) => {
@@ -49,8 +48,6 @@ const CustomTabs: FC<BottomTabBarProps> = ({ state, navigation }) => {
 };
 
 export default function TabLayout() {
-  const theme = useTheme();
-
   return (
     <Tabs
       tabBar={(props) => <CustomTabs {...props} />}

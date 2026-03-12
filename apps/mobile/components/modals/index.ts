@@ -4,3 +4,4 @@ export * from './photo-guidelines-sheet';
 export * from './change-model-sheet';
 
 export * from './contents';
+export * from './share-intent-sheet';

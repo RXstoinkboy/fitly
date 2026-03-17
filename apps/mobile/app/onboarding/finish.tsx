@@ -1,23 +1,31 @@
-import { useMount } from '@/hooks';
+import { useMount, usePaywall } from '@/hooks';
 import { YStack, Text, ScreenWrapper, Image, Button, XStack } from '@/components/v2/ui';
 import { generatedKeys } from '@/queries/image-generation/keys';
 import { useGeneratedImages, useOnboarding } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
-import { Link, usePathname } from 'expo-router';
+import { Link, usePathname, useRouter } from 'expo-router';
 import { ArrowLeft } from '@/icons';
 
 export default function Onboarding() {
   const { setOnboardingStep, completeOnboarding } = useOnboarding();
+  const router = useRouter();
   const pathname = usePathname();
   const isGenerating = useIsMutating({
     mutationKey: generatedKeys.add(),
   });
   const { images } = useGeneratedImages();
   const generatedImage = images.length > 0 ? images.at(-1)?.filePath : null;
+  const { showPaywall, isPresenting } = usePaywall();
 
-  const onFinish = () => {
-    // TODO: show paywall
-    completeOnboarding();
+  const onFinish = async () => {
+    try {
+      await showPaywall();
+    } catch (error) {
+      console.warn('Paywall presentation failed', error);
+    } finally {
+      completeOnboarding();
+      router.replace('/(tabs)');
+    }
   };
 
   useMount(() => {
@@ -62,9 +70,9 @@ export default function Onboarding() {
             />
           </>
         ) : null}
-        <Link asChild href={'/(tabs)'}>
-          <Button onPress={onFinish}>Continue</Button>
-        </Link>
+        <Button onPress={onFinish} disabled={isPresenting}>
+          {isPresenting ? 'Opening paywall...' : 'Continue'}
+        </Button>
         <Link asChild href={'/onboarding/select-garments'}>
           <Button>Back</Button>
         </Link>

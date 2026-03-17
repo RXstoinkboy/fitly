@@ -12,6 +12,7 @@ import { QueryClientProvider } from '@/queries/provider';
 import { GarmentsProvider } from '@/context/garment-context';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useOnboarding } from '@/state';
+import { SubscriptionProvider } from '@/components/subscription';
 
 const RootContent = () => {
   const { isCompleted } = useOnboarding();
@@ -87,16 +88,18 @@ export default function RootLayout() {
         config={tamaguiConfig}
         defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}>
         <QueryClientProvider>
-          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <GarmentsProvider>
-              <SafeAreaProvider>
-                <RootContent />
-                {/* TODO: clothes selection drawer */}
-                {/* TODO: modal with image zoom -n */}
-              </SafeAreaProvider>
-              <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-            </GarmentsProvider>
-          </ThemeProvider>
+          <SubscriptionProvider>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+              <GarmentsProvider>
+                <SafeAreaProvider>
+                  <RootContent />
+                  {/* TODO: clothes selection drawer */}
+                  {/* TODO: modal with image zoom -n */}
+                </SafeAreaProvider>
+                <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+              </GarmentsProvider>
+            </ThemeProvider>
+          </SubscriptionProvider>
         </QueryClientProvider>
       </TamaguiProvider>
     </GestureHandlerRootView>

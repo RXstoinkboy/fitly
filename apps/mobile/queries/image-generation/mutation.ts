@@ -4,7 +4,7 @@ import { generatedKeys } from './keys';
 import { fileUriToBase64 } from '@/utils/file-uri-to-base64';
 import { saveToFileSystem } from '@/utils/save-to-file-system';
 import { paths } from '@/constants/paths';
-import { useModels } from '@/state';
+import { state, useModels } from '@/state';
 
 type GenerateImageParams = { top?: string; bottom?: string };
 
@@ -23,9 +23,23 @@ export const useGenerateImageMutation = (
   return useMutation<GenerateImageResult | undefined, Error, GenerateImageParams>({
     mutationKey: generatedKeys.add(),
     mutationFn: async ({ top, bottom }) => {
-      const [modelImageBase64, garmentTopImageBase64, garmentBottomImageBase64] = await Promise.all(
-        [fileUriToBase64(currentModel?.filePath), fileUriToBase64(top), fileUriToBase64(bottom)],
-      );
+      if (!currentModel?.filePath) {
+        throw new Error('Model photo is missing. Please select your photo again.');
+      }
+
+      let modelImageBase64 = '';
+
+      try {
+        modelImageBase64 = await fileUriToBase64(currentModel.filePath);
+      } catch {
+        await state.actions.deleteModelPermanently(currentModel.id);
+        throw new Error('Model photo is missing. Please select your photo again.');
+      }
+
+      const [garmentTopImageBase64, garmentBottomImageBase64] = await Promise.all([
+        fileUriToBase64(top),
+        fileUriToBase64(bottom),
+      ]);
 
       const result = await generateImage({
         modelImageBase64,

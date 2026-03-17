@@ -12,6 +12,11 @@ export const fileUriToBase64 = async (fileUri: string | null | undefined): Promi
     return '';
   }
 
+  const fileInfo = await FileSystem.getInfoAsync(fileUri);
+  if (!fileInfo.exists) {
+    throw new Error(`Image file does not exist: ${fileUri}`);
+  }
+
   const base64 = await FileSystem.readAsStringAsync(fileUri, {
     encoding: FileSystem.EncodingType.Base64,
   });

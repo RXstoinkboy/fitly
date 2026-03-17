@@ -1,7 +1,7 @@
 import React from 'react';
 import { Share } from 'react-native';
 import { Image, XStack, YStack, Button } from '@/components/v2/ui';
-import { X, Share2, Trash2, ImageUp } from '@tamagui/lucide-icons';
+import { X, Share2, Trash2 } from '@tamagui/lucide-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { ConfirmationSheet, useConfirmationSheet } from '@/components/modals';

@@ -15,9 +15,11 @@ import { openCamera } from '@/utils/open-camera';
 import { openImageLibrary } from '@/utils/open-image-library';
 import { YGroup } from 'tamagui';
 import { ChangeModelSheet } from '@/components/modals';
+import { usePaywall } from '@/hooks';
 
 export const SettingsScreen = () => {
   const { currentModel, addModel, setCurrentModel } = useModels();
+  const { openCustomerCenter, isPresenting } = usePaywall();
   const [isChangeSheetOpen, setIsChangeSheetOpen] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
 
@@ -45,6 +47,13 @@ export const SettingsScreen = () => {
     closeSheet();
     router.push('/models-gallery');
   }, [closeSheet]);
+
+  const handleManageSubscription = useCallback(async () => {
+    const result = await openCustomerCenter();
+    if (!result.opened) {
+      console.warn('Subscription management is unavailable right now.');
+    }
+  }, [openCustomerCenter]);
 
   return (
     <ScreenWrapper>
@@ -86,9 +95,9 @@ export const SettingsScreen = () => {
             <ListItem
               icon={<Sparkles />}
               bg={'$color3'}
-              disabled
               title="Manage subscriptions"
-              subTitle="Coming soon"
+              subTitle={isPresenting ? 'Opening…' : 'Open RevenueCat Customer Center'}
+              onPress={handleManageSubscription}
             />
           </YGroup.Item>
           <Separator />

@@ -1,20 +1,10 @@
 import { AddModelPhoto, ImagesCarousel } from '@/components/ui-legacy';
-import {
-  YStack,
-  XStack,
-  Square,
-  Spinner,
-  GenerateImageButton,
-  Image,
-  ScreenWrapper,
-} from '@/components/v2';
+import { YStack, XStack, GenerateImageButton, ScreenWrapper, Button } from '@/components/v2';
 import * as FileSystem from 'expo-file-system/legacy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SelectGarment, useSelectGarment } from '@/components/garments';
 import { SelectGarmentType, SelectPhotoSheet, useSelectPhotoSheet } from '@/components/modals';
-import { useGeneratedImages, useModels } from '@/state';
-import { useIsMutating } from '@tanstack/react-query';
-import { generatedKeys } from '@/queries/image-generation/keys';
+import { state, useGeneratedImages, useModels, useOnboarding } from '@/state';
 import { useWindowDimensions } from 'react-native';
 import React from 'react';
 import { H6 } from 'tamagui';
@@ -42,13 +32,18 @@ export default function HomeScreen() {
       await FileSystem.deleteAsync(`${docDir}${item}`, { idempotent: true });
     }
 
+    state.actions.resetAppData();
+
     console.log('All dev data cleared!');
   };
+
+  const { resetOnboarding } = useOnboarding();
 
   return (
     <>
       {/*<Button onPress={debugFn}>Debug</Button>*/}
       {/* <Button onPress={reset}>Reset storage</Button> */}
+      {/* <Button onPress={resetOnboarding}>Reset onboarding</Button> */}
       <ScreenWrapper>
         <>
           {!currentModel ? (
@@ -57,20 +52,6 @@ export default function HomeScreen() {
             <YStack flex={1} minW={'100%'}>
               <YStack flex={1} justify="center" items="center">
                 {images.length > 0 ? (
-                  // <>
-                  //   {images.map((image) => (
-                  //     <YStack key={image.id} gap="$4" mb="$4">
-                  //       <H6 px={'$2'}>Generated image</H6>
-                  //       <Image
-                  //         src={image.filePath}
-                  //         width={300}
-                  //         height={400}
-                  //         rounded={'$7'}
-                  //         aspectRatio={3 / 4}
-                  //       />
-                  //     </YStack>
-                  //   ))}
-                  // </>
                   <ImagesCarousel
                     height={carouselHeight}
                     images={images}

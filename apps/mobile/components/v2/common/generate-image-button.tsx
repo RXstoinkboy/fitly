@@ -4,6 +4,7 @@ import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
 import { useGeneratedImages, useModels, useSelectedGarments } from '@/state';
 import { useEffect, useState } from 'react';
 import { usePaywall } from '@/hooks';
+import { analyticsEvents, captureError, trackEvent } from '@/lib/analytics';
 
 const loadingStates = [
   'Sending images...',
@@ -29,6 +30,11 @@ export const GenerateImageButton = () => {
     },
     onError: (error) => {
       console.error('Failed to generate image:', error);
+      captureError(error, {
+        flow: 'app',
+        event: analyticsEvents.generation.failed('app'),
+      });
+      throw error;
     },
   });
 
@@ -38,17 +44,33 @@ export const GenerateImageButton = () => {
       return;
     }
 
-    const isSubscribed = await requireSubscription();
+    const isSubscribed = await requireSubscription('app_generate');
     if (!isSubscribed) {
       return;
     }
 
     const topGarment = selectedGarments.selectedGarments.find((g) => g.type === 'top');
     const bottomGarment = selectedGarments.selectedGarments.find((g) => g.type === 'bottom');
+    const garmentTypes = selectedGarments.selectedGarments.map((garment) => garment.type);
+    const garmentIds = selectedGarments.selectedGarments.map((garment) => garment.id);
+
+    trackEvent(analyticsEvents.generation.requested('app'), {
+      flow: 'app',
+      garmentTypes,
+      garmentCount: garmentTypes.length,
+      modelId: currentModelId,
+    });
 
     mutate({
       top: topGarment?.filePath,
       bottom: bottomGarment?.filePath,
+      garments: {
+        ids: garmentIds,
+        types: garmentTypes,
+        count: garmentTypes.length,
+      },
+      context: 'app',
+      modelId: currentModelId,
     });
     selectedGarments.clearSelection();
   };

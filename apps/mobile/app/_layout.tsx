@@ -13,6 +13,7 @@ import { GarmentsProvider } from '@/context/garment-context';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useOnboarding } from '@/state';
 import { SubscriptionProvider } from '@/components/subscription';
+import { AnalyticsProvider } from '@/lib/analytics';
 
 const RootContent = () => {
   const { isCompleted } = useOnboarding();
@@ -84,24 +85,26 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <TamaguiProvider
-        config={tamaguiConfig}
-        defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}>
-        <QueryClientProvider>
-          <SubscriptionProvider>
-            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-              <GarmentsProvider>
-                <SafeAreaProvider>
-                  <RootContent />
-                  {/* TODO: clothes selection drawer */}
-                  {/* TODO: modal with image zoom -n */}
-                </SafeAreaProvider>
-                <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-              </GarmentsProvider>
-            </ThemeProvider>
-          </SubscriptionProvider>
-        </QueryClientProvider>
-      </TamaguiProvider>
+      <AnalyticsProvider>
+        <TamaguiProvider
+          config={tamaguiConfig}
+          defaultTheme={colorScheme === 'dark' ? 'dark' : 'light'}>
+          <QueryClientProvider>
+            <SubscriptionProvider>
+              <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                <GarmentsProvider>
+                  <SafeAreaProvider>
+                    <RootContent />
+                    {/* TODO: clothes selection drawer */}
+                    {/* TODO: modal with image zoom -n */}
+                  </SafeAreaProvider>
+                  <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+                </GarmentsProvider>
+              </ThemeProvider>
+            </SubscriptionProvider>
+          </QueryClientProvider>
+        </TamaguiProvider>
+      </AnalyticsProvider>
     </GestureHandlerRootView>
   );
 }

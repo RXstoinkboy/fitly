@@ -14,3 +14,24 @@ export type PaywallAttemptResult = {
   paywallResult: PAYWALL_RESULT;
   status: SubscriptionStatus;
 };
+
+export type SubscriptionProductId = 'monthly' | 'yearly';
+
+export type SubscriptionPlan = {
+  id: SubscriptionProductId;
+  title: string;
+  priceString: string;
+  productIdentifier: string;
+  packageIdentifier: string;
+};
+
+export type CustomerSnapshot = {
+  originalAppUserId: string;
+  activeEntitlementIds: string[];
+  latestExpirationDate: string | null;
+};
+
+export type CustomerCenterResult = {
+  opened: boolean;
+  source: 'customer-center' | 'store-management' | 'none';
+};

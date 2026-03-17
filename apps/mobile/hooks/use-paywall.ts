@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import {
   defaultSubscriptionStatus,
   fetchSubscriptionStatus,
+  presentRevenueCatCustomerCenter,
   presentRevenueCatPaywall,
   presentRevenueCatPaywallIfNeeded,
 } from '@/lib/subscription';
@@ -57,11 +58,26 @@ export const usePaywall = () => {
     }
   }, [refreshStatus, status.isSubscribed]);
 
+  const openCustomerCenter = useCallback(async () => {
+    setIsPresenting(true);
+    try {
+      const result = await presentRevenueCatCustomerCenter();
+      await refreshStatus();
+      return result;
+    } catch (error) {
+      console.warn('Unable to open subscription management', error);
+      return { opened: false as const, source: 'none' as const };
+    } finally {
+      setIsPresenting(false);
+    }
+  }, [refreshStatus]);
+
   return {
     status,
     isPresenting,
     isChecking: isLoading || isFetching,
     requireSubscription,
     showPaywall,
+    openCustomerCenter,
   };
 };

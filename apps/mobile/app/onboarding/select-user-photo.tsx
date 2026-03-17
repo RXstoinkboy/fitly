@@ -9,12 +9,14 @@ import { View, YStack, Text, Button, Image, XStack, ScreenWrapper } from '@/comp
 import { ImageSource, useModels, useOnboarding } from '@/state';
 import { ArrowLeft, ImageUp } from '@/icons';
 import { Link, usePathname } from 'expo-router';
+import { useEffect } from 'react';
+import * as FileSystem from 'expo-file-system/legacy';
 
 export default function SelectUserPhoto() {
   const { setOnboardingStep } = useOnboarding();
   const pathname = usePathname();
 
-  const { currentModel, addModel, setCurrentModel } = useModels();
+  const { currentModel, addModel, setCurrentModel, deleteModelPermanently } = useModels();
   const selectPhotoSheet = useSelectPhotoSheet();
   const photoGuidelinesSheet = usePhotoGuidelinesSheet();
 
@@ -27,6 +29,21 @@ export default function SelectUserPhoto() {
   useMount(() => {
     setOnboardingStep(pathname);
   });
+
+  useEffect(() => {
+    if (!currentModel) {
+      return;
+    }
+
+    const cleanupMissingModel = async () => {
+      const fileInfo = await FileSystem.getInfoAsync(currentModel.filePath);
+      if (!fileInfo.exists) {
+        await deleteModelPermanently(currentModel.id);
+      }
+    };
+
+    cleanupMissingModel();
+  }, [currentModel, deleteModelPermanently]);
 
   return (
     <ScreenWrapper

@@ -4,7 +4,7 @@ import * as FileSystem from 'expo-file-system/legacy';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SelectGarment, useSelectGarment } from '@/components/garments';
 import { SelectGarmentType, SelectPhotoSheet, useSelectPhotoSheet } from '@/components/modals';
-import { useGeneratedImages, useModels, useOnboarding } from '@/state';
+import { state, useGeneratedImages, useModels, useOnboarding } from '@/state';
 import { useWindowDimensions } from 'react-native';
 import React from 'react';
 import { H6 } from 'tamagui';
@@ -32,6 +32,8 @@ export default function HomeScreen() {
       await FileSystem.deleteAsync(`${docDir}${item}`, { idempotent: true });
     }
 
+    state.actions.resetAppData();
+
     console.log('All dev data cleared!');
   };
 
@@ -40,8 +42,8 @@ export default function HomeScreen() {
   return (
     <>
       {/*<Button onPress={debugFn}>Debug</Button>*/}
-      <Button onPress={reset}>Reset storage</Button>
-      <Button onPress={resetOnboarding}>Reset onboarding</Button>
+      {/* <Button onPress={reset}>Reset storage</Button> */}
+      {/* <Button onPress={resetOnboarding}>Reset onboarding</Button> */}
       <ScreenWrapper>
         <>
           {!currentModel ? (

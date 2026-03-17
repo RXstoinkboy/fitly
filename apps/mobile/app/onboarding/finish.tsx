@@ -5,7 +5,6 @@ import { useGeneratedImages, useOnboarding } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { Link, usePathname, useRouter } from 'expo-router';
 import { ArrowLeft } from '@/icons';
-import { PaywallCta } from '@/components/subscription';
 
 export default function Onboarding() {
   const { setOnboardingStep, completeOnboarding } = useOnboarding();
@@ -69,7 +68,6 @@ export default function Onboarding() {
               rounded={'$7'}
               aspectRatio={3 / 4}
             />
-            <PaywallCta />
           </>
         ) : null}
         <Button onPress={onFinish} disabled={isPresenting}>

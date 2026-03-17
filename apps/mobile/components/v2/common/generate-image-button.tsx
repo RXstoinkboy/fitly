@@ -29,7 +29,6 @@ export const GenerateImageButton = () => {
     },
     onError: (error) => {
       console.error('Failed to generate image:', error);
-      throw error;
     },
   });
 

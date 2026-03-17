@@ -563,6 +563,24 @@ const actions = {
   clearAuthToken: () => {
     store$.auth.token.set(null);
   },
+
+  /**
+   * Reset the whole app state to defaults
+   */
+  resetAppData: () => {
+    store$.models.set({});
+    store$.garments.top.set({});
+    store$.garments.bottom.set({});
+    store$.generatedImages.set({});
+    store$.outfits.set({});
+
+    store$.onboarding.isCompleted.set(false);
+    store$.onboarding.currentStep.set('/onboarding/welcome');
+
+    store$.preferences.selectedModelId.set(null);
+    store$.auth.token.set(null);
+    store$.ui.selectedGarmentIds.set([]);
+  },
 };
 
 // ============================================================================

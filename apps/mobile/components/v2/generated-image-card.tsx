@@ -77,15 +77,16 @@ export const GeneratedImageCard = ({
         {garments.length > 0 && (
           <XStack position="absolute" b={'$2'} r={'$2'} gap={'$1'}>
             {garments.map((garment) => (
-              <Image
+              <View
                 key={garment.id}
-                src={garment.filePath}
                 width={'$4'}
                 height={'$4'}
                 rounded={'$3'}
                 borderWidth={'$0.25'}
                 borderColor={'$color1'}
-              />
+                overflow="hidden">
+                <Image src={garment.filePath} width={'100%'} height={'100%'} objectFit="cover" />
+              </View>
             ))}
           </XStack>
         )}

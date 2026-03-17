@@ -61,7 +61,7 @@ node -e "const crypto = require('crypto'); console.log(crypto.randomBytes(32).to
 ### 3. Run database migrations
 
 ```bash
-node ace migration:run
+npm run ace -- migration:run
 ```
 
 ### 4. Start the development server

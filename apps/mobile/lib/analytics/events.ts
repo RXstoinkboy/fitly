@@ -1,4 +1,4 @@
-type EventNameParts = Array<string | number | undefined | null>;
+type EventNameParts = (string | number | undefined | null)[];
 
 const buildEventName = (...parts: EventNameParts) => parts.filter(Boolean).join(':');
 
@@ -31,7 +31,8 @@ export const analyticsEvents = {
   },
   paywall: {
     shown: (context: string) => buildEventName('paywall', 'shown', context),
-    result: (context: string, result: string) => buildEventName('paywall', 'result', context, result),
+    result: (context: string, result: string) =>
+      buildEventName('paywall', 'result', context, result),
     requirementOutcome: (context: string, outcome: 'allowed' | 'blocked') =>
       buildEventName('paywall', 'requirement', context, outcome),
     customerCenterOpened: (context: string) =>

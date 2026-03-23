@@ -27,7 +27,7 @@ export const generateImage = async (payload: ImageGenerationInput) => {
   });
 
   if (response.status === 401) {
-    state.actions.clearAuthToken();
+    state.actions.clearAuthIdentity();
     const regeneratedToken = await getOrCreateToken();
 
     // Retry the request with the new token

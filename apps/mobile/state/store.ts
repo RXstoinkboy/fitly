@@ -43,6 +43,7 @@ export const store$ = observable<AppState>({
   },
   auth: {
     token: null,
+    userId: null,
   },
   ui: {
     selectedGarmentIds: [],
@@ -558,10 +559,33 @@ const actions = {
   },
 
   /**
+   * Set authentication identity
+   */
+  setAuthIdentity: (token: string, userId: string) => {
+    store$.auth.token.set(token);
+    store$.auth.userId.set(userId);
+  },
+
+  /**
+   * Set authentication user id
+   */
+  setAuthUserId: (userId: string | null) => {
+    store$.auth.userId.set(userId);
+  },
+
+  /**
    * Clear authentication token
    */
   clearAuthToken: () => {
     store$.auth.token.set(null);
+  },
+
+  /**
+   * Clear authentication identity
+   */
+  clearAuthIdentity: () => {
+    store$.auth.token.set(null);
+    store$.auth.userId.set(null);
   },
 
   /**
@@ -579,6 +603,7 @@ const actions = {
 
     store$.preferences.selectedModelId.set(null);
     store$.auth.token.set(null);
+    store$.auth.userId.set(null);
     store$.ui.selectedGarmentIds.set([]);
   },
 };

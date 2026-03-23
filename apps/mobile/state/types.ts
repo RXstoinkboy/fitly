@@ -109,6 +109,7 @@ export type AppState = {
 
   auth: {
     token: string | null;
+    userId: string | null;
   };
 
   // UI state (ephemeral - not persisted)

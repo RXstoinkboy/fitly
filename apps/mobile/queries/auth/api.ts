@@ -8,12 +8,16 @@ type AnonymousAuthResponse = {
   userId: string;
 };
 
-let pendingAnonymousAuth: Promise<string> | null = null;
+export type AuthIdentity = {
+  token: string;
+  userId: string;
+};
 
-export const getOrCreateToken = async (): Promise<string> => {
-  const token = state.store.auth.token.get();
-  if (token) {
-    return token;
+let pendingAnonymousAuth: Promise<AuthIdentity> | null = null;
+
+const authenticateAnonymously = async (): Promise<AuthIdentity> => {
+  if (!API_URL) {
+    throw new Error('EXPO_PUBLIC_API_URL is not configured.');
   }
 
   const headers: Record<string, string> = {
@@ -23,35 +27,56 @@ export const getOrCreateToken = async (): Promise<string> => {
     headers['x-api-key'] = API_KEY;
   }
 
+  const response = await fetch(`${API_URL}/api/v1/auth/anonymous`, {
+    method: 'POST',
+    headers,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: response.statusText }));
+    throw new Error(errorData.error || `Request failed with status ${response.status}`);
+  }
+
+  const data = (await response.json()) as Partial<AnonymousAuthResponse>;
+
+  if (!data.token || typeof data.token !== 'string') {
+    throw new Error('Anonymous auth response is missing a valid token.');
+  }
+
+  if (!data.userId || typeof data.userId !== 'string') {
+    throw new Error('Anonymous auth response is missing a valid userId.');
+  }
+
+  state.actions.setAuthIdentity(data.token, data.userId);
+
+  return {
+    token: data.token,
+    userId: data.userId,
+  };
+};
+
+export const getOrCreateAuthIdentity = async (): Promise<AuthIdentity> => {
+  const token = state.store.auth.token.get();
+  const userId = state.store.auth.userId.get();
+
+  if (token && userId) {
+    return { token, userId };
+  }
+
   if (pendingAnonymousAuth) {
     return pendingAnonymousAuth;
   }
 
-  pendingAnonymousAuth = (async () => {
-    const response = await fetch(`${API_URL}/api/v1/auth/anonymous`, {
-      method: 'POST',
-      headers,
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: response.statusText }));
-      throw new Error(errorData.error || `Request failed with status ${response.status}`);
-    }
-
-    const data = (await response.json()) as Partial<AnonymousAuthResponse>;
-
-    if (!data.token || typeof data.token !== 'string') {
-      throw new Error('Anonymous auth response is missing a valid token.');
-    }
-
-    state.actions.setAuthToken(data.token);
-
-    return data.token;
-  })();
+  pendingAnonymousAuth = authenticateAnonymously();
 
   try {
     return await pendingAnonymousAuth;
   } finally {
     pendingAnonymousAuth = null;
   }
+};
+
+export const getOrCreateToken = async (): Promise<string> => {
+  const identity = await getOrCreateAuthIdentity();
+  return identity.token;
 };

@@ -4,6 +4,10 @@ import { posthogClient } from './client';
 
 type TrackProperties = Record<string, unknown>;
 
+type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+
+type IdentifyProperties = Record<string, JsonValue>;
+
 export const trackEvent = (event: string, properties: TrackProperties = {}) => {
   if (!posthogClient) return;
 
@@ -20,4 +24,10 @@ export const captureError = (error: unknown, properties: TrackProperties = {}) =
     stack: error instanceof Error ? error.stack : undefined,
     ...properties,
   });
+};
+
+export const identifyUser = (userId: string, properties: IdentifyProperties = {}) => {
+  if (!posthogClient || !userId) return;
+
+  posthogClient.identify(userId, properties as any);
 };

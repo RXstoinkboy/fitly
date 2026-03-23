@@ -207,10 +207,15 @@ export const useAppState = () => {
  */
 export const useAuthState = () => {
   const token = useValue(state.store.auth.token);
+  const userId = useValue(state.store.auth.userId);
 
   return {
     token,
+    userId,
     setToken: state.actions.setAuthToken,
+    setAuthIdentity: state.actions.setAuthIdentity,
+    setUserId: state.actions.setAuthUserId,
     clearToken: state.actions.clearAuthToken,
+    clearIdentity: state.actions.clearAuthIdentity,
   };
 };

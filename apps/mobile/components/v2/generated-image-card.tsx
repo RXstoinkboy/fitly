@@ -4,6 +4,7 @@ import { Share2, Trash2 } from '@/icons';
 import { Button, Image, View, XStack } from '@/components/v2/ui';
 import { GarmentImage } from '@/state/types';
 import { ConfirmationSheet, useConfirmationSheet } from '../modals';
+import { analyticsEvents, trackEvent } from '@/lib/analytics';
 
 type GeneratedImageCardProps = {
   /** The image content (e.g. a Tamagui Image). Tapping it triggers onPress. */
@@ -97,6 +98,10 @@ export const GeneratedImageCard = ({
         <ConfirmationSheet.Description>This action cannot be undone.</ConfirmationSheet.Description>
         <ConfirmationSheet.ConfirmButton
           onPress={() => {
+            trackEvent(analyticsEvents.image.deleted('generated'), {
+              type: 'generated',
+              source: 'main_carousel',
+            });
             onRemove();
             confirmation.toggle(false);
           }}>

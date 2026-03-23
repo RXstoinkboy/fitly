@@ -7,6 +7,7 @@ import { GeneratedImage, GarmentImage } from '@/state/types';
 import { useTopGarments, useBottomGarments } from '@/state';
 import { useRouter } from 'expo-router';
 import { GeneratedImageCard } from './generated-image-card';
+import { analyticsEvents, trackEvent } from '@/lib/analytics';
 
 // ---------------------------------------------------------------------------
 // Individual slide
@@ -81,12 +82,17 @@ export function ImagesCarousel({
             image={item}
             garments={allGarments}
             onRemove={() => onRemove(item.id)}
-            onPress={() =>
+            onPress={() => {
+              trackEvent(analyticsEvents.gallery.openedItem('generated'), {
+                itemId: item.id,
+                type: 'generated',
+                source: 'main_carousel',
+              });
               router.push({
                 pathname: '/image-detail/[id]',
                 params: { id: item.id, type: 'generated' },
-              })
-            }
+              });
+            }}
           />
         )}
         mode="parallax"

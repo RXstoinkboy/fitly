@@ -25,6 +25,9 @@ export const analyticsEvents = {
     succeeded: (context: string) => buildEventName('generation', 'succeeded', context),
     failed: (context: string) => buildEventName('generation', 'failed', context),
   },
+  image: {
+    deleted: (type: string) => buildEventName('image', 'deleted', type),
+  },
   gallery: {
     openedItem: (type: string) => buildEventName('gallery', 'opened_item', type),
     filterChanged: () => buildEventName('gallery', 'filter_changed'),

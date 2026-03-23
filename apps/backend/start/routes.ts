@@ -8,9 +8,11 @@ const AuthController = () => import('#controllers/auth_controller')
 
 router
   .group(() => {
-    router.post('/images/generate', [ImageGenerationController, 'generate']).use(middleware.auth())
+    router
+      .post('/images/generate', [ImageGenerationController, 'generate'])
+      .use([middleware.installationId(), middleware.auth()])
 
-    router.post('/auth/anonymous', [AuthController, 'anonymous'])
+    router.post('/auth/anonymous', [AuthController, 'anonymous']).use(middleware.installationId())
 
     router.get('/health', async ({ response }) => {
       try {

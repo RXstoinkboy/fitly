@@ -1,8 +1,8 @@
 import { state } from '@/state';
 import { setRevenueCatAppUser } from '@/lib/subscription';
+import { buildBackendHeaders } from '../backend-headers';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
-const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
 
 type AnonymousAuthResponse = {
   token: string;
@@ -35,12 +35,7 @@ const authenticateAnonymously = async (): Promise<AuthIdentity> => {
     throw new Error('EXPO_PUBLIC_API_URL is not configured.');
   }
 
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
-  if (API_KEY) {
-    headers['x-api-key'] = API_KEY;
-  }
+  const headers = buildBackendHeaders();
 
   const response = await fetch(`${API_URL}/api/v1/auth/anonymous`, {
     method: 'POST',
@@ -72,6 +67,8 @@ const authenticateAnonymously = async (): Promise<AuthIdentity> => {
 };
 
 export const getOrCreateAuthIdentity = async (): Promise<AuthIdentity> => {
+  state.actions.getOrCreateInstallationId();
+
   const token = state.store.auth.token.get();
   const userId = state.store.auth.userId.get();
 

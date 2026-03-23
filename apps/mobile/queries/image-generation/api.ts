@@ -1,8 +1,8 @@
 import { clearAuthIdentity, getOrCreateToken } from '../auth/api';
 import { ImageGenerationInput } from './types';
+import { buildBackendHeaders } from '../backend-headers';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
-const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
 
 export const generateImage = async (payload: ImageGenerationInput) => {
   if (!API_URL) {
@@ -10,14 +10,7 @@ export const generateImage = async (payload: ImageGenerationInput) => {
   }
   const token = await getOrCreateToken();
 
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  };
-
-  if (API_KEY) {
-    headers['x-api-key'] = API_KEY;
-  }
+  const headers = buildBackendHeaders({ token });
 
   const response = await fetch(`${API_URL}/api/v1/images/generate`, {
     method: 'POST',
@@ -32,10 +25,7 @@ export const generateImage = async (payload: ImageGenerationInput) => {
     // Retry the request with the new token
     const retryResponse = await fetch(`${API_URL}/api/v1/images/generate`, {
       method: 'POST',
-      headers: {
-        ...headers,
-        Authorization: `Bearer ${regeneratedToken}`,
-      },
+      headers: buildBackendHeaders({ token: regeneratedToken }),
       body: JSON.stringify(payload),
     });
 

@@ -5,6 +5,7 @@ import { posthogClient } from './client';
 import { registerErrorHandlers } from './error-handlers';
 import { captureError, identifyUser, trackEvent } from './track';
 import { getOrCreateAuthIdentity } from '@/queries/auth/api';
+import { state } from '@/state';
 
 export const AnalyticsProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
@@ -16,10 +17,12 @@ export const AnalyticsProvider = ({ children }: PropsWithChildren) => {
 
     const bootstrapIdentity = async () => {
       try {
+        const installationId = state.actions.getOrCreateInstallationId();
         const identity = await getOrCreateAuthIdentity();
         if (!cancelled) {
           identifyUser(identity.userId, {
             authType: 'anonymous',
+            installationId,
           });
         }
       } catch (error) {

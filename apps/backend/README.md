@@ -78,6 +78,10 @@ The server starts at `http://0.0.0.0:3333` by default.
 
 Creates an anonymous user and returns an access token. No credentials required.
 
+**Headers:**
+
+- `x-installation-id: <installation id>` _(required)_
+
 **Response (201):**
 
 ```json
@@ -96,6 +100,7 @@ Generates a virtual try-on image using Google's Gemini model.
 **Headers:**
 
 - `Content-Type: application/json`
+- `x-installation-id: <installation id>` _(required)_
 - `x-api-key: <API_KEY>` _(required only if `API_KEY` is set in `.env`)_
 
 **Request Body:**
@@ -126,6 +131,7 @@ Generates a virtual try-on image using Google's Gemini model.
 **Error Responses:**
 
 - `400` – Bad request (missing garment images or validation failure)
+- `400` – Bad request (missing or invalid `x-installation-id`)
 - `401` – Unauthorized (invalid or missing API key)
 - `502` – Google GenAI request failed
 
@@ -152,6 +158,8 @@ EXPO_PUBLIC_API_URL=http://localhost:3333
 EXPO_PUBLIC_API_URL=http://192.168.1.x:3333
 
 EXPO_PUBLIC_API_KEY=your_api_key_here
+
+# x-installation-id is generated automatically by the mobile app
 ```
 
 ## Production Build

@@ -44,6 +44,7 @@ export const store$ = observable<AppState>({
   auth: {
     token: null,
     userId: null,
+    installationId: null,
   },
   ui: {
     selectedGarmentIds: [],
@@ -567,6 +568,29 @@ const actions = {
   },
 
   /**
+   * Set installation id
+   */
+  setInstallationId: (installationId: string) => {
+    store$.auth.installationId.set(installationId);
+  },
+
+  /**
+   * Get existing installation id or create one
+   */
+  getOrCreateInstallationId: () => {
+    const existingInstallationId = store$.auth.installationId.peek();
+
+    if (existingInstallationId) {
+      return existingInstallationId;
+    }
+
+    const installationId = generateId();
+    store$.auth.installationId.set(installationId);
+
+    return installationId;
+  },
+
+  /**
    * Set authentication user id
    */
   setAuthUserId: (userId: string | null) => {
@@ -604,6 +628,7 @@ const actions = {
     store$.preferences.selectedModelId.set(null);
     store$.auth.token.set(null);
     store$.auth.userId.set(null);
+    store$.auth.installationId.set(null);
     store$.ui.selectedGarmentIds.set([]);
   },
 };

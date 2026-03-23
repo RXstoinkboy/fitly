@@ -1,5 +1,4 @@
-import { state } from '@/state';
-import { getOrCreateToken } from '../auth/api';
+import { clearAuthIdentity, getOrCreateToken } from '../auth/api';
 import { ImageGenerationInput } from './types';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -27,7 +26,7 @@ export const generateImage = async (payload: ImageGenerationInput) => {
   });
 
   if (response.status === 401) {
-    state.actions.clearAuthIdentity();
+    await clearAuthIdentity();
     const regeneratedToken = await getOrCreateToken();
 
     // Retry the request with the new token

@@ -1,4 +1,5 @@
 import { state } from '@/state';
+import { setRevenueCatAppUser } from '@/lib/subscription';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
@@ -14,6 +15,20 @@ export type AuthIdentity = {
 };
 
 let pendingAnonymousAuth: Promise<AuthIdentity> | null = null;
+let syncedRevenueCatUserId: string | null = null;
+
+const syncRevenueCatAppUser = async (userId: string | null) => {
+  if (syncedRevenueCatUserId === userId) {
+    return;
+  }
+
+  try {
+    await setRevenueCatAppUser(userId);
+    syncedRevenueCatUserId = userId;
+  } catch (error) {
+    console.warn('Failed to sync RevenueCat app user', error);
+  }
+};
 
 const authenticateAnonymously = async (): Promise<AuthIdentity> => {
   if (!API_URL) {
@@ -48,6 +63,7 @@ const authenticateAnonymously = async (): Promise<AuthIdentity> => {
   }
 
   state.actions.setAuthIdentity(data.token, data.userId);
+  await syncRevenueCatAppUser(data.userId);
 
   return {
     token: data.token,
@@ -60,6 +76,7 @@ export const getOrCreateAuthIdentity = async (): Promise<AuthIdentity> => {
   const userId = state.store.auth.userId.get();
 
   if (token && userId) {
+    await syncRevenueCatAppUser(userId);
     return { token, userId };
   }
 
@@ -79,4 +96,9 @@ export const getOrCreateAuthIdentity = async (): Promise<AuthIdentity> => {
 export const getOrCreateToken = async (): Promise<string> => {
   const identity = await getOrCreateAuthIdentity();
   return identity.token;
+};
+
+export const clearAuthIdentity = async (): Promise<void> => {
+  state.actions.clearAuthIdentity();
+  await syncRevenueCatAppUser(null);
 };

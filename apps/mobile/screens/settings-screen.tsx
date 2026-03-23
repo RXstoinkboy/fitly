@@ -16,6 +16,7 @@ import { openImageLibrary } from '@/utils/open-image-library';
 import { YGroup } from 'tamagui';
 import { ChangeModelSheet } from '@/components/modals';
 import { usePaywall } from '@/hooks';
+import { analyticsEvents, trackEvent } from '@/lib/analytics';
 
 export const SettingsScreen = () => {
   const { currentModel, addModel, setCurrentModel } = useModels();
@@ -35,6 +36,10 @@ export const SettingsScreen = () => {
       try {
         const id = await addModel(image, source);
         setCurrentModel(id);
+        trackEvent(analyticsEvents.photos.added('model', source), {
+          flow: 'app',
+          source,
+        });
         closeSheet();
       } finally {
         setIsAdding(false);
@@ -49,7 +54,7 @@ export const SettingsScreen = () => {
   }, [closeSheet]);
 
   const handleManageSubscription = useCallback(async () => {
-    const result = await openCustomerCenter();
+    const result = await openCustomerCenter('settings');
     if (!result.opened) {
       console.warn('Subscription management is unavailable right now.');
     }

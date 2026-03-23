@@ -6,6 +6,7 @@ import { useGeneratedImages, useModels, useOnboarding } from '@/state';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
 import { SelectGarment, useSelectGarment } from '@/components/garments';
 import { ArrowLeft } from '@/icons';
+import { analyticsEvents, trackEvent } from '@/lib/analytics';
 
 export default function Onboarding() {
   const pathname = usePathname();
@@ -17,7 +18,7 @@ export default function Onboarding() {
     selectPhotoSheet,
     selectedGarments,
     garments,
-  } = useSelectGarment();
+  } = useSelectGarment('onboarding');
 
   const { addGeneratedImage } = useGeneratedImages();
   const { currentModelId } = useModels();
@@ -42,16 +43,35 @@ export default function Onboarding() {
 
     const topGarment = selectedGarments.selectedGarments.find((g) => g.type === 'top');
     const bottomGarment = selectedGarments.selectedGarments.find((g) => g.type === 'bottom');
+    const garmentTypes = selectedGarments.selectedGarments.map((garment) => garment.type);
+    const garmentIds = selectedGarments.selectedGarments.map((garment) => garment.id);
+
+    trackEvent(analyticsEvents.generation.requested('onboarding'), {
+      flow: 'onboarding',
+      garmentTypes,
+      garmentCount: garmentTypes.length,
+      modelId: currentModelId,
+    });
 
     mutate({
       top: topGarment?.filePath,
       bottom: bottomGarment?.filePath,
+      garments: {
+        ids: garmentIds,
+        types: garmentTypes,
+        count: garmentTypes.length,
+      },
+      context: 'onboarding',
+      modelId: currentModelId,
     });
     selectedGarments.clearSelection();
   };
 
   useMount(() => {
     setOnboardingStep(pathname);
+    trackEvent(analyticsEvents.onboarding.stepViewed(), {
+      step: pathname,
+    });
   });
 
   return (
@@ -92,7 +112,9 @@ export default function Onboarding() {
       <SelectPhotoSheet
         isOpen={selectPhotoSheet.isOpen}
         toggle={selectPhotoSheet.toggle}
-        onSuccess={onImageSelected}>
+        onSuccess={onImageSelected}
+        subject="garment"
+        flow="onboarding">
         {tempImage ? <SelectGarmentType image={tempImage} onSuccess={handleAddGarment} /> : null}
       </SelectPhotoSheet>
     </ScreenWrapper>

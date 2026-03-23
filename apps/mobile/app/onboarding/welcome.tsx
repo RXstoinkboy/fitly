@@ -2,6 +2,7 @@ import { useMount } from '@/hooks';
 import { YStack, Text, Button, ScreenWrapper } from '@/components/v2/ui';
 import { useOnboarding } from '@/state';
 import { Link, usePathname } from 'expo-router';
+import { analyticsEvents, trackEvent } from '@/lib/analytics';
 
 export default function Welcome() {
   const { setOnboardingStep } = useOnboarding();
@@ -9,7 +10,16 @@ export default function Welcome() {
 
   useMount(() => {
     setOnboardingStep(pathname);
+    trackEvent(analyticsEvents.onboarding.stepViewed(), {
+      step: pathname,
+    });
   });
+
+  const handleStart = () => {
+    trackEvent(analyticsEvents.onboarding.started(), {
+      step: pathname,
+    });
+  };
 
   return (
     <ScreenWrapper>
@@ -22,7 +32,7 @@ export default function Welcome() {
           You’re one step closer to trying on your favourite styles, right from home
         </Text>
         <Link href="/onboarding/select-user-photo" asChild>
-          <Button>Let&apos;s get started!</Button>
+          <Button onPress={handleStart}>Let&apos;s get started!</Button>
         </Link>
       </YStack>
     </ScreenWrapper>

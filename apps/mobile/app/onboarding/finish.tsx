@@ -5,6 +5,7 @@ import { useGeneratedImages, useOnboarding } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { Link, usePathname, useRouter } from 'expo-router';
 import { ArrowLeft } from '@/icons';
+import { analyticsEvents, trackEvent } from '@/lib/analytics';
 
 export default function Onboarding() {
   const { setOnboardingStep, completeOnboarding } = useOnboarding();
@@ -18,11 +19,21 @@ export default function Onboarding() {
   const { showPaywall, isPresenting } = usePaywall();
 
   const onFinish = async () => {
+    let paywallResult:
+      | Awaited<ReturnType<typeof showPaywall>>
+      | { paywallResult?: string; status?: { isSubscribed?: boolean | null } }
+      | undefined;
     try {
-      await showPaywall();
+      paywallResult = await showPaywall('onboarding_finish');
     } catch (error) {
       console.warn('Paywall presentation failed', error);
     } finally {
+      trackEvent(analyticsEvents.onboarding.completed(), {
+        step: pathname,
+        generatedImage: Boolean(generatedImage),
+        paywallResult: paywallResult?.paywallResult ?? 'error',
+        isSubscribed: paywallResult?.status?.isSubscribed,
+      });
       completeOnboarding();
       router.replace('/(tabs)');
     }
@@ -30,6 +41,9 @@ export default function Onboarding() {
 
   useMount(() => {
     setOnboardingStep(pathname);
+    trackEvent(analyticsEvents.onboarding.stepViewed(), {
+      step: pathname,
+    });
   });
 
   return (

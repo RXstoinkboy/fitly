@@ -11,6 +11,7 @@ import { ArrowLeft, ImageUp } from '@/icons';
 import { Link, usePathname } from 'expo-router';
 import { useEffect } from 'react';
 import * as FileSystem from 'expo-file-system/legacy';
+import { analyticsEvents, trackEvent } from '@/lib/analytics';
 
 export default function SelectUserPhoto() {
   const { setOnboardingStep } = useOnboarding();
@@ -24,10 +25,18 @@ export default function SelectUserPhoto() {
     const id = await addModel(image, source);
     setCurrentModel(id);
     selectPhotoSheet.toggle(false);
+
+    trackEvent(analyticsEvents.photos.added('model', source), {
+      flow: 'onboarding',
+      source,
+    });
   };
 
   useMount(() => {
     setOnboardingStep(pathname);
+    trackEvent(analyticsEvents.onboarding.stepViewed(), {
+      step: pathname,
+    });
   });
 
   useEffect(() => {
@@ -103,6 +112,8 @@ export default function SelectUserPhoto() {
         isOpen={selectPhotoSheet.isOpen}
         toggle={selectPhotoSheet.toggle}
         onSuccess={handleAddModel}
+        subject="model"
+        flow="onboarding"
       />
       <PhotoGuidelinesSheet
         isOpen={photoGuidelinesSheet.isOpen}

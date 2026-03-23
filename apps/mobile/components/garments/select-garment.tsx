@@ -5,8 +5,10 @@ import { GarmentImage, GarmentType, ImageSource } from '@/state/types';
 import { useGarments, useSelectedGarments } from '@/state';
 import { useState, useEffect } from 'react';
 import { useSelectPhotoSheet } from '../modals';
+import { analyticsEvents, trackEvent } from '@/lib/analytics';
+import { AnalyticsFlow } from '@/lib/analytics/types';
 
-export const useSelectGarment = () => {
+export const useSelectGarment = (flow: AnalyticsFlow = 'app') => {
   const garments = useGarments();
   const selectedGarments = useSelectedGarments();
   const selectPhotoSheet = useSelectPhotoSheet();
@@ -24,6 +26,13 @@ export const useSelectGarment = () => {
     const id = await garments.addGarment(filePath, source, type);
     selectedGarments.toggleSelection(id, true);
     selectPhotoSheet.toggle(false);
+
+    trackEvent(analyticsEvents.garments.added(type), {
+      flow,
+      garmentType: type,
+      source,
+      garmentCount: selectedGarments.selectedIds.length + 1,
+    });
   };
 
   useEffect(() => {

@@ -3,6 +3,8 @@ import { Button, Text, YStack, Sheet } from '@/components/v2/ui';
 import { openCamera } from '@/utils/open-camera';
 import { openImageLibrary } from '@/utils/open-image-library';
 import { ImageSource } from '@/state';
+import { analyticsEvents, trackEvent } from '@/lib/analytics';
+import { AnalyticsFlow } from '@/lib/analytics/types';
 
 export const useSelectPhotoSheet = () => {
   const [opened, setOpened] = useState(false);
@@ -21,34 +23,63 @@ export const SelectPhotoSheet = ({
   isOpen,
   toggle,
   onSuccess,
+  subject = 'model',
+  flow = 'app',
 }: {
   step?: number;
   children?: React.ReactNode;
   isOpen: boolean;
   toggle: (visible?: boolean) => void;
   onSuccess: (image: string, source: ImageSource) => void;
+  subject?: 'model' | 'garment';
+  flow?: AnalyticsFlow;
 }) => {
   return (
     <Sheet disableRemoveScroll={isOpen} modal open={isOpen} onOpenChange={toggle}>
       <Sheet.Overlay />
       <Sheet.Handle />
-      <Sheet.Frame>{children ?? <SheetContents onSuccess={onSuccess} />}</Sheet.Frame>
+      <Sheet.Frame>
+        {children ?? <SheetContents onSuccess={onSuccess} subject={subject} flow={flow} />}
+      </Sheet.Frame>
     </Sheet>
   );
 };
 
-const getImageFromDevice =
-  (imageGetterFn: () => Promise<string | null>, onSuccess: (image: string) => void) => async () => {
+const getImageFromDevice = (
+  imageGetterFn: () => Promise<string | null>,
+  onSuccess: (image: string) => void,
+) => {
+  return async () => {
     const selectedImage = await imageGetterFn();
 
     if (selectedImage) {
       return onSuccess(selectedImage);
     }
+
+    return null;
   };
+};
 
 const SheetContents = memo(
-  ({ onSuccess }: { onSuccess: (image: string, source: ImageSource) => void }) => {
-    const onSuccessCallback = (source: ImageSource) => (image: string) => onSuccess(image, source);
+  ({
+    onSuccess,
+    subject,
+    flow,
+  }: {
+    onSuccess: (image: string, source: ImageSource) => void;
+    subject: 'model' | 'garment';
+    flow: AnalyticsFlow;
+  }) => {
+    const onSuccessCallback =
+      (source: ImageSource) =>
+      (image: string): void => {
+        trackEvent(analyticsEvents.photos.added(subject, source), {
+          flow,
+          subject,
+          source,
+        });
+        onSuccess(image, source);
+      };
 
     const getImageFromDeviceLibrary = getImageFromDevice(
       openImageLibrary,

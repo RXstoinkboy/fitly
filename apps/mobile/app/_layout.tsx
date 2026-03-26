@@ -14,6 +14,7 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useOnboarding } from '@/state';
 import { SubscriptionProvider } from '@/components/subscription';
 import { AnalyticsProvider } from '@/lib/analytics';
+import { DevMenu } from '@/components/dev-menu';
 
 const RootContent = () => {
   const { isCompleted } = useOnboarding();
@@ -95,6 +96,7 @@ export default function RootLayout() {
                 <GarmentsProvider>
                   <SafeAreaProvider>
                     <RootContent />
+                    <DevMenu />
                     {/* TODO: clothes selection drawer */}
                     {/* TODO: modal with image zoom -n */}
                   </SafeAreaProvider>

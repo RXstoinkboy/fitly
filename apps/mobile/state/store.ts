@@ -613,7 +613,24 @@ const actions = {
   },
 
   /**
-   * Reset the whole app state to defaults
+   * Reset local data but keep onboarding state
+   */
+  resetDataWithoutOnboarding: () => {
+    store$.models.set({});
+    store$.garments.top.set({});
+    store$.garments.bottom.set({});
+    store$.generatedImages.set({});
+    store$.outfits.set({});
+
+    store$.preferences.selectedModelId.set(null);
+    store$.auth.token.set(null);
+    store$.auth.userId.set(null);
+    store$.auth.installationId.set(null);
+    store$.ui.selectedGarmentIds.set([]);
+  },
+
+  /**
+   * Reset the whole app state to defaults (factory reset)
    */
   resetAppData: () => {
     store$.models.set({});

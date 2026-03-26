@@ -199,6 +199,21 @@ export const useAppState = () => {
 };
 
 // ============================================================================
+// Reset Hooks
+// ============================================================================
+
+/**
+ * Hook for accessing state reset actions
+ */
+export const useResetState = () => {
+  return {
+    resetOnboarding: state.actions.resetOnboarding,
+    resetDataWithoutOnboarding: state.actions.resetDataWithoutOnboarding,
+    resetAppData: state.actions.resetAppData,
+  };
+};
+
+// ============================================================================
 // Auth Hooks
 // ============================================================================
 

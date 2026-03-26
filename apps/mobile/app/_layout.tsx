@@ -6,11 +6,11 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { TamaguiProvider, useTheme } from 'tamagui';
+import { TamaguiProvider } from 'tamagui';
 import { tamaguiConfig } from '../tamagui.config';
 import { QueryClientProvider } from '@/queries/provider';
 import { GarmentsProvider } from '@/context/garment-context';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useOnboarding } from '@/state';
 import { SubscriptionProvider } from '@/components/subscription';
 import { AnalyticsProvider } from '@/lib/analytics';
@@ -18,15 +18,9 @@ import { DevMenu } from '@/components/dev-menu';
 
 const RootContent = () => {
   const { isCompleted } = useOnboarding();
-  const theme = useTheme();
 
   return (
     <Stack
-      screenLayout={({ children }) => (
-        <SafeAreaView style={{ flex: 1, backgroundColor: theme.background.val }}>
-          {children}
-        </SafeAreaView>
-      )}
       screenOptions={{
         headerTitleAlign: 'center',
         headerBackVisible: false,

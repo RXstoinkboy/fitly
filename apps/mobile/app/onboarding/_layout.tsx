@@ -15,11 +15,6 @@ export default function OnboardingLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        // headerTitle: '',
-        // headerBackVisible: false,
-        // headerStyle: {
-        //   height: HEADER_HEIGHT,
-        // } as StyleProp<{ backgroundColor?: string; height?: number }>,
       }}>
       <Stack.Screen name="welcome" />
       <Stack.Screen name="select-user-photo" />

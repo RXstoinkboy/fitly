@@ -5,26 +5,26 @@ export const Text = styled(TamaguiText, {
     size: {
       s: {
         fontSize: '$4',
-        lineHeight: '$4',
+        lineHeight: '$5',
       },
       m: {
         fontSize: '$5',
-        lineHeight: '$5',
+        lineHeight: '$6',
       },
       l: {
         fontSize: '$6',
-        lineHeight: '$6',
+        lineHeight: '$7',
       },
       xl: {
         fontSize: '$7',
-        lineHeight: '$7',
+        lineHeight: '$8',
       },
       xxl: {
         fontSize: '$9',
-        lineHeight: '$9',
+        lineHeight: '$10',
       },
     },
-    weigth: {
+    weight: {
       regular: {
         fontWeight: '400',
       },
@@ -46,7 +46,7 @@ export const Text = styled(TamaguiText, {
   } as const,
   defaultVariants: {
     size: 'm',
-    weigth: 'regular',
+    weight: 'regular',
     type: 'primary',
   },
 });

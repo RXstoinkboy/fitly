@@ -50,8 +50,6 @@ export function ImagesCarousel({
   onRemove: (id: string) => void;
 }) {
   const { width } = Dimensions.get('window');
-  const PAGE_WIDTH = width;
-  const PAGE_HEIGHT = height;
 
   const router = useRouter();
 
@@ -65,16 +63,16 @@ export function ImagesCarousel({
     <View style={{ flex: 1 }}>
       <Carousel
         style={{
-          width: PAGE_WIDTH,
-          height: PAGE_HEIGHT,
+          width,
+          height,
           justifyContent: 'center',
           alignItems: 'center',
         }}
         loop={false}
         defaultIndex={images.length - 1}
         vertical={false}
-        width={PAGE_WIDTH}
-        height={PAGE_HEIGHT}
+        width={width}
+        height={height}
         data={images}
         renderItem={({ index, item }) => (
           <SlideItem

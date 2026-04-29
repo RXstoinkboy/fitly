@@ -5,7 +5,16 @@ import {
   PhotoGuidelinesSheet,
   usePhotoGuidelinesSheet,
 } from '@/components/modals/photo-guidelines-sheet';
-import { View, YStack, Text, Button, Image, XStack, ScreenWrapper } from '@/components/v2/ui';
+import {
+  View,
+  YStack,
+  Text,
+  Button,
+  Image,
+  XStack,
+  ScreenWrapper,
+  NoImagePlaceholder,
+} from '@/components/v2/ui';
 import { ImageSource, useModels, useOnboarding } from '@/state';
 import { ArrowLeft, ImageUp } from '@/icons';
 import { Link, usePathname } from 'expo-router';
@@ -59,54 +68,64 @@ export default function SelectUserPhoto() {
       footer={
         <XStack>
           <Link asChild href={'/onboarding/welcome'}>
-            <Button icon={<ArrowLeft />}>Back</Button>
+            <Button ghost icon={<ArrowLeft />}>
+              Back
+            </Button>
           </Link>
         </XStack>
       }>
       <YStack flex={1} items={'center'} gap={'$4'}>
-        <Text size="xxl" weigth="semiBold">
+        <Text size="xxl" weight="semiBold">
           Take a photo of yourself
         </Text>
         <Text type="secondary" text="center">
           This photo will be used to try new outfits. Don’t worry, you can change it anytime
         </Text>
-        <View position={'relative'}>
+        <YStack gap={'$2'}>
           {/* TODO: when no image then show a placeholder */}
           {currentModel ? (
-            <Image
-              src={currentModel?.filePath}
+            <View width={300} height={400} rounded={'$7'} overflow="hidden" position="relative">
+              <Image
+                src={currentModel?.filePath}
+                width={300}
+                height={400}
+                rounded={'$7'}
+                aspectRatio={3 / 4}
+              />
+            </View>
+          ) : (
+            <View
               width={300}
               height={400}
               rounded={'$7'}
-              aspectRatio={3 / 4}
+              bg={'$color3'}
+              overflow="hidden"
+              onPress={() => {
+                selectPhotoSheet.toggle();
+              }}>
+              <NoImagePlaceholder text="Add your photo" />
+            </View>
+          )}
+
+          <PhotoGuidelinesInfoButton onPress={() => photoGuidelinesSheet.toggle()} />
+
+          {currentModel ? (
+            <Button
+              onPress={() => selectPhotoSheet.toggle()}
+              position="absolute"
+              t={10}
+              r={10}
+              rounded={'$radius.12'}
+              icon={<ImageUp />}
             />
           ) : null}
+        </YStack>
 
-          <Button
-            onPress={() => selectPhotoSheet.toggle()}
-            position="absolute"
-            t={10}
-            r={10}
-            rounded={'$radius.12'}
-            icon={<ImageUp />}
-          />
-        </View>
         {currentModel?.filePath ? (
-          <XStack width={'100%'} gap="$2">
-            <Link asChild href={'/onboarding/select-garments'}>
-              <Button flex={1}>Go next!</Button>
-            </Link>
-          </XStack>
-        ) : (
-          <Button
-            onPress={() => {
-              selectPhotoSheet.toggle();
-            }}>
-            Select photo
-          </Button>
-        )}
-
-        <PhotoGuidelinesInfoButton onPress={() => photoGuidelinesSheet.toggle()} />
+          <Link asChild href={'/onboarding/select-garments'}>
+            <Button size="l">Go next!</Button>
+          </Link>
+        ) : null}
       </YStack>
       <SelectPhotoSheet
         isOpen={selectPhotoSheet.isOpen}

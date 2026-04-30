@@ -87,12 +87,10 @@ export const SelectGarmentsScreen = () => {
         </XStack>
       }>
       <YStack flex={1} items={'center'} gap={'$4'}>
-        <Text size="xxl" weight="semiBold" text={'center'}>
+        <Text size="xxl" weight="bold">
           What you&apos;d like to wear?
         </Text>
-        <Text type="secondary" text="center">
-          Select garments you want to try on
-        </Text>
+        <Text type="secondary">Select garments you want to try on</Text>
 
         <SelectGarment
           removeGarment={garments.removeGarment}

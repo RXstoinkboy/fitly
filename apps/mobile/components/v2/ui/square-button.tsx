@@ -27,7 +27,7 @@ export const SquareButton = ({
         overflow="hidden">
         {icon}
       </Square>
-      <Text text={'center'} type="secondary">
+      <Text size={'s'} text={'center'} type="secondary">
         {label}
       </Text>
     </YStack>

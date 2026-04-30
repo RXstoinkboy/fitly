@@ -1,6 +1,14 @@
 import { Trash } from '@/icons';
-import { ScrollView } from 'tamagui';
-import { Button, XStack, YStack, Square, Text, Image, SquareButton } from '@/components/v2/ui';
+import {
+  ScrollView,
+  Button,
+  XStack,
+  YStack,
+  Square,
+  Text,
+  Image,
+  SquareButton,
+} from '@/components/v2/ui';
 import { GarmentImage, GarmentType, ImageSource } from '@/state/types';
 import { useGarments, useSelectedGarments } from '@/state';
 import { useState, useEffect } from 'react';
@@ -56,6 +64,7 @@ type SelectGarmentProps = {
   selectedGarments: GarmentImage[];
   toggleSelection: (id: string, isSelected?: boolean | undefined) => void;
   removeGarment: (id: string, type: GarmentType) => void;
+  placeholder?: string;
 };
 
 export const SelectGarment = ({

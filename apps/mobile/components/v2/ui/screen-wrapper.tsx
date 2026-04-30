@@ -15,7 +15,13 @@ export const ScreenWrapper: FC<ScreenWrapperProps> = ({ children, footer }) => {
 
   return (
     <YStack flex={1} position="relative">
-      <SafeAreaView style={{ flex: 1, padding: tokens.space['$2'].val }}>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          padding: tokens.space['$2'].val,
+          paddingLeft: tokens.space['$4'].val,
+          paddingRight: tokens.space['$4'].val,
+        }}>
         <LinearGradient
           colors={['$background', '$color2']}
           start={[0.5, 0.5]}

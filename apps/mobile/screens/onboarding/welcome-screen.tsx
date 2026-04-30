@@ -65,7 +65,7 @@ export const WelcomeScreen = () => {
             directionAnimVal.value = absoluteProgress;
           }}
         />
-        
+
         <YStack items={'center'} gap={'$4'} flex={1}>
           <Text size={'xxl'} weight="bold">
             Welcome!

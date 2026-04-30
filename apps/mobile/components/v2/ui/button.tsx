@@ -38,6 +38,12 @@ export const Button = styled(ButtonDS, {
           outlineStyle: 'solid',
           outlineWidth: 2,
         },
+        disabledStyle: {
+          backgroundColor: '$accent1',
+          filter: 'grayscale(1)',
+          opacity: 0.6,
+          borderColor: 'transparent',
+        },
       },
     },
 

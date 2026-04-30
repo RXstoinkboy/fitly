@@ -1,6 +1,6 @@
 import { AddModelPhoto, ImagesCarousel } from '@/components/ui-legacy';
 import { YStack, XStack, GenerateImageButton, ScreenWrapper } from '@/components/v2';
-import { SelectGarment, useSelectGarment } from '@/components/garments';
+import { SelectGarment, useSelectGarment } from '@/components/v2/domain';
 import { SelectGarmentType, SelectPhotoSheet, useSelectPhotoSheet } from '@/components/modals';
 import { useGeneratedImages, useModels } from '@/state';
 import { useWindowDimensions } from 'react-native';

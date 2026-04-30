@@ -18,3 +18,4 @@ export * from './x-group';
 export * from './toggle-group';
 export * from './list-item';
 export * from './linear-gradient';
+export * from './square-button';

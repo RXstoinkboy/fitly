@@ -1,10 +1,10 @@
-import { useMount } from '@/hooks';
+import { useImageSize, useMount } from '@/hooks';
 import { YStack, Text, Button, ScreenWrapper, XStack } from '@/components/v2/ui';
 import { SelectGarmentType, SelectPhotoSheet } from '@/components/modals';
 import { Link, usePathname } from 'expo-router';
 import { useGeneratedImages, useModels, useOnboarding } from '@/state';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
-import { SelectGarment, useSelectGarment } from '@/components/garments';
+import { SelectGarment, useSelectGarment } from '@/components/v2/domain';
 import { ArrowLeft } from '@/icons';
 import { analyticsEvents, trackEvent } from '@/lib/analytics';
 
@@ -19,6 +19,7 @@ export const SelectGarmentsScreen = () => {
     selectedGarments,
     garments,
   } = useSelectGarment('onboarding');
+  const { width } = useImageSize();
 
   const { addGeneratedImage } = useGeneratedImages();
   const { currentModelId } = useModels();
@@ -79,12 +80,14 @@ export const SelectGarmentsScreen = () => {
       footer={
         <XStack>
           <Link asChild href={'/onboarding/select-user-photo'}>
-            <Button icon={<ArrowLeft />}>Back</Button>
+            <Button kind="ghost" icon={<ArrowLeft />}>
+              Back
+            </Button>
           </Link>
         </XStack>
       }>
       <YStack flex={1} items={'center'} gap={'$4'}>
-        <Text size="xxl" weigth="semiBold" text={'center'}>
+        <Text size="xxl" weight="semiBold" text={'center'}>
           What you&apos;d like to wear?
         </Text>
         <Text type="secondary" text="center">
@@ -99,13 +102,14 @@ export const SelectGarmentsScreen = () => {
         />
         {/* TODO: or maybe even hide it when there are no clothes added yet */}
         <Link asChild href={'/onboarding/finish'}>
-          <Button disabled={!isAnyImageSelected} onPress={onGenerateImage}>
+          <Button
+            width={width}
+            kind="cta"
+            size={'l'}
+            disabled={!isAnyImageSelected}
+            onPress={onGenerateImage}>
             Try this look!
           </Button>
-        </Link>
-        {/* TODO: move it to some less visible place (same for other steps too) */}
-        <Link asChild href={'/onboarding/select-user-photo'}>
-          <Button>Back</Button>
         </Link>
       </YStack>
 

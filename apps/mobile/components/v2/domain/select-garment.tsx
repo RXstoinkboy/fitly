@@ -1,10 +1,10 @@
-import { Plus, Trash } from '@/icons';
+import { Trash } from '@/icons';
 import { ScrollView } from 'tamagui';
-import { Button, XStack, YStack, Square, Text, Image } from '@/components/v2/ui';
+import { Button, XStack, YStack, Square, Text, Image, SquareButton } from '@/components/v2/ui';
 import { GarmentImage, GarmentType, ImageSource } from '@/state/types';
 import { useGarments, useSelectedGarments } from '@/state';
 import { useState, useEffect } from 'react';
-import { useSelectPhotoSheet } from '../modals';
+import { useSelectPhotoSheet } from '@/components/modals';
 import { analyticsEvents, trackEvent } from '@/lib/analytics';
 import { AnalyticsFlow } from '@/lib/analytics/types';
 
@@ -67,25 +67,8 @@ export const SelectGarment = ({
   return (
     <XStack width={'100%'} justify={'space-evenly'}>
       <ScrollView horizontal>
-        <YStack
-          gap={'$2'}
-          onPress={() => {
-            toggle();
-          }}>
-          <Square
-            height="$12"
-            borderColor={'$borderColor'}
-            bg="$accent12"
-            borderWidth={'$1'}
-            borderStyle="dashed"
-            rounded={'$5'}
-            position="relative"
-            aspectRatio={1}
-            overflow="hidden">
-            <Plus />
-          </Square>
-          <Text text={'center'}>{'Add something'}</Text>
-        </YStack>
+        <SquareButton onPress={() => toggle()} />
+
         {selectedGarments
           .sort((a, b) => Number(b.updatedAt) - Number(a.updatedAt))
           .map((image) => {
@@ -118,7 +101,9 @@ export const SelectGarment = ({
                     />
                   </>
                 </Square>
-                <Text text={'center'}>{image.type}</Text>
+                <Text text={'center'} type="secondary">
+                  {image.type}
+                </Text>
               </YStack>
             );
           })}

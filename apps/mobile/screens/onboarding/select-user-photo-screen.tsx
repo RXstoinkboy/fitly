@@ -1,4 +1,4 @@
-import { useMount } from '@/hooks';
+import { useImageSize, useMount } from '@/hooks';
 import { SelectPhotoSheet, useSelectPhotoSheet } from '@/components/modals';
 import {
   PhotoGuidelinesInfoButton,
@@ -25,6 +25,7 @@ import { analyticsEvents, trackEvent } from '@/lib/analytics';
 export const SelectUserPhotoScreen = () => {
   const { setOnboardingStep } = useOnboarding();
   const pathname = usePathname();
+  const { width, height } = useImageSize();
 
   const { currentModel, addModel, setCurrentModel, deleteModelPermanently } = useModels();
   const selectPhotoSheet = useSelectPhotoSheet();
@@ -68,47 +69,22 @@ export const SelectUserPhotoScreen = () => {
       footer={
         <XStack>
           <Link asChild href={'/onboarding/welcome'}>
-            <Button ghost icon={<ArrowLeft />}>
+            <Button kind="ghost" icon={<ArrowLeft />}>
               Back
             </Button>
           </Link>
         </XStack>
       }>
-      <YStack flex={1} items={'center'} gap={'$4'}>
-        <Text size="xxl" weight="semiBold">
-          Take a photo of yourself
-        </Text>
-        <Text type="secondary" text="center">
-          This photo will be used to try new outfits. Don&apos;t worry, you can change it anytime
-        </Text>
-        <YStack gap={'$2'}>
-          {currentModel ? (
-            <View width={300} height={400} rounded={'$7'} overflow="hidden" position="relative">
-              <Image
-                src={currentModel?.filePath}
-                width={300}
-                height={400}
-                rounded={'$7'}
-                aspectRatio={3 / 4}
-              />
-            </View>
-          ) : (
-            <View
-              width={300}
-              height={400}
+      <YStack flex={1} items={'center'} gap={'$6'}>
+        {currentModel ? (
+          <View width={width} height={height} rounded={'$7'} overflow="hidden" position="relative">
+            <Image
+              src={currentModel?.filePath}
+              width={width}
+              height={height}
               rounded={'$7'}
-              bg={'$color3'}
-              overflow="hidden"
-              onPress={() => {
-                selectPhotoSheet.toggle();
-              }}>
-              <NoImagePlaceholder text="Add your photo" />
-            </View>
-          )}
-
-          <PhotoGuidelinesInfoButton onPress={() => photoGuidelinesSheet.toggle()} />
-
-          {currentModel ? (
+              aspectRatio={3 / 4}
+            />
             <Button
               onPress={() => selectPhotoSheet.toggle()}
               position="absolute"
@@ -117,15 +93,39 @@ export const SelectUserPhotoScreen = () => {
               rounded={'$radius.12'}
               icon={<ImageUp />}
             />
-          ) : null}
-        </YStack>
+          </View>
+        ) : (
+          <View
+            width={width}
+            height={height}
+            rounded={'$7'}
+            bg={'$color3'}
+            overflow="hidden"
+            onPress={() => {
+              selectPhotoSheet.toggle();
+            }}>
+            <NoImagePlaceholder text="Add your photo" />
+          </View>
+        )}
 
-        {currentModel?.filePath ? (
-          <Link asChild href={'/onboarding/select-garments'}>
-            <Button size="l">Go next!</Button>
-          </Link>
-        ) : null}
+        <YStack gap={'$4'} items={'center'}>
+          <Text size="xxl" weight="bold">
+            Take a photo of yourself
+          </Text>
+          <Text size="s" type="secondary" text="center">
+            This photo will be used to try new outfits. Don&apos;t worry, you can change it anytime
+          </Text>
+          {currentModel?.filePath ? (
+            <Link asChild href={'/onboarding/select-garments'}>
+              <Button size="l" kind="cta" width={width}>
+                Go next!
+              </Button>
+            </Link>
+          ) : null}
+          <PhotoGuidelinesInfoButton onPress={() => photoGuidelinesSheet.toggle()} />
+        </YStack>
       </YStack>
+
       <SelectPhotoSheet
         isOpen={selectPhotoSheet.isOpen}
         toggle={selectPhotoSheet.toggle}

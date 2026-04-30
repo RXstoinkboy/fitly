@@ -80,7 +80,7 @@ export const PhotoGuidelinesSheet = ({
 );
 
 export const PhotoGuidelinesInfoButton = ({ onPress }: { onPress: () => void }) => (
-  <Button ghost onPress={onPress} icon={<Info />} color={'$color10'} size="xs">
+  <Button kind="ghost" onPress={onPress} icon={<Info />} color={'$color10'} size="xs">
     Photo guidelines
   </Button>
 );

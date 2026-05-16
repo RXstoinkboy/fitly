@@ -3,6 +3,8 @@
 # tools
 .vscode/
 .idea/
+.github/
+.pi/
 
 # dependencies
 node_modules/

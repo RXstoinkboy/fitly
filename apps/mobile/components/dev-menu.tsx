@@ -19,8 +19,8 @@ export const DevMenu = () => {
           size="$3"
           circular
           position="absolute"
-          b="$2"
-          l="$2"
+          b="$8"
+          r="$10"
           z={1000}
           opacity={0.6}
           icon={<Bug size={16} />}

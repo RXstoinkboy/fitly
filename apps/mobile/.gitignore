@@ -30,4 +30,3 @@ app-example/
 
 # local env
 .env
-supabase/functions/.env

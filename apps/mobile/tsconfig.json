@@ -5,9 +5,8 @@
     "experimentalDecorators": true,
     "types": ["tamagui"],
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/*": ["./*"],
+    },
   },
   "include": ["tamagui.config.ts", "**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
-  "exclude": ["supabase/functions/**/*"]
 }

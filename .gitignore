@@ -51,7 +51,6 @@ yarn-error.*
 
 # Mobile env
 apps/mobile/.env
-apps/mobile/supabase/functions/.env
 
 # ── apps/backend ─────────────────────────────────
 apps/backend/.env

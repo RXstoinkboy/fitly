@@ -16,7 +16,7 @@ export const DevMenu = () => {
     <Popover open={open} onOpenChange={setOpen} placement="top-start">
       <Popover.Trigger asChild>
         <Button
-          size="$3"
+          size="$5"
           circular
           position="absolute"
           b="$8"
@@ -28,22 +28,15 @@ export const DevMenu = () => {
       </Popover.Trigger>
       <Popover.Content p="$2" bg="$color2" borderColor="$color5" borderWidth="$0.25">
         <YStack gap="$1" minW={200}>
-          <Button
-            size="$3"
-            icon={<RotateCcw size={16} />}
-            onPress={() => handleAction(resetOnboarding)}>
+          <Button icon={<RotateCcw size={16} />} onPress={() => handleAction(resetOnboarding)}>
             <Text fontSize="$3">Reset onboarding</Text>
           </Button>
           <Button
-            size="$3"
             icon={<Trash2 size={16} />}
             onPress={() => handleAction(resetDataWithoutOnboarding)}>
             <Text fontSize="$3">Reset local data</Text>
           </Button>
-          <Button
-            size="$3"
-            icon={<AlertTriangle size={16} />}
-            onPress={() => handleAction(resetAppData)}>
+          <Button icon={<AlertTriangle size={16} />} onPress={() => handleAction(resetAppData)}>
             <Text fontSize="$3">Factory reset</Text>
           </Button>
         </YStack>

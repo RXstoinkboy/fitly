@@ -51,6 +51,8 @@ export const GenerateImageButton = () => {
 
     const topGarment = selectedGarments.selectedGarments.find((g) => g.type === 'top');
     const bottomGarment = selectedGarments.selectedGarments.find((g) => g.type === 'bottom');
+    const dressGarment = selectedGarments.selectedGarments.find((g) => g.type === 'dress');
+    const outerwearGarment = selectedGarments.selectedGarments.find((g) => g.type === 'outerwear');
     const garmentTypes = selectedGarments.selectedGarments.map((garment) => garment.type);
     const garmentIds = selectedGarments.selectedGarments.map((garment) => garment.id);
 
@@ -64,6 +66,8 @@ export const GenerateImageButton = () => {
     mutate({
       top: topGarment?.filePath,
       bottom: bottomGarment?.filePath,
+      dress: dressGarment?.filePath,
+      outerwear: outerwearGarment?.filePath,
       garments: {
         ids: garmentIds,
         types: garmentTypes,

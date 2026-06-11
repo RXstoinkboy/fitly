@@ -1,10 +1,11 @@
 import React, { memo, useState } from 'react';
-import { Button, Text, YStack, Sheet } from '@/components/v2/ui';
+import { Button, Text, YStack, Sheet, XStack } from '@/components/v2/ui';
 import { openCamera } from '@/utils/open-camera';
 import { openImageLibrary } from '@/utils/open-image-library';
 import { ImageSource } from '@/state';
 import { analyticsEvents, trackEvent } from '@/lib/analytics';
 import { AnalyticsFlow } from '@/lib/analytics/types';
+import { Images, Camera } from '@/icons';
 
 export const useSelectPhotoSheet = () => {
   const [opened, setOpened] = useState(false);
@@ -88,11 +89,26 @@ const SheetContents = memo(
     const getImageFromDeviceCamera = getImageFromDevice(openCamera, onSuccessCallback('camera'));
 
     return (
-      <YStack width={'100%'} gap={'$2'}>
-        <Button onPress={getImageFromDeviceLibrary}>Select from gallery</Button>
-        <Text self={'center'}>or</Text>
-        <Button onPress={getImageFromDeviceCamera}>Use a camera</Button>
-      </YStack>
+      <XStack width={'100%'} gap={'$2'} pb={'$4'} justify={'space-evenly'}>
+        <Button
+          onPress={getImageFromDeviceLibrary}
+          flexDirection="column"
+          height={'auto'}
+          p="$3"
+          flex={1}>
+          <Images size={'$3'} />
+          Select from gallery
+        </Button>
+        <Button
+          onPress={getImageFromDeviceCamera}
+          flexDirection="column"
+          height={'auto'}
+          p="$3"
+          flex={1}>
+          <Camera size={'$3'} />
+          Use a camera
+        </Button>
+      </XStack>
     );
   },
 );

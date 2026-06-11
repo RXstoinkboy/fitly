@@ -106,6 +106,32 @@ export const useBottomGarments = () => {
   };
 };
 
+export const useDressGarments = () => {
+  const garments = useValue(() => state.computed.dressGarments());
+  const selectedIds = useValue(state.store.ui.selectedGarmentIds);
+
+  return {
+    garments,
+    selectedIds,
+    addGarment: (filePath: string, source: ImageSource) =>
+      state.actions.addGarment(filePath, 'dress', source),
+    toggleSelection: state.actions.toggleGarmentSelection,
+  };
+};
+
+export const useOuterwearGarments = () => {
+  const garments = useValue(() => state.computed.outerwearGarments());
+  const selectedIds = useValue(state.store.ui.selectedGarmentIds);
+
+  return {
+    garments,
+    selectedIds,
+    addGarment: (filePath: string, source: ImageSource) =>
+      state.actions.addGarment(filePath, 'outerwear', source),
+    toggleSelection: state.actions.toggleGarmentSelection,
+  };
+};
+
 /**
  * Hook for accessing selected garments
  */

@@ -1,5 +1,5 @@
 import { useMount, usePaywall } from '@/hooks';
-import { YStack, Text, ScreenWrapper, Image, Button, XStack } from '@/components/v2/ui';
+import { YStack, Text, ScreenWrapper, Image, Button, XStack, View } from '@/components/v2/ui';
 import { generatedKeys } from '@/queries/image-generation/keys';
 import { useGeneratedImages, useOnboarding } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
@@ -58,7 +58,7 @@ export const FinishScreen = () => {
       <YStack flex={1} items={'center'} gap={'$4'}>
         {isGenerating ? (
           <>
-            <Text size="xxl" weigth="semiBold" text={'center'}>
+            <Text size="xxl" weight="semiBold" text={'center'}>
               {'Loading...'}
             </Text>
             <Text type="secondary" text="center">
@@ -68,20 +68,16 @@ export const FinishScreen = () => {
         ) : null}
         {generatedImage && !isGenerating ? (
           <>
-            <Text size="xxl" weigth="semiBold" text={'center'}>
+            <Text size="xxl" weight="semiBold" text={'center'}>
               {'Congratulations!'}
             </Text>
             <Text type="secondary" text="center">
               That&apos;s just the beginning. Now you can explore the app and start trying on
               outfits!
             </Text>
-            <Image
-              src={generatedImage}
-              width={300}
-              height={400}
-              rounded={'$7'}
-              aspectRatio={3 / 4}
-            />
+            <View rounded={'$7'} overflow="hidden">
+              <Image src={generatedImage} width={300} height={400} aspectRatio={3 / 4} />
+            </View>
           </>
         ) : null}
         <Button onPress={onFinish} disabled={isPresenting}>

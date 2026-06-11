@@ -31,6 +31,8 @@ export const store$ = observable<AppState>({
   garments: {
     top: {},
     bottom: {},
+    dress: {},
+    outerwear: {},
   },
   generatedImages: {},
   outfits: {},
@@ -109,9 +111,13 @@ const computed = {
    * Get garments of a specific type as an array (excluding soft-deleted)
    */
   garments: () => {
-    // Get raw data first to avoid creating Proxies during iteration
     const garments = store$.garments.get();
-    return Object.values(garments).filter((garment) => !garment.deletedAt);
+    return [
+      ...Object.values(garments.top),
+      ...Object.values(garments.bottom),
+      ...Object.values(garments.dress),
+      ...Object.values(garments.outerwear),
+    ].filter((garment) => !garment.deletedAt);
   },
 
   /**
@@ -127,8 +133,17 @@ const computed = {
    * Get all bottom garments
    */
   bottomGarments: () => {
-    // Get raw data first to avoid creating Proxies during iteration
     const garments = store$.garments.bottom.get();
+    return Object.values(garments).filter((garment) => !garment.deletedAt);
+  },
+
+  dressGarments: () => {
+    const garments = store$.garments.dress.get();
+    return Object.values(garments).filter((garment) => !garment.deletedAt);
+  },
+
+  outerwearGarments: () => {
+    const garments = store$.garments.outerwear.get();
     return Object.values(garments).filter((garment) => !garment.deletedAt);
   },
 
@@ -136,11 +151,12 @@ const computed = {
    * Get currently selected garments
    */
   selectedGarments: () => {
-    // Get raw data first to avoid creating Proxies during iteration
     const ids = store$.ui.selectedGarmentIds.get();
     const allGarments = {
       ...store$.garments.top.get(),
       ...store$.garments.bottom.get(),
+      ...store$.garments.dress.get(),
+      ...store$.garments.outerwear.get(),
     };
     return ids.map((id) => allGarments[id]).filter(Boolean);
   },
@@ -619,6 +635,8 @@ const actions = {
     store$.models.set({});
     store$.garments.top.set({});
     store$.garments.bottom.set({});
+    store$.garments.dress.set({});
+    store$.garments.outerwear.set({});
     store$.generatedImages.set({});
     store$.outfits.set({});
 
@@ -636,6 +654,8 @@ const actions = {
     store$.models.set({});
     store$.garments.top.set({});
     store$.garments.bottom.set({});
+    store$.garments.dress.set({});
+    store$.garments.outerwear.set({});
     store$.generatedImages.set({});
     store$.outfits.set({});
 

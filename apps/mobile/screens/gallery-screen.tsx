@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { FlatList, Dimensions } from 'react-native';
 import { YStack, Tabs, Text } from '@/components/v2/ui';
-import { useGeneratedImages, useTopGarments, useBottomGarments } from '@/state';
+import {
+  useGeneratedImages,
+  useTopGarments,
+  useBottomGarments,
+  useDressGarments,
+  useOuterwearGarments,
+} from '@/state';
 import { GalleryTile } from '@/components/gallery/gallery-tile';
 import { GalleryFilter } from '@/components/gallery/gallery-filter';
 import { router } from 'expo-router';
@@ -18,11 +24,15 @@ const getFilteredGarments = (
   filter: GarmentFilter,
   topGarments: GarmentImage[],
   bottomGarments: GarmentImage[],
+  dressGarments: GarmentImage[],
+  outerwearGarments: GarmentImage[],
 ): GarmentImage[] => {
   const filterMap: Record<GarmentFilter, GarmentImage[]> = {
-    all: [...topGarments, ...bottomGarments],
+    all: [...topGarments, ...bottomGarments, ...dressGarments, ...outerwearGarments],
     top: topGarments,
     bottom: bottomGarments,
+    dress: dressGarments,
+    outerwear: outerwearGarments,
   };
   return filterMap[filter] ?? filterMap.all;
 };
@@ -33,8 +43,16 @@ export const GalleryScreen = () => {
   const { images: generatedImages } = useGeneratedImages();
   const { garments: topGarments } = useTopGarments();
   const { garments: bottomGarments } = useBottomGarments();
+  const { garments: dressGarments } = useDressGarments();
+  const { garments: outerwearGarments } = useOuterwearGarments();
 
-  const garmentImages = getFilteredGarments(garmentFilter, topGarments, bottomGarments);
+  const garmentImages = getFilteredGarments(
+    garmentFilter,
+    topGarments,
+    bottomGarments,
+    dressGarments,
+    outerwearGarments,
+  );
 
   const handlePress = (item: GeneratedImage | GarmentImage, type: ImageDetailType) => {
     trackEvent(analyticsEvents.gallery.openedItem(type), {

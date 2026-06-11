@@ -15,6 +15,7 @@ import { useState, useEffect } from 'react';
 import { useSelectPhotoSheet } from '@/components/modals';
 import { analyticsEvents, trackEvent } from '@/lib/analytics';
 import { AnalyticsFlow } from '@/lib/analytics/types';
+import { garmentTypeMap } from '@/constants/garments';
 
 export const useSelectGarment = (flow: AnalyticsFlow = 'app') => {
   const garments = useGarments();
@@ -111,7 +112,7 @@ export const SelectGarment = ({
                   </>
                 </Square>
                 <Text text={'center'} type="secondary">
-                  {image.type}
+                  {garmentTypeMap[image.type]}
                 </Text>
               </YStack>
             );

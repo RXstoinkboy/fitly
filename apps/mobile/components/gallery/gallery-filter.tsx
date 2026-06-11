@@ -12,6 +12,8 @@ const FILTER_OPTIONS: { label: string; value: GarmentFilter }[] = [
   { label: 'All', value: 'all' },
   { label: 'Top', value: 'top' },
   { label: 'Bottom', value: 'bottom' },
+  { label: 'Dress', value: 'dress' },
+  { label: 'Outerwear', value: 'outerwear' },
 ];
 
 export const GalleryFilter = ({ filter, onChange }: GalleryFilterProps) => {

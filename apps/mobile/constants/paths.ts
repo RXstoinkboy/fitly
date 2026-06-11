@@ -4,6 +4,8 @@ export const paths = {
     garments: {
       top: 'garments/top',
       bottom: 'garments/bottom',
+      dress: 'garments/dress',
+      outerwear: 'garments/outerwear',
     },
     models: `models`,
   },

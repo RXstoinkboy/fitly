@@ -4,4 +4,5 @@ export type ImageGenerationInput = {
   garmentTopImageBase64?: string;
   garmentBottomImageBase64?: string;
   garmentFullBodyImageBase64?: string;
+  garmentOuterwearImageBase64?: string;
 };

@@ -5,6 +5,63 @@ import { GoogleGenAI, type Part } from '@google/genai'
 
 const DEFAULT_MIME_TYPE = 'image/jpeg'
 
+function garmentLabel(field: string): string {
+  const map: Record<string, string> = {
+    garmentTopImageBase64: 'top garment',
+    garmentBottomImageBase64: 'bottom garment',
+    garmentFullBodyImageBase64: 'full-body garment',
+    garmentOuterwearImageBase64: 'outerwear garment',
+  }
+  return map[field] ?? field
+}
+
+function buildPrompt(
+  modelImageBase64: string,
+  garments: { field: string; data: string }[],
+): { textPrompt: string; imageParts: Part[] } {
+  const mime = DEFAULT_MIME_TYPE
+  const imageParts: Part[] = [{ inlineData: { mimeType: mime, data: modelImageBase64 } }]
+
+  for (const garment of garments) {
+    imageParts.push({ inlineData: { mimeType: mime, data: garment.data } })
+  }
+
+  if (garments.length === 1) {
+    const label = garmentLabel(garments[0].field)
+    const textPrompt = `
+      Generate a new image where the person from the first image
+      is wearing the ${label} from the second image.
+      Make sure that the ${label} from the second image preserves its original fit, color, and details.
+    `
+    return { textPrompt, imageParts }
+  }
+
+  const descriptions = garments.map((g, index) => {
+    const label = garmentLabel(g.field)
+    const position = index + 2
+    const suffix = getOrdinalSuffix(position)
+    return `the ${label} from the ${position}${suffix} image`
+  })
+
+  const lastDesc = descriptions.pop()
+  const allButLast = descriptions.join(', ')
+  const combined = allButLast ? `${allButLast} and ${lastDesc}` : lastDesc
+
+  const textPrompt = `
+    Generate a new image where the person from the first image
+    is wearing ${combined}.
+    Make sure that all garments preserve their original fit, color, and details.
+  `
+
+  return { textPrompt, imageParts }
+}
+
+function getOrdinalSuffix(n: number): string {
+  const s = ['th', 'st', 'nd', 'rd']
+  const v = n % 100
+  return s[(v - 20) % 10] ?? s[v] ?? s[0]
+}
+
 export default class ImageGenerationController {
   async generate({ request, response }: HttpContext) {
     const payload = await imageGenerationValidator.validate(request.all())
@@ -18,54 +75,30 @@ export default class ImageGenerationController {
       garmentTopImageBase64,
       garmentBottomImageBase64,
       garmentFullBodyImageBase64,
+      garmentOuterwearImageBase64,
     } = payload
 
     const mime = mimeType ?? DEFAULT_MIME_TYPE
 
-    // TODO: Refactor prompt building into a dedicated service with better handling of
-    //       different garment types, combinations, and edge cases. Consider adding
-    //       validation that a given garment image actually matches the stated type
-    //       (top, bottom, full-body) using a pre-classification step.
-    let textPrompt = ''
-    const imageParts: Part[] = []
-
-    imageParts.push({ inlineData: { mimeType: mime, data: modelImageBase64 } })
-
+    const garments: { field: string; data: string }[] = []
     if (garmentFullBodyImageBase64) {
-      textPrompt = `
-        Generate a new image where the person from the first image
-        is wearing the full-body garment from the second image.
-        Make sure that the full-body garment from the second image preserves its original fit, color, and details.
-      `
-      imageParts.push({ inlineData: { mimeType: mime, data: garmentFullBodyImageBase64 } })
-    } else if (garmentTopImageBase64 && garmentBottomImageBase64) {
-      textPrompt = `
-        Generate a new image where the person from the first image
-        is wearing the top garment from the second image and the bottom garment from the third image.
-        Make sure that the top garment from the second image and bottom garment from the third image preserves its original fit, color, and details.
-      `
-      imageParts.push({ inlineData: { mimeType: mime, data: garmentTopImageBase64 } })
-      imageParts.push({ inlineData: { mimeType: mime, data: garmentBottomImageBase64 } })
-    } else if (garmentTopImageBase64) {
-      textPrompt = `
-        Generate a new image where the person from the first image
-        is wearing the top garment from the second image.
-        Make sure that the top garment from the second image preserves its original fit, color, and details.
-      `
-      imageParts.push({ inlineData: { mimeType: mime, data: garmentTopImageBase64 } })
-    } else if (garmentBottomImageBase64) {
-      textPrompt = `
-        Generate a new image where the person from the first image
-        is wearing the bottom garment from the second image.
-        Make sure that the bottom garment from the second image preserves its original fit, color, and details.
-      `
-      imageParts.push({ inlineData: { mimeType: mime, data: garmentBottomImageBase64 } })
-    } else {
-      // NOTE: Validator enforces at least one garment field, so this branch should
-      // never be reached in practice — kept as a defensive fallback.
+      garments.push({ field: 'garmentFullBodyImageBase64', data: garmentFullBodyImageBase64 })
+    }
+    if (garmentTopImageBase64) {
+      garments.push({ field: 'garmentTopImageBase64', data: garmentTopImageBase64 })
+    }
+    if (garmentBottomImageBase64) {
+      garments.push({ field: 'garmentBottomImageBase64', data: garmentBottomImageBase64 })
+    }
+    if (garmentOuterwearImageBase64) {
+      garments.push({ field: 'garmentOuterwearImageBase64', data: garmentOuterwearImageBase64 })
+    }
+
+    if (garments.length === 0) {
       return response.badRequest({ error: 'No garment images provided.' })
     }
 
+    const { textPrompt, imageParts } = buildPrompt(modelImageBase64, garments)
     const prompt: Part[] = [{ text: textPrompt }, ...imageParts]
 
     let googleResponse

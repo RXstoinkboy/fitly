@@ -2,12 +2,35 @@ import type { HttpContext } from '@adonisjs/core/http'
 import env from '#start/env'
 import { imageGenerationValidator } from '#validators/image_generation_validator'
 import { GoogleGenAI, type Part } from '@google/genai'
+import UsageGeneration from '#models/usage_generation'
+import { DateTime } from 'luxon'
 
 const DEFAULT_MIME_TYPE = 'image/jpeg'
+const MONTHLY_GENERATION_LIMIT = 200
 
 export default class ImageGenerationController {
-  async generate({ request, response }: HttpContext) {
+  async generate({ request, response, currentUser }: HttpContext) {
     const payload = await imageGenerationValidator.validate(request.all())
+
+    const isSubscribed = request.header('x-is-subscribed') === 'true'
+
+    // Check monthly generation limit — skip for subscribers
+    if (!isSubscribed) {
+      const monthStart = DateTime.now().startOf('month')
+      const usage = await UsageGeneration.firstOrCreate(
+        { userId: currentUser.id, month: monthStart.toISODate() },
+        { userId: currentUser.id, month: monthStart.toJSDate(), count: 0 }
+      )
+
+      if (usage.count >= MONTHLY_GENERATION_LIMIT) {
+        return response.status(429).json({
+          error: 'Monthly generation limit reached',
+          message: `You have used all ${MONTHLY_GENERATION_LIMIT} generations this month. Subscribe for unlimited access.`,
+          limit: MONTHLY_GENERATION_LIMIT,
+          used: usage.count,
+        })
+      }
+    }
 
     const apiKey = env.get('GOOGLE_API_KEY')
     const ai = new GoogleGenAI({ apiKey })
@@ -90,6 +113,18 @@ export default class ImageGenerationController {
 
     for (const part of parts) {
       if (part.inlineData?.data) {
+        // Increment usage count after successful generation
+        if (!isSubscribed) {
+          const monthStart = DateTime.now().startOf('month')
+          await UsageGeneration.firstOrCreate(
+            { userId: currentUser.id, month: monthStart.toISODate() },
+            { userId: currentUser.id, month: monthStart.toJSDate(), count: 0 }
+          ).then((usage) => {
+            usage.count += 1
+            return usage.save()
+          })
+        }
+
         return response.json({
           generatedImageBase64: part.inlineData.data,
           mimeType: mime,

@@ -1,2 +1,2 @@
-export type GarmentFilter = 'all' | 'top' | 'bottom';
-export type ImageDetailType = 'generated' | 'top' | 'bottom';
+export type GarmentFilter = 'all' | 'top' | 'bottom' | 'dress' | 'outerwear';
+export type ImageDetailType = 'generated' | 'top' | 'bottom' | 'dress' | 'outerwear';

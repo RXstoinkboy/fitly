@@ -14,8 +14,12 @@ export default function ImageDetailScreen() {
       return state.store.generatedImages[id].get();
     } else if (type === 'top') {
       return state.store.garments.top[id].get();
-    } else {
+    } else if (type === 'bottom') {
       return state.store.garments.bottom[id].get();
+    } else if (type === 'dress') {
+      return state.store.garments.dress[id].get();
+    } else {
+      return state.store.garments.outerwear[id].get();
     }
   })();
 

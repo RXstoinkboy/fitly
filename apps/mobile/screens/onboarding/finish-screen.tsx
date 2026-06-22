@@ -1,14 +1,52 @@
-import { useMount, usePaywall } from '@/hooks';
-import { YStack, Text, ScreenWrapper, Image, Button, XStack } from '@/components/v2/ui';
+import { useImageSize, useMount, usePaywall } from '@/hooks';
+import {
+  YStack,
+  Text,
+  ScreenWrapper,
+  Image,
+  Button,
+  XStack,
+  View,
+  Spinner,
+} from '@/components/v2/ui';
 import { generatedKeys } from '@/queries/image-generation/keys';
-import { useGeneratedImages, useOnboarding } from '@/state';
+import { useCurrentModel, useGeneratedImages, useOnboarding } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { Link, usePathname, useRouter } from 'expo-router';
 import { ArrowLeft } from '@/icons';
 import { analyticsEvents, trackEvent } from '@/lib/analytics';
+import { useLoadingState } from '@/hooks/use-loading-state';
+
+const ImageLoader = () => {
+  const { currentModel } = useCurrentModel();
+  const loadingState = useLoadingState({ isPending: true });
+
+  return (
+    <YStack rounded={'$7'} overflow="hidden">
+      <YStack
+        position="absolute"
+        z={'$1'}
+        t={'50%'}
+        l={'50%'}
+        items={'center'}
+        transform={'translate(-50%, -50%)'}>
+        <Spinner size="large" color="$accent2" />
+        <Text color="$color1">{loadingState}</Text>
+      </YStack>
+      <Image
+        src={currentModel?.filePath}
+        width={300}
+        height={400}
+        aspectRatio={3 / 4}
+        blurRadius={80}
+      />
+    </YStack>
+  );
+};
 
 export const FinishScreen = () => {
   const { setOnboardingStep, completeOnboarding } = useOnboarding();
+  const { width } = useImageSize();
   const router = useRouter();
   const pathname = usePathname();
   const isGenerating = useIsMutating({
@@ -17,6 +55,7 @@ export const FinishScreen = () => {
   const { images } = useGeneratedImages();
   const generatedImage = images.length > 0 ? images.at(-1)?.filePath : null;
   const { showPaywall, isPresenting } = usePaywall();
+  const isGenerated = generatedImage && !isGenerating;
 
   const onFinish = async () => {
     let paywallResult:
@@ -51,45 +90,33 @@ export const FinishScreen = () => {
       footer={
         <XStack>
           <Link asChild href={'/onboarding/select-garments'}>
-            <Button icon={<ArrowLeft />}>Back</Button>
+            <Button kind="ghost" icon={<ArrowLeft />}>
+              Back
+            </Button>
           </Link>
         </XStack>
       }>
       <YStack flex={1} items={'center'} gap={'$4'}>
-        {isGenerating ? (
-          <>
-            <Text size="xxl" weigth="semiBold" text={'center'}>
-              {'Loading...'}
-            </Text>
-            <Text type="secondary" text="center">
-              Please wait
-            </Text>
-          </>
-        ) : null}
-        {generatedImage && !isGenerating ? (
-          <>
-            <Text size="xxl" weigth="semiBold" text={'center'}>
-              {'Congratulations!'}
-            </Text>
-            <Text type="secondary" text="center">
-              That&apos;s just the beginning. Now you can explore the app and start trying on
-              outfits!
-            </Text>
-            <Image
-              src={generatedImage}
-              width={300}
-              height={400}
-              rounded={'$7'}
-              aspectRatio={3 / 4}
-            />
-          </>
-        ) : null}
-        <Button onPress={onFinish} disabled={isPresenting}>
+        <>
+          <Text size="xxl" weight="semiBold" text={'center'}>
+            {isGenerated ? 'Congratulations!' : 'Loading...'}
+          </Text>
+          <Text type="secondary" text="center">
+            {isGenerated
+              ? `That's just the beginning. Now you can explore the app and start trying on outfits!`
+              : 'Please wait'}
+          </Text>
+          <View rounded={'$7'} overflow="hidden">
+            {isGenerated && generatedImage ? (
+              <Image src={generatedImage} width={300} height={400} aspectRatio={3 / 4} />
+            ) : (
+              <ImageLoader />
+            )}
+          </View>
+        </>
+        <Button width={width} kind="cta" size={'l'} onPress={onFinish} disabled={isPresenting}>
           {isPresenting ? 'Opening paywall...' : 'Continue'}
         </Button>
-        <Link asChild href={'/onboarding/select-garments'}>
-          <Button>Back</Button>
-        </Link>
       </YStack>
     </ScreenWrapper>
   );

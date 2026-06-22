@@ -9,7 +9,7 @@
 
 export type ImageSource = 'camera' | 'library' | 'url';
 
-export type GarmentType = 'top' | 'bottom';
+export type GarmentType = 'top' | 'bottom' | 'dress' | 'outerwear';
 
 // ============================================================================
 // Base Types
@@ -92,6 +92,8 @@ export type AppState = {
   garments: {
     top: Record<string, GarmentImage>;
     bottom: Record<string, GarmentImage>;
+    dress: Record<string, GarmentImage>;
+    outerwear: Record<string, GarmentImage>;
   };
   generatedImages: Record<string, GeneratedImage>;
   outfits: Record<string, OutfitImage>;

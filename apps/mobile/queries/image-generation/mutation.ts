@@ -13,6 +13,8 @@ import { useSubscriptionStatus } from '@/queries/subscription';
 type GenerateImageParams = {
   top?: string;
   bottom?: string;
+  dress?: string;
+  outerwear?: string;
   garments?: { ids: string[]; types: GarmentType[]; count: number };
   context?: AnalyticsFlow;
   modelId?: string | null;
@@ -35,7 +37,7 @@ export const useGenerateImageMutation = (
 
   return useMutation<GenerateImageResult | undefined, Error, GenerateImageParams>({
     mutationKey: generatedKeys.add(),
-    mutationFn: async ({ top, bottom }) => {
+    mutationFn: async ({ top, bottom, dress, outerwear }) => {
       if (!currentModel?.filePath) {
         throw new Error('Model photo is missing. Please select your photo again.');
       }
@@ -49,9 +51,16 @@ export const useGenerateImageMutation = (
         throw new Error('Model photo is missing. Please select your photo again.');
       }
 
-      const [garmentTopImageBase64, garmentBottomImageBase64] = await Promise.all([
+      const [
+        garmentTopImageBase64,
+        garmentBottomImageBase64,
+        garmentFullBodyImageBase64,
+        garmentOuterwearImageBase64,
+      ] = await Promise.all([
         top ? fileUriToBase64(top) : Promise.resolve(undefined),
         bottom ? fileUriToBase64(bottom) : Promise.resolve(undefined),
+        dress ? fileUriToBase64(dress) : Promise.resolve(undefined),
+        outerwear ? fileUriToBase64(outerwear) : Promise.resolve(undefined),
       ]);
 
       const result = await generateImage({
@@ -59,6 +68,8 @@ export const useGenerateImageMutation = (
         garmentTopImageBase64,
         garmentBottomImageBase64,
         isSubscribed,
+        garmentFullBodyImageBase64,
+        garmentOuterwearImageBase64,
       });
 
       if (!result) {

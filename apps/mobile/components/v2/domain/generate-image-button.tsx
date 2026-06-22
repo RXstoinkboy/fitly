@@ -2,21 +2,11 @@ import { Sparkles } from '@/icons';
 import { Button, Spinner } from '@/components/v2/ui';
 import { useGenerateImageMutation } from '@/queries/image-generation/mutation';
 import { useGeneratedImages, useModels, useSelectedGarments } from '@/state';
-import { useEffect, useState } from 'react';
 import { usePaywall } from '@/hooks';
 import { analyticsEvents, captureError, trackEvent } from '@/lib/analytics';
-
-const loadingStates = [
-  'Sending images...',
-  'Analyzing content...',
-  'Generating image...',
-  'Hold on...',
-  'Almost there...',
-];
+import { useLoadingState } from '@/hooks/use-loading-state';
 
 export const GenerateImageButton = () => {
-  const [loadingState, setLoadingState] = useState<number | null>(null);
-
   const { addGeneratedImage } = useGeneratedImages();
   const { currentModelId } = useModels();
   const selectedGarments = useSelectedGarments();
@@ -38,6 +28,8 @@ export const GenerateImageButton = () => {
     },
   });
 
+  const loadingState = useLoadingState({ isPending });
+
   const onGenerateImage = async () => {
     if (!currentModelId) {
       console.error('No model selected');
@@ -51,6 +43,8 @@ export const GenerateImageButton = () => {
 
     const topGarment = selectedGarments.selectedGarments.find((g) => g.type === 'top');
     const bottomGarment = selectedGarments.selectedGarments.find((g) => g.type === 'bottom');
+    const dressGarment = selectedGarments.selectedGarments.find((g) => g.type === 'dress');
+    const outerwearGarment = selectedGarments.selectedGarments.find((g) => g.type === 'outerwear');
     const garmentTypes = selectedGarments.selectedGarments.map((garment) => garment.type);
     const garmentIds = selectedGarments.selectedGarments.map((garment) => garment.id);
 
@@ -64,6 +58,8 @@ export const GenerateImageButton = () => {
     mutate({
       top: topGarment?.filePath,
       bottom: bottomGarment?.filePath,
+      dress: dressGarment?.filePath,
+      outerwear: outerwearGarment?.filePath,
       garments: {
         ids: garmentIds,
         types: garmentTypes,
@@ -75,35 +71,6 @@ export const GenerateImageButton = () => {
     selectedGarments.clearSelection();
   };
 
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | undefined;
-    let intervalTime = 3000;
-
-    if (isPending) {
-      setLoadingState(0);
-      interval = setInterval(() => {
-        setLoadingState((prev) => {
-          if (prev === null) {
-            return 0;
-          }
-
-          if (prev >= loadingStates.length - 1) {
-            return prev;
-          }
-
-          return prev + 1;
-        });
-      }, intervalTime);
-    } else {
-      setLoadingState(null);
-    }
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [isPending]);
-
   return (
     <Button
       bg={'$accent1'}
@@ -112,7 +79,7 @@ export const GenerateImageButton = () => {
       disabled={isPending || isPresenting}
       icon={isPending ? Spinner : Sparkles}
       onPress={onGenerateImage}>
-      {isPending ? loadingStates[loadingState ?? 0] : 'Create'}
+      {isPending ? loadingState : 'Create'}
     </Button>
   );
 };

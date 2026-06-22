@@ -4,7 +4,7 @@ import Carousel from 'react-native-reanimated-carousel';
 import Animated, { useSharedValue, FadeInDown } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import { GeneratedImage, GarmentImage } from '@/state/types';
-import { useTopGarments, useBottomGarments } from '@/state';
+import { useTopGarments, useBottomGarments, useDressGarments, useOuterwearGarments } from '@/state';
 import { useRouter } from 'expo-router';
 import { GeneratedImageCard } from './generated-image-card';
 import { analyticsEvents, trackEvent } from '@/lib/analytics';
@@ -57,7 +57,9 @@ export function ImagesCarousel({
 
   const { garments: topGarments } = useTopGarments();
   const { garments: bottomGarments } = useBottomGarments();
-  const allGarments = [...topGarments, ...bottomGarments];
+  const { garments: dressGarments } = useDressGarments();
+  const { garments: outerwearGarments } = useOuterwearGarments();
+  const allGarments = [...topGarments, ...bottomGarments, ...dressGarments, ...outerwearGarments];
 
   return (
     <View style={{ flex: 1 }}>

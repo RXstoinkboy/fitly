@@ -5,4 +5,5 @@ export type ImageGenerationInput = {
   garmentBottomImageBase64?: string;
   garmentFullBodyImageBase64?: string;
   isSubscribed?: boolean;
+  garmentOuterwearImageBase64?: string;
 };

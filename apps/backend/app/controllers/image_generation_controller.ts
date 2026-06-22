@@ -71,18 +71,31 @@ export default class ImageGenerationController {
 
     const isSubscribed = request.header('x-is-subscribed') === 'true'
 
-    // Check monthly generation limit — skip for subscribers
-    if (!isSubscribed) {
+    // Allow one free generation during onboarding
+    if (!currentUser.onboardingGenerationUsed) {
+      currentUser.onboardingGenerationUsed = true
+      await currentUser.save()
+    } else if (!isSubscribed) {
+      return response.status(403).json({
+        error: 'Subscription required',
+        message: 'You have used your free generation. Subscribe to continue generating images.',
+      })
+    }
+
+    let usage: UsageGeneration | null = null
+    if (isSubscribed) {
       const monthStart = DateTime.now().startOf('month')
-      const usage = await UsageGeneration.firstOrCreate(
-        { userId: currentUser.id, month: monthStart.toISODate() },
-        { userId: currentUser.id, month: monthStart.toJSDate(), count: 0 }
+      usage = await UsageGeneration.firstOrCreate(
+        { userId: currentUser.id, month: monthStart },
+        { userId: currentUser.id, month: monthStart, count: 0 },
       )
 
+      // TODO: Support additional credit purchases to increase monthly limit beyond the plan limit
+      // TODO: Support higher subscription plans with increased monthly limits
       if (usage.count >= MONTHLY_GENERATION_LIMIT) {
         return response.status(429).json({
           error: 'Monthly generation limit reached',
-          message: `You have used all ${MONTHLY_GENERATION_LIMIT} generations this month. Subscribe for unlimited access.`,
+          message: `You have used all ${MONTHLY_GENERATION_LIMIT} generations this month. Your limit will reset next month.`,
           limit: MONTHLY_GENERATION_LIMIT,
           used: usage.count,
         })
@@ -146,16 +159,9 @@ export default class ImageGenerationController {
 
     for (const part of parts) {
       if (part.inlineData?.data) {
-        // Increment usage count after successful generation
-        if (!isSubscribed) {
-          const monthStart = DateTime.now().startOf('month')
-          await UsageGeneration.firstOrCreate(
-            { userId: currentUser.id, month: monthStart.toISODate() },
-            { userId: currentUser.id, month: monthStart.toJSDate(), count: 0 }
-          ).then((usage) => {
-            usage.count += 1
-            return usage.save()
-          })
+        if (usage) {
+          usage.count += 1
+          await usage.save()
         }
 
         return response.json({

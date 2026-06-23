@@ -60,17 +60,23 @@ export const GeneratedImageCard = ({
           position="absolute"
           t={'$2'}
           r={'$2'}
-          circular
+          height={'$4'}
+          width={'$4'}
+          rounded={'$12'}
+          iconSize={'$4'}
           icon={<Trash2 />}
           onPress={() => confirmation.toggle(true)}
         />
 
         <Button
+          height={'$4'}
+          width={'$4'}
+          rounded={'$12'}
           position="absolute"
           b={'$2'}
           l={'$2'}
-          circular
           icon={<Share2 />}
+          iconSize={'$4'}
           onPress={handleShare}
         />
 

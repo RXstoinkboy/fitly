@@ -3,6 +3,7 @@ import { ImageDetailContent } from '@/components/gallery/image-detail-modal';
 import { state } from '@/state';
 import type { ImageDetailType } from '@/components/gallery/types';
 import { analyticsEvents, trackEvent } from '@/lib/analytics';
+import { ScreenWrapper } from '@/components/v2';
 
 // TODO: consider using the same in onboarding flow screens
 // if yes then there might be limited options there compoared to app
@@ -43,11 +44,13 @@ export default function ImageDetailScreen() {
   };
 
   return (
-    <ImageDetailContent
-      imageUri={image.filePath}
-      isGenerated={type === 'generated'}
-      onClose={() => router.back()}
-      onRemove={handleRemove}
-    />
+    <ScreenWrapper>
+      <ImageDetailContent
+        imageUri={image.filePath}
+        isGenerated={type === 'generated'}
+        onClose={() => router.back()}
+        onRemove={handleRemove}
+      />
+    </ScreenWrapper>
   );
 }

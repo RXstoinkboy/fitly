@@ -112,7 +112,7 @@ export const ImageDetailContent = ({
 
   return (
     <>
-      <YStack flex={1} bg="$color1">
+      <YStack flex={1}>
         {/* Zoomable image */}
         <GestureDetector gesture={composedGesture}>
           <Animated.View
@@ -131,26 +131,43 @@ export const ImageDetailContent = ({
         <XStack justify="flex-end" gap="$3" px="$4" py="$2" position="absolute" t={0} l={0} r={0}>
           {shouldShowShare ? (
             <Button
-              size="$4"
-              circular
+              height={'$4'}
+              width={'$4'}
+              rounded={'$12'}
+              iconSize={'$4'}
               icon={<Share2 color="white" size={22} />}
               onPress={handleShare}
             />
           ) : null}
           {shouldShowDelete ? (
             <Button
-              size="$4"
-              circular
+              height={'$4'}
+              width={'$4'}
+              rounded={'$12'}
+              iconSize={'$4'}
               icon={<Trash2 color="white" size={22} />}
               onPress={() => confirmation.toggle(true)}
             />
           ) : null}
           {primaryAction ? (
-            <Button size="$4" icon={primaryAction.icon} onPress={primaryAction.onPress}>
+            <Button
+              height={'$4'}
+              width={'$4'}
+              rounded={'$12'}
+              iconSize={'$4'}
+              icon={primaryAction.icon}
+              onPress={primaryAction.onPress}>
               {primaryAction.label}
             </Button>
           ) : null}
-          <Button size="$4" circular icon={<X color="white" size={22} />} onPress={onClose} />
+          <Button
+            height={'$4'}
+            width={'$4'}
+            rounded={'$12'}
+            iconSize={'$4'}
+            icon={<X color="white" size={22} />}
+            onPress={onClose}
+          />
         </XStack>
 
         {primaryAction ? <YStack position="absolute" b={20} l={0} r={0} px="$4"></YStack> : null}

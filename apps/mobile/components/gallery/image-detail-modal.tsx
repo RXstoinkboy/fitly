@@ -1,10 +1,11 @@
 import React from 'react';
 import { Share } from 'react-native';
 import { Image, XStack, YStack, Button } from '@/components/v2/ui';
-import { X, Share2, Trash2 } from '@tamagui/lucide-icons';
+import { Share2, Trash2, ArrowLeft } from '@tamagui/lucide-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { ConfirmationSheet, useConfirmationSheet } from '@/components/modals';
+import { ButtonProps } from 'tamagui';
 
 type ImageDetailContentProps = {
   imageUri: string;
@@ -112,7 +113,7 @@ export const ImageDetailContent = ({
 
   return (
     <>
-      <YStack flex={1} bg="$color1">
+      <YStack flex={1}>
         {/* Zoomable image */}
         <GestureDetector gesture={composedGesture}>
           <Animated.View
@@ -128,29 +129,48 @@ export const ImageDetailContent = ({
         </GestureDetector>
 
         {/* Controls */}
-        <XStack justify="flex-end" gap="$3" px="$4" py="$2" position="absolute" t={0} l={0} r={0}>
-          {shouldShowShare ? (
-            <Button
-              size="$4"
-              circular
-              icon={<Share2 color="white" size={22} />}
-              onPress={handleShare}
-            />
-          ) : null}
-          {shouldShowDelete ? (
-            <Button
-              size="$4"
-              circular
-              icon={<Trash2 color="white" size={22} />}
-              onPress={() => confirmation.toggle(true)}
-            />
-          ) : null}
-          {primaryAction ? (
-            <Button size="$4" icon={primaryAction.icon} onPress={primaryAction.onPress}>
-              {primaryAction.label}
-            </Button>
-          ) : null}
-          <Button size="$4" circular icon={<X color="white" size={22} />} onPress={onClose} />
+        <XStack justify="space-between" px="$4" py="$2" position="absolute" t={0} l={0} r={0}>
+          <Button
+            height={'$4'}
+            width={'$4'}
+            rounded={'$12'}
+            iconSize={'$4'}
+            icon={<ArrowLeft color="white" size={22} />}
+            onPress={onClose}
+          />
+          <XStack justify="flex-end" gap="$3">
+            {shouldShowShare ? (
+              <Button
+                height={'$4'}
+                width={'$4'}
+                rounded={'$12'}
+                iconSize={'$4'}
+                icon={<Share2 color="white" size={22} />}
+                onPress={handleShare}
+              />
+            ) : null}
+            {shouldShowDelete ? (
+              <Button
+                height={'$4'}
+                width={'$4'}
+                rounded={'$12'}
+                iconSize={'$4'}
+                icon={<Trash2 color="white" size={22} />}
+                onPress={() => confirmation.toggle(true)}
+              />
+            ) : null}
+            {primaryAction ? (
+              <Button
+                height={'$4'}
+                width={'$4'}
+                rounded={'$12'}
+                iconSize={'$4'}
+                icon={primaryAction.icon as ButtonProps['icon']}
+                onPress={primaryAction.onPress}>
+                {primaryAction.label}
+              </Button>
+            ) : null}
+          </XStack>
         </XStack>
 
         {primaryAction ? <YStack position="absolute" b={20} l={0} r={0} px="$4"></YStack> : null}

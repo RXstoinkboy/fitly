@@ -2,8 +2,11 @@ import type { HttpContext } from '@adonisjs/core/http'
 import env from '#start/env'
 import { imageGenerationValidator } from '#validators/image_generation_validator'
 import { GoogleGenAI, type Part } from '@google/genai'
+import UsageGeneration from '#models/usage_generation'
+import { DateTime } from 'luxon'
 
 const DEFAULT_MIME_TYPE = 'image/jpeg'
+const MONTHLY_GENERATION_LIMIT = 200
 
 function garmentLabel(field: string): string {
   const map: Record<string, string> = {
@@ -63,8 +66,41 @@ function getOrdinalSuffix(n: number): string {
 }
 
 export default class ImageGenerationController {
-  async generate({ request, response }: HttpContext) {
+  async generate({ request, response, currentUser }: HttpContext) {
     const payload = await imageGenerationValidator.validate(request.all())
+
+    const isSubscribed = request.header('x-is-subscribed') === 'true'
+
+    // Allow one free generation during onboarding
+    if (!currentUser.onboardingGenerationUsed) {
+      currentUser.onboardingGenerationUsed = true
+      await currentUser.save()
+    } else if (!isSubscribed) {
+      return response.status(403).json({
+        error: 'Subscription required',
+        message: 'You have used your free generation. Subscribe to continue generating images.',
+      })
+    }
+
+    let usage: UsageGeneration | null = null
+    if (isSubscribed) {
+      const monthStart = DateTime.now().startOf('month')
+      usage = await UsageGeneration.firstOrCreate(
+        { userId: currentUser.id, month: monthStart },
+        { userId: currentUser.id, month: monthStart, count: 0 },
+      )
+
+      // TODO: Support additional credit purchases to increase monthly limit beyond the plan limit
+      // TODO: Support higher subscription plans with increased monthly limits
+      if (usage.count >= MONTHLY_GENERATION_LIMIT) {
+        return response.status(429).json({
+          error: 'Monthly generation limit reached',
+          message: `You have used all ${MONTHLY_GENERATION_LIMIT} generations this month. Your limit will reset next month.`,
+          limit: MONTHLY_GENERATION_LIMIT,
+          used: usage.count,
+        })
+      }
+    }
 
     const apiKey = env.get('GOOGLE_API_KEY')
     const ai = new GoogleGenAI({ apiKey })
@@ -123,6 +159,11 @@ export default class ImageGenerationController {
 
     for (const part of parts) {
       if (part.inlineData?.data) {
+        if (usage) {
+          usage.count += 1
+          await usage.save()
+        }
+
         return response.json({
           generatedImageBase64: part.inlineData.data,
           mimeType: mime,

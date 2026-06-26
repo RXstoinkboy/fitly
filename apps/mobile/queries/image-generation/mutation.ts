@@ -8,6 +8,7 @@ import { state, useModels } from '@/state';
 import { GarmentType } from '@/state/types';
 import { analyticsEvents, captureError, trackEvent } from '@/lib/analytics';
 import { AnalyticsFlow } from '@/lib/analytics/types';
+import { useSubscriptionStatus } from '@/queries/subscription';
 
 type GenerateImageParams = {
   top?: string;
@@ -17,6 +18,7 @@ type GenerateImageParams = {
   garments?: { ids: string[]; types: GarmentType[]; count: number };
   context?: AnalyticsFlow;
   modelId?: string | null;
+  isSubscribed?: boolean;
 };
 
 type GenerateImageResult = {
@@ -30,6 +32,8 @@ export const useGenerateImageMutation = (
 ) => {
   const queryClient = useQueryClient();
   const { currentModel } = useModels();
+  const { data: subscriptionStatus } = useSubscriptionStatus();
+  const isSubscribed = subscriptionStatus?.isSubscribed ?? false;
 
   return useMutation<GenerateImageResult | undefined, Error, GenerateImageParams>({
     mutationKey: generatedKeys.add(),
@@ -63,6 +67,7 @@ export const useGenerateImageMutation = (
         modelImageBase64,
         garmentTopImageBase64,
         garmentBottomImageBase64,
+        isSubscribed,
         garmentFullBodyImageBase64,
         garmentOuterwearImageBase64,
       });

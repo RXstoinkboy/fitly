@@ -11,19 +11,20 @@ import {
 } from '@/components/v2/ui';
 import { GarmentImage, GarmentType, ImageSource } from '@/state/types';
 import { useGarments, useSelectedGarments } from '@/state';
-import { useState, useEffect } from 'react';
+import { useState, useLayoutEffect } from 'react';
 import { useSelectPhotoSheet } from '@/components/modals';
 import { analyticsEvents, trackEvent } from '@/lib/analytics';
 import { AnalyticsFlow } from '@/lib/analytics/types';
 import { garmentTypeMap } from '@/constants/garments';
 
 export const useSelectGarment = (flow: AnalyticsFlow = 'app') => {
+  const [tempImage, setTempImage] = useState<{ filePath: string; source: ImageSource }>();
   const garments = useGarments();
   const selectedGarments = useSelectedGarments();
   const selectPhotoSheet = useSelectPhotoSheet();
-  const [tempImage, setTempImage] = useState<{ filePath: string; source: ImageSource }>();
 
   const onImageSelected = (filePath: string, source: ImageSource) => {
+    console.log('on image selected', filePath, source);
     setTempImage({ filePath, source });
   };
 
@@ -32,9 +33,10 @@ export const useSelectGarment = (flow: AnalyticsFlow = 'app') => {
     source: ImageSource,
     type: GarmentType,
   ): Promise<void> => {
+    selectPhotoSheet.toggle(false);
+
     const id = await garments.addGarment(filePath, source, type);
     selectedGarments.toggleSelection(id, true);
-    selectPhotoSheet.toggle(false);
 
     trackEvent(analyticsEvents.garments.added(type), {
       flow,
@@ -44,8 +46,8 @@ export const useSelectGarment = (flow: AnalyticsFlow = 'app') => {
     });
   };
 
-  useEffect(() => {
-    if (!selectPhotoSheet.isOpen) {
+  useLayoutEffect(() => {
+    if (selectPhotoSheet.isOpen) {
       setTempImage(undefined);
     }
   }, [selectPhotoSheet.isOpen]);
@@ -106,12 +108,15 @@ export const SelectGarment = ({
                       position="absolute"
                       t={'$2'}
                       r={'$2'}
+                      width={'$3'}
+                      height={'$3'}
                       circular
+                      iconSize={'$3'}
                       icon={<Trash />}
                     />
                   </>
                 </Square>
-                <Text text={'center'} type="secondary">
+                <Text size={'s'} text={'center'} type="secondary">
                   {garmentTypeMap[image.type]}
                 </Text>
               </YStack>

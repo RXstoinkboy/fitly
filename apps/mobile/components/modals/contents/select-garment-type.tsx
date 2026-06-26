@@ -13,15 +13,19 @@ export const SelectGarmentType = memo(
     onSuccess: (filePath: string, source: ImageSource, type: GarmentType) => Promise<void>;
   }) => {
     const onTop = () => {
+      console.log('on top');
       onSuccess(image.filePath, image.source, GarmentType.TOP);
     };
     const onBottom = () => {
+      console.log('on bottom');
       onSuccess(image.filePath, image.source, GarmentType.BOTTOM);
     };
     const onDress = () => {
+      console.log('on dress');
       onSuccess(image.filePath, image.source, GarmentType.DRESS);
     };
     const onOuterwear = () => {
+      console.log('on outerwear');
       onSuccess(image.filePath, image.source, GarmentType.OUTERWEAR);
     };
 

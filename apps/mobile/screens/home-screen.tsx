@@ -1,19 +1,22 @@
 import { AddModelPhoto, ImagesCarousel } from '@/components/ui-legacy';
-import { YStack, XStack, GenerateImageButton, ScreenWrapper } from '@/components/v2';
+import { YStack, XStack, GenerateImageButton, ScreenWrapper, Text } from '@/components/v2';
 import { SelectGarment, useSelectGarment } from '@/components/v2/domain';
-import { SelectGarmentType, SelectPhotoSheet, useSelectPhotoSheet } from '@/components/modals';
+import { SelectGarmentType, SelectPhotoSheet } from '@/components/modals';
 import { useGeneratedImages, useModels } from '@/state';
 import { useWindowDimensions } from 'react-native';
 import React from 'react';
-import { H6 } from 'tamagui';
 
 export const HomeScreen = () => {
   const { currentModel } = useModels();
   const { images, deleteGeneratedImagePermanently } = useGeneratedImages();
-  const { tempImage, onImageSelected, handleAddGarment, selectedGarments, garments } =
-    useSelectGarment('app');
-
-  const selectPhotoSheet = useSelectPhotoSheet();
+  const {
+    tempImage,
+    onImageSelected,
+    handleAddGarment,
+    selectPhotoSheet,
+    selectedGarments,
+    garments,
+  } = useSelectGarment('app');
 
   const { height: windowHeight } = useWindowDimensions();
   const carouselHeight = windowHeight * 0.5;
@@ -39,7 +42,9 @@ export const HomeScreen = () => {
                 <YStack gap="$4" px="$6">
                   <YStack gap={'$4'}>
                     <YStack gap={'$2'}>
-                      <H6 px={'$2'}>Let&apos;s try something on</H6>
+                      <Text fontFamily={'$heading'} size="xl" px={'$2'}>
+                        Let&apos;s try something on
+                      </Text>
                       <SelectGarment
                         removeGarment={garments.removeGarment}
                         selectedGarments={selectedGarments.selectedGarments}

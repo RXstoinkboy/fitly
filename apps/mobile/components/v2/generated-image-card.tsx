@@ -1,6 +1,6 @@
 import React from 'react';
-import { Pressable, Share } from 'react-native';
-import { Share2, Trash2 } from '@/icons';
+import { Pressable } from 'react-native';
+import { Trash } from '@/icons';
 import { Button, Image, View, XStack } from '@/components/v2/ui';
 import { GarmentImage } from '@/state/types';
 import { ConfirmationSheet, useConfirmationSheet } from '../modals';
@@ -31,16 +31,15 @@ export const GeneratedImageCard = ({
   onPress,
 }: GeneratedImageCardProps) => {
   const confirmation = useConfirmationSheet();
-  const handleShare = async () => {
-    try {
-      // TODO: add image URL to the message, but I think that in order to do it, I have to upload image to backend!
-      await Share.share({ message: 'Check out this outfit!' });
-    } catch (error) {
-      console.error('Error sharing image:', error);
-    }
-  };
+  // const handleShare = async () => {
+  //   try {
+  //     // TODO: add image URL to the message, but I think that in order to do it, I have to upload image to backend!
+  //     await Share.share({ message: 'Check out this outfit!' });
+  //   } catch (error) {
+  //     console.error('Error sharing image:', error);
+  //   }
+  // };
   // TODO: fix garment previews - garment ids and not added to generate image data
-
   return (
     <>
       <View
@@ -60,19 +59,25 @@ export const GeneratedImageCard = ({
           position="absolute"
           t={'$2'}
           r={'$2'}
-          circular
-          icon={<Trash2 />}
+          height={'$4'}
+          width={'$4'}
+          rounded={'$12'}
+          iconSize={'$5'}
+          icon={<Trash />}
           onPress={() => confirmation.toggle(true)}
         />
 
-        <Button
+        {/*<Button
+          height={'$4'}
+          width={'$4'}
+          rounded={'$12'}
           position="absolute"
           b={'$2'}
           l={'$2'}
-          circular
           icon={<Share2 />}
+          iconSize={'$5'}
           onPress={handleShare}
-        />
+        />*/}
 
         {/* Garment previews – bottom-right corner */}
         {garments.length > 0 && (

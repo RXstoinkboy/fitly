@@ -10,13 +10,21 @@ export const generateImage = async (payload: ImageGenerationInput) => {
   }
   const token = await getOrCreateToken();
 
-  const headers = buildBackendHeaders({ token });
+  const { isSubscribed, ...requestPayload } = payload;
+
+  const headers = buildBackendHeaders({ token, isSubscribed });
 
   const response = await fetch(`${API_URL}/api/v1/images/generate`, {
     method: 'POST',
     headers,
-    body: JSON.stringify(payload),
+    body: JSON.stringify(requestPayload),
   });
+
+  // Handle monthly usage limit exceeded
+  if (response.status === 429) {
+    const errorData = await response.json().catch(() => ({ error: response.statusText }));
+    throw new Error(errorData.message || `Monthly generation limit reached (200/month). Subscribe for unlimited access.`);
+  }
 
   if (response.status === 401) {
     await clearAuthIdentity();
@@ -25,8 +33,8 @@ export const generateImage = async (payload: ImageGenerationInput) => {
     // Retry the request with the new token
     const retryResponse = await fetch(`${API_URL}/api/v1/images/generate`, {
       method: 'POST',
-      headers: buildBackendHeaders({ token: regeneratedToken }),
-      body: JSON.stringify(payload),
+      headers: buildBackendHeaders({ token: regeneratedToken, isSubscribed }),
+      body: JSON.stringify(requestPayload),
     });
 
     if (!retryResponse.ok) {
@@ -34,7 +42,9 @@ export const generateImage = async (payload: ImageGenerationInput) => {
         .json()
         .catch(() => ({ error: retryResponse.statusText }));
       throw new Error(
-        errorData.error || `Unauthorized: Request failed with status ${retryResponse.status}`,
+        retryResponse.status === 429
+          ? errorData.message || `Monthly generation limit reached (200/month). Subscribe for unlimited access.`
+          : errorData.error || `Unauthorized: Request failed with status ${retryResponse.status}`,
       );
     }
     return retryResponse.json();

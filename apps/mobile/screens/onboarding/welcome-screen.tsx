@@ -67,7 +67,7 @@ export const WelcomeScreen = () => {
         />
 
         <YStack items={'center'} gap={'$4'} flex={1}>
-          <Text size={'xxl'} weight="bold">
+          <Text size={'xxl'} weight="bold" fontFamily={'$heading'}>
             Welcome!
           </Text>
           <Text size="s" type="secondary" text="center">

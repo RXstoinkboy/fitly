@@ -16,7 +16,7 @@ import {
   NoImagePlaceholder,
 } from '@/components/v2/ui';
 import { ImageSource, useModels, useOnboarding } from '@/state';
-import { ArrowLeft, ImageUp } from '@/icons';
+import { ArrowLeft, Repeat } from '@/icons';
 import { Link, usePathname } from 'expo-router';
 import { useEffect } from 'react';
 import * as FileSystem from 'expo-file-system/legacy';
@@ -91,7 +91,10 @@ export const SelectUserPhotoScreen = () => {
               t={10}
               r={10}
               rounded={'$radius.12'}
-              icon={<ImageUp />}
+              icon={<Repeat />}
+              width={'$3'}
+              height={'$3'}
+              iconSize={'$4'}
             />
           </View>
         ) : (
@@ -101,7 +104,7 @@ export const SelectUserPhotoScreen = () => {
             rounded={'$7'}
             bg={'$color3'}
             overflow="hidden"
-            onPress={() => {
+            onPress={(d) => {
               selectPhotoSheet.toggle();
             }}>
             <NoImagePlaceholder text="Add your photo" />
@@ -109,8 +112,8 @@ export const SelectUserPhotoScreen = () => {
         )}
 
         <YStack gap={'$4'} items={'center'}>
-          <Text size="xxl" weight="bold">
-            Take a photo of yourself
+          <Text size="xxl" weight="bold" fontFamily={'$heading'}>
+            Add you photo
           </Text>
           <Text size="s" type="secondary" text="center">
             This photo will be used to try new outfits. Don&apos;t worry, you can change it anytime

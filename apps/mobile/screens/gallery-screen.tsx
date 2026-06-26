@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, Dimensions } from 'react-native';
-import { YStack, Tabs, Text } from '@/components/v2/ui';
+import { YStack, Tabs, Text, ScreenWrapper } from '@/components/v2/ui';
 import {
   useGeneratedImages,
   useTopGarments,
@@ -39,6 +39,7 @@ const getFilteredGarments = (
 
 export const GalleryScreen = () => {
   const [garmentFilter, setGarmentFilter] = useState<GarmentFilter>('all');
+  const [tab, setTab] = useState<'garments' | 'generated'>('generated');
 
   const { images: generatedImages } = useGeneratedImages();
   const { garments: topGarments } = useTopGarments();
@@ -78,60 +79,75 @@ export const GalleryScreen = () => {
   );
 
   return (
-    <Tabs defaultValue="generated" flexDirection="column" flex={1}>
-      <Tabs.List>
-        <Tabs.Tab flex={1} value="generated">
-          <Text>Generated</Text>
-        </Tabs.Tab>
-        <Tabs.Tab flex={1} value="garments">
-          <Text>Garments</Text>
-        </Tabs.Tab>
-      </Tabs.List>
+    <ScreenWrapper>
+      <Tabs
+        defaultValue="generated"
+        flexDirection="column"
+        flex={1}
+        onValueChange={(value) => setTab(value as 'garments' | 'generated')}
+        value={tab}>
+        <Tabs.List pb={'$2'}>
+          <Tabs.Tab
+            flex={1}
+            value="generated"
+            borderBottomColor={tab === 'generated' ? '$accent1' : 'transparent'}
+            borderBottomWidth={2}>
+            <Text fontFamily={'$heading'}>Generated</Text>
+          </Tabs.Tab>
+          <Tabs.Tab
+            flex={1}
+            value="garments"
+            borderBottomColor={tab === 'garments' ? '$accent1' : 'transparent'}
+            borderBottomWidth={2}>
+            <Text fontFamily={'$heading'}>Garments</Text>
+          </Tabs.Tab>
+        </Tabs.List>
 
-      <Tabs.Content value="generated" flex={1}>
-        {generatedImages.length === 0 ? (
-          <YStack flex={1} items="center" justify="center">
-            <Text color="$color8">No generated images yet</Text>
-          </YStack>
-        ) : (
-          <FlatList
-            data={generatedImages}
-            keyExtractor={(item) => item.id}
-            renderItem={renderGeneratedItem}
-            numColumns={GRID_COLUMNS}
-            columnWrapperStyle={{ gap: GRID_SPACING }}
-            contentContainerStyle={{ gap: GRID_SPACING, padding: GRID_SPACING }}
-            showsVerticalScrollIndicator={false}
-            style={{ flex: 1 }}
-          />
-        )}
-      </Tabs.Content>
-
-      <Tabs.Content value="garments" flex={1}>
-        <YStack flex={1} position="relative">
-          {garmentImages.length === 0 ? (
+        <Tabs.Content value="generated" flex={1}>
+          {generatedImages.length === 0 ? (
             <YStack flex={1} items="center" justify="center">
-              <Text color="$color8">No garments yet</Text>
+              <Text color="$color8">No generated images yet</Text>
             </YStack>
           ) : (
             <FlatList
-              data={garmentImages}
+              data={generatedImages}
               keyExtractor={(item) => item.id}
-              renderItem={renderGarmentItem}
+              renderItem={renderGeneratedItem}
               numColumns={GRID_COLUMNS}
               columnWrapperStyle={{ gap: GRID_SPACING }}
-              contentContainerStyle={{
-                gap: GRID_SPACING,
-                padding: GRID_SPACING,
-                paddingBottom: 80,
-              }}
+              contentContainerStyle={{ gap: GRID_SPACING, padding: GRID_SPACING }}
               showsVerticalScrollIndicator={false}
               style={{ flex: 1 }}
             />
           )}
-          <GalleryFilter filter={garmentFilter} onChange={handleFilterChange} />
-        </YStack>
-      </Tabs.Content>
-    </Tabs>
+        </Tabs.Content>
+
+        <Tabs.Content value="garments" flex={1}>
+          <YStack flex={1} position="relative">
+            {garmentImages.length === 0 ? (
+              <YStack flex={1} items="center" justify="center">
+                <Text color="$color8">No garments yet</Text>
+              </YStack>
+            ) : (
+              <FlatList
+                data={garmentImages}
+                keyExtractor={(item) => item.id}
+                renderItem={renderGarmentItem}
+                numColumns={GRID_COLUMNS}
+                columnWrapperStyle={{ gap: GRID_SPACING }}
+                contentContainerStyle={{
+                  gap: GRID_SPACING,
+                  padding: GRID_SPACING,
+                  paddingBottom: 80,
+                }}
+                showsVerticalScrollIndicator={false}
+                style={{ flex: 1 }}
+              />
+            )}
+            <GalleryFilter filter={garmentFilter} onChange={handleFilterChange} />
+          </YStack>
+        </Tabs.Content>
+      </Tabs>
+    </ScreenWrapper>
   );
 };

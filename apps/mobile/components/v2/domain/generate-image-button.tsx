@@ -74,12 +74,13 @@ export const GenerateImageButton = () => {
   return (
     <Button
       bg={'$accent1'}
-      size={'$6'}
+      size={'l'}
       width={'100%'}
       disabled={isPending || isPresenting}
       icon={isPending ? Spinner : Sparkles}
+      iconSize={'$4'}
       onPress={onGenerateImage}>
-      {isPending ? loadingState : 'Create'}
+      {isPending ? loadingState : 'Try it on!'}
     </Button>
   );
 };

@@ -108,7 +108,9 @@ export const ImageDetailContent = ({
     onClose();
   };
 
-  const shouldShowShare = showShare ?? isGenerated;
+  // TODO: add share image functionality
+  // const shouldShowShare = showShare ?? isGenerated;
+  const shouldShowShare = false;
   const shouldShowDelete = showDelete ?? Boolean(onRemove);
 
   return (

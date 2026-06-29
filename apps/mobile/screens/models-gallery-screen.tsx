@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import { Dimensions, FlatList, Pressable } from 'react-native';
 import { router } from 'expo-router';
-import { Image, Text, YStack } from '@/components/v2/ui';
+import { Button, Image, ScreenWrapper, Text, XStack, YStack } from '@/components/v2/ui';
 import { useModels } from '@/state';
 import type { ModelImage } from '@/state/types';
+import { ArrowLeft, ChevronLeft } from '@tamagui/lucide-icons';
 
 const { width } = Dimensions.get('window');
 const GRID_COLUMNS = 3;
@@ -34,11 +35,30 @@ export const ModelsGalleryScreen = () => {
     [currentModelId, handleOpenDetail],
   );
 
+  const goBack = useCallback(() => {
+    router.navigate('/settings');
+  }, []);
+
   return (
-    <YStack flex={1} bg="$color1">
+    <ScreenWrapper>
+      <XStack width="100%" items={'center'} pb="$2">
+        <Text size="l" fontFamily={'$heading'} flex={1} text={'center'}>
+          Model gallery
+        </Text>
+        <Button
+          position="absolute"
+          l={0}
+          icon={ChevronLeft}
+          width={'$4'}
+          height={'$4'}
+          iconSize={'$8'}
+          onPress={goBack}
+          kind="ghost"
+        />
+      </XStack>
       {models.length === 0 ? (
         <YStack flex={1} items="center" justify="center" px="$4" gap="$2">
-          <Text size="l" weigth="semiBold">
+          <Text size="l" weight="semiBold">
             No models yet
           </Text>
           <Text type="secondary" text="center">
@@ -57,6 +77,6 @@ export const ModelsGalleryScreen = () => {
           style={{ flex: 1 }}
         />
       )}
-    </YStack>
+    </ScreenWrapper>
   );
 };

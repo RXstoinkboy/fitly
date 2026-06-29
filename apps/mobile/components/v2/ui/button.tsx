@@ -25,6 +25,7 @@ export const Button = styled(ButtonDS, {
       cta: {
         backgroundColor: '$accent1',
         borderColor: 'transparent',
+        rounded: '$12',
         hoverStyle: {
           backgroundColor: '$accent1',
           borderColor: 'transparent',

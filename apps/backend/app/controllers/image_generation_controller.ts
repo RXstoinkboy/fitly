@@ -1,7 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import env from '#start/env'
 import { imageGenerationValidator } from '#validators/image_generation_validator'
-import { GoogleGenAI, type Part } from '@google/genai'
+import { GoogleGenAI, type Part, ThinkingLevel } from '@google/genai'
 import UsageGeneration from '#models/usage_generation'
 import { DateTime } from 'luxon'
 
@@ -33,7 +33,7 @@ function buildPrompt(
     const label = garmentLabel(garments[0].field)
     const textPrompt = `
       Generate a new image where the person from the first image
-      is wearing the ${label} from the second image.
+      is wearing the ${label} from the second image (replace current ${label} if exists in this slot).
       Make sure that the ${label} from the second image preserves its original fit, color, and details.
     `
     return { textPrompt, imageParts }
@@ -43,7 +43,7 @@ function buildPrompt(
     const label = garmentLabel(g.field)
     const position = index + 2
     const suffix = getOrdinalSuffix(position)
-    return `the ${label} from the ${position}${suffix} image`
+    return `the ${label} from the ${position}${suffix} image (replace current ${label} if exists in this slot)`
   })
 
   const lastDesc = descriptions.pop()
@@ -140,8 +140,15 @@ export default class ImageGenerationController {
     let googleResponse
     try {
       googleResponse = await ai.models.generateContent({
-        model: 'gemini-3.1-flash-image-preview',
+        model: 'gemini-3.1-flash-image',
         contents: prompt,
+        config: {
+          temperature: 0.7,
+          maxOutputTokens: 65536,
+          topP: 0.95,
+          thinkingConfig: { thinkingLevel: ThinkingLevel.MINIMAL },
+          imageConfig: { imageSize: '1K' },
+        },
       })
     } catch (err) {
       // TODO: Improve error handling — introduce a structured error system (e.g.

@@ -49,7 +49,7 @@ const RootContent = () => {
         <Stack.Screen
           name="models-gallery"
           options={{
-            title: 'Model gallery',
+            headerShown: false,
           }}
         />
         <Stack.Screen

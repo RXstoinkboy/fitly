@@ -41,7 +41,7 @@ export const WelcomeScreen = () => {
             width,
             height,
           }}
-          loop={false}
+          loop={true}
           defaultIndex={images.length - 1}
           vertical={false}
           width={width}

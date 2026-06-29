@@ -1,48 +1,12 @@
 import { useImageSize, useMount, usePaywall } from '@/hooks';
-import {
-  YStack,
-  Text,
-  ScreenWrapper,
-  Image,
-  Button,
-  XStack,
-  View,
-  Spinner,
-} from '@/components/v2/ui';
+import { YStack, Text, ScreenWrapper, Image, Button, XStack, View } from '@/components/v2/ui';
+import { ImageLoader } from '@/components/v2';
 import { generatedKeys } from '@/queries/image-generation/keys';
-import { useCurrentModel, useGeneratedImages, useOnboarding } from '@/state';
+import { useGeneratedImages, useOnboarding } from '@/state';
 import { useIsMutating } from '@tanstack/react-query';
 import { Link, usePathname, useRouter } from 'expo-router';
 import { ArrowLeft } from '@/icons';
 import { analyticsEvents, trackEvent } from '@/lib/analytics';
-import { useLoadingState } from '@/hooks/use-loading-state';
-
-const ImageLoader = () => {
-  const { currentModel } = useCurrentModel();
-  const loadingState = useLoadingState({ isPending: true });
-
-  return (
-    <YStack rounded={'$7'} overflow="hidden">
-      <YStack
-        position="absolute"
-        z={'$1'}
-        t={'50%'}
-        l={'50%'}
-        items={'center'}
-        transform={'translate(-50%, -50%)'}>
-        <Spinner size="large" color="$accent2" />
-        <Text color="$color1">{loadingState}</Text>
-      </YStack>
-      <Image
-        src={currentModel?.filePath}
-        width={300}
-        height={400}
-        aspectRatio={3 / 4}
-        blurRadius={80}
-      />
-    </YStack>
-  );
-};
 
 export const FinishScreen = () => {
   const { setOnboardingStep, completeOnboarding } = useOnboarding();

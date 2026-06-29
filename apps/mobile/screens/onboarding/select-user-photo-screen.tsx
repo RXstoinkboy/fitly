@@ -16,7 +16,7 @@ import {
   NoImagePlaceholder,
 } from '@/components/v2/ui';
 import { ImageSource, useModels, useOnboarding } from '@/state';
-import { ArrowLeft, ImageUp } from '@/icons';
+import { ArrowLeft, Repeat } from '@/icons';
 import { Link, usePathname } from 'expo-router';
 import { useEffect } from 'react';
 import * as FileSystem from 'expo-file-system/legacy';
@@ -78,20 +78,25 @@ export const SelectUserPhotoScreen = () => {
       <YStack flex={1} items={'center'} gap={'$6'}>
         {currentModel ? (
           <View width={width} height={height} rounded={'$7'} overflow="hidden" position="relative">
-            <Image
-              src={currentModel?.filePath}
-              width={width}
-              height={height}
-              rounded={'$7'}
-              aspectRatio={3 / 4}
-            />
+            <View justify="center" items="center" flex={1}>
+              <Image
+                src={currentModel?.filePath}
+                width={width}
+                height={height}
+                objectFit="cover"
+                aspectRatio={3 / 4}
+              />
+            </View>
             <Button
               onPress={() => selectPhotoSheet.toggle()}
               position="absolute"
               t={10}
               r={10}
               rounded={'$radius.12'}
-              icon={<ImageUp />}
+              icon={<Repeat />}
+              width={'$3'}
+              height={'$3'}
+              iconSize={'$4'}
             />
           </View>
         ) : (
@@ -101,16 +106,15 @@ export const SelectUserPhotoScreen = () => {
             rounded={'$7'}
             bg={'$color3'}
             overflow="hidden"
-            onPress={() => {
+            onPress={(d) => {
               selectPhotoSheet.toggle();
             }}>
             <NoImagePlaceholder text="Add your photo" />
           </View>
         )}
-
         <YStack gap={'$4'} items={'center'}>
-          <Text size="xxl" weight="bold">
-            Take a photo of yourself
+          <Text size="xxl" weight="bold" fontFamily={'$heading'}>
+            {currentModel ? 'You look great!' : 'Add your photo'}
           </Text>
           <Text size="s" type="secondary" text="center">
             This photo will be used to try new outfits. Don&apos;t worry, you can change it anytime
@@ -118,7 +122,7 @@ export const SelectUserPhotoScreen = () => {
           {currentModel?.filePath ? (
             <Link asChild href={'/onboarding/select-garments'}>
               <Button size="l" kind="cta" width={width}>
-                Go next!
+                Select clothes
               </Button>
             </Link>
           ) : null}

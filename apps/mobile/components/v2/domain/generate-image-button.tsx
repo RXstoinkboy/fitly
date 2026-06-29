@@ -16,6 +16,7 @@ export const GenerateImageButton = () => {
     onSuccess: (data) => {
       if (data && currentModelId) {
         addGeneratedImage(data.filePath, currentModelId, selectedGarments.selectedIds);
+        selectedGarments.clearSelection();
       }
     },
     onError: (error) => {
@@ -68,18 +69,19 @@ export const GenerateImageButton = () => {
       context: 'app',
       modelId: currentModelId,
     });
-    selectedGarments.clearSelection();
   };
 
   return (
     <Button
       bg={'$accent1'}
-      size={'$6'}
+      size={'l'}
       width={'100%'}
+      kind={'cta'}
       disabled={isPending || isPresenting}
       icon={isPending ? Spinner : Sparkles}
+      iconSize={'$4'}
       onPress={onGenerateImage}>
-      {isPending ? loadingState : 'Create'}
+      {isPending ? loadingState : 'Try it on'}
     </Button>
   );
 };

@@ -15,6 +15,12 @@ import { useOnboarding } from '@/state';
 import { SubscriptionProvider } from '@/components/subscription';
 import { AnalyticsProvider } from '@/lib/analytics';
 import { DevMenu } from '@/components/dev-menu';
+import {
+  PlayfairDisplay_400Regular,
+  PlayfairDisplay_700Bold,
+  PlayfairDisplay_400Regular_Italic,
+  PlayfairDisplay_700Bold_Italic,
+} from '@expo-google-fonts/playfair-display';
 
 const RootContent = () => {
   const { isCompleted } = useOnboarding();
@@ -43,7 +49,7 @@ const RootContent = () => {
         <Stack.Screen
           name="models-gallery"
           options={{
-            title: 'Model gallery',
+            headerShown: false,
           }}
         />
         <Stack.Screen
@@ -71,6 +77,10 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
     InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+    PlayfairDisplay_400Regular,
+    PlayfairDisplay_700Bold,
+    PlayfairDisplay_400Regular_Italic,
+    PlayfairDisplay_700Bold_Italic,
   });
 
   if (!loaded) {

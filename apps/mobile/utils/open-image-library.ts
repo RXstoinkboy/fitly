@@ -5,7 +5,7 @@ export const openImageLibrary = async () => {
   let result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ['images'],
     allowsEditing: true,
-    aspect: [3, 4],
+    allowsMultipleSelection: false,
     quality: 1,
   });
 

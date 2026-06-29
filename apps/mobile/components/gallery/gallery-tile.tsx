@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable } from 'react-native';
-import { Image } from '@/components/v2/ui';
+import { Image, View } from '@/components/v2/ui';
 import type { GeneratedImage, GarmentImage } from '@/state/types';
 
 type GalleryTileProps = {
@@ -12,7 +12,9 @@ type GalleryTileProps = {
 export const GalleryTile = ({ item, tileSize, onPress }: GalleryTileProps) => {
   return (
     <Pressable onPress={() => onPress(item)}>
-      <Image src={item.filePath} width={tileSize} height={tileSize} objectFit="cover" />
+      <View overflow="hidden" rounded={'$3'}>
+        <Image src={item.filePath} width={tileSize} height={tileSize} objectFit="cover" />
+      </View>
     </Pressable>
   );
 };

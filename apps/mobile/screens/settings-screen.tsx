@@ -9,7 +9,7 @@ import {
   View,
   ListItem,
 } from '@/components/v2/ui';
-import { ImageUp, MessageCircle, Sparkles } from '@/icons';
+import { ImageUp, MessageCircle, Sparkles, Wallet } from '@/icons';
 import { ImageSource, useModels } from '@/state';
 import { openCamera } from '@/utils/open-camera';
 import { openImageLibrary } from '@/utils/open-image-library';
@@ -89,6 +89,7 @@ export const SettingsScreen = () => {
             bg={'$color3'}>
             <YGroup.Item>
               <ListItem
+                iconSize={'$5'}
                 bg={'$color3'}
                 icon={<ImageUp />}
                 title="Change model"
@@ -99,7 +100,8 @@ export const SettingsScreen = () => {
             <Separator />
             <YGroup.Item>
               <ListItem
-                icon={<Sparkles />}
+                icon={<Wallet />}
+                iconSize={'$5'}
                 bg={'$color3'}
                 title="Manage subscriptions"
                 subTitle={isPresenting ? 'Opening…' : 'Open RevenueCat Customer Center'}
@@ -109,6 +111,7 @@ export const SettingsScreen = () => {
             <Separator />
             <YGroup.Item>
               <ListItem
+                iconSize={'$5'}
                 bg={'$color3'}
                 icon={<MessageCircle />}
                 title="Add app suggestion"

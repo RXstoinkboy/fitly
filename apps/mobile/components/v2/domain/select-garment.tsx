@@ -78,7 +78,7 @@ export const SelectGarment = ({
 }: SelectGarmentProps) => {
   return (
     <XStack width={'100%'} justify={'space-evenly'}>
-      <ScrollView horizontal>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <SquareButton onPress={() => toggle()} />
 
         {selectedGarments

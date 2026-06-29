@@ -1,5 +1,13 @@
 import { AddModelPhoto, ImagesCarousel } from '@/components/ui-legacy';
-import { YStack, XStack, GenerateImageButton, ScreenWrapper, Text } from '@/components/v2';
+import {
+  YStack,
+  XStack,
+  GenerateImageButton,
+  ScreenWrapper,
+  Text,
+  View,
+  Image,
+} from '@/components/v2';
 import { SelectGarment, useSelectGarment } from '@/components/v2/domain';
 import { SelectGarmentType, SelectPhotoSheet } from '@/components/modals';
 import { useGeneratedImages, useModels } from '@/state';
@@ -36,10 +44,28 @@ export const HomeScreen = () => {
                     images={images}
                     onRemove={deleteGeneratedImagePermanently}
                   />
-                ) : null}
+                ) : (
+                  <View
+                    width={0.93 * carouselHeight * (3 / 4)}
+                    height={0.93 * carouselHeight}
+                    justify="center"
+                    items="center"
+                    rounded={'$7'}
+                    borderWidth={1}
+                    borderColor={'transparent'}
+                    overflow="hidden">
+                    <Image
+                      src={currentModel?.filePath}
+                      width={(0.93 * carouselHeight) / (3 / 4)}
+                      height={0.93 * carouselHeight}
+                      objectFit="cover"
+                      aspectRatio={3 / 4}
+                    />
+                  </View>
+                )}
               </YStack>
               {currentModel ? (
-                <YStack gap="$4" px="$6">
+                <YStack gap="$4" px="$2">
                   <YStack gap={'$4'}>
                     <YStack gap={'$2'}>
                       <Text fontFamily={'$heading'} size="xl" px={'$2'}>

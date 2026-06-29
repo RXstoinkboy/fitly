@@ -78,13 +78,15 @@ export const SelectUserPhotoScreen = () => {
       <YStack flex={1} items={'center'} gap={'$6'}>
         {currentModel ? (
           <View width={width} height={height} rounded={'$7'} overflow="hidden" position="relative">
-            <Image
-              src={currentModel?.filePath}
-              width={width}
-              height={height}
-              rounded={'$7'}
-              aspectRatio={3 / 4}
-            />
+            <View justify="center" items="center" flex={1}>
+              <Image
+                src={currentModel?.filePath}
+                width={width}
+                height={height}
+                objectFit="cover"
+                aspectRatio={3 / 4}
+              />
+            </View>
             <Button
               onPress={() => selectPhotoSheet.toggle()}
               position="absolute"
@@ -110,7 +112,6 @@ export const SelectUserPhotoScreen = () => {
             <NoImagePlaceholder text="Add your photo" />
           </View>
         )}
-
         <YStack gap={'$4'} items={'center'}>
           <Text size="xxl" weight="bold" fontFamily={'$heading'}>
             {currentModel ? 'You look great!' : 'Add your photo'}

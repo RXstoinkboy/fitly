@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Image, View } from '@/components/v2/ui';
-import Carousel from 'react-native-reanimated-carousel';
+import Carousel, { type ICarouselInstance } from 'react-native-reanimated-carousel';
 import Animated, { useSharedValue, FadeInDown } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import { GeneratedImage, GarmentImage } from '@/state/types';
@@ -8,6 +8,7 @@ import { useTopGarments, useBottomGarments, useDressGarments, useOuterwearGarmen
 import { useRouter } from 'expo-router';
 import { GeneratedImageCard } from './generated-image-card';
 import { analyticsEvents, trackEvent } from '@/lib/analytics';
+import { ImageLoader } from './image-loader';
 
 // ---------------------------------------------------------------------------
 // Individual slide
@@ -40,19 +41,24 @@ const SlideItem = ({ image, garments, onRemove, onPress }: SlideItemProps) => {
 // ---------------------------------------------------------------------------
 // Carousel
 // ---------------------------------------------------------------------------
+const PLACEHOLDER_ID = '__generating_placeholder__';
+
 export function ImagesCarousel({
   height,
   images,
   onRemove,
+  isGenerating = false,
 }: {
   height: number;
   images: GeneratedImage[];
   onRemove: (id: string) => void;
+  isGenerating?: boolean;
 }) {
   const { width } = Dimensions.get('window');
 
   const router = useRouter();
 
+  const carouselRef = React.useRef<ICarouselInstance>(null);
   const directionAnimVal = useSharedValue(0);
 
   const { garments: topGarments } = useTopGarments();
@@ -61,9 +67,39 @@ export function ImagesCarousel({
   const { garments: outerwearGarments } = useOuterwearGarments();
   const allGarments = [...topGarments, ...bottomGarments, ...dressGarments, ...outerwearGarments];
 
+  const displayImages = React.useMemo(() => {
+    if (isGenerating) {
+      return [...images, { id: PLACEHOLDER_ID } as GeneratedImage];
+    }
+    return images;
+  }, [images, isGenerating]);
+
+  const prevGenerating = React.useRef(isGenerating);
+
+  React.useEffect(() => {
+    if (isGenerating && !prevGenerating.current) {
+      setTimeout(() => {
+        carouselRef.current?.scrollTo({
+          index: displayImages.length - 1,
+          animated: true,
+        });
+      }, 100);
+    }
+    if (!isGenerating && prevGenerating.current) {
+      setTimeout(() => {
+        carouselRef.current?.scrollTo({
+          index: displayImages.length - 1,
+          animated: false,
+        });
+      }, 50);
+    }
+    prevGenerating.current = isGenerating;
+  }, [isGenerating, displayImages.length]);
+
   return (
     <View style={{ flex: 1 }}>
       <Carousel
+        ref={carouselRef}
         style={{
           width,
           height,
@@ -71,30 +107,41 @@ export function ImagesCarousel({
           alignItems: 'center',
         }}
         loop={false}
-        defaultIndex={images.length - 1}
+        defaultIndex={displayImages.length - 1}
         vertical={false}
         width={width}
         height={height}
-        data={images}
-        renderItem={({ index, item }) => (
-          <SlideItem
-            key={index}
-            image={item}
-            garments={allGarments}
-            onRemove={() => onRemove(item.id)}
-            onPress={() => {
-              trackEvent(analyticsEvents.gallery.openedItem('generated'), {
-                itemId: item.id,
-                type: 'generated',
-                source: 'main_carousel',
-              });
-              router.push({
-                pathname: '/image-detail/[id]',
-                params: { id: item.id, type: 'generated' },
-              });
-            }}
-          />
-        )}
+        data={displayImages}
+        renderItem={({ index, item }) => {
+          if (item.id === PLACEHOLDER_ID) {
+            return (
+              <Animated.View
+                entering={FadeInDown.duration(1000)}
+                style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ImageLoader wrapped={false} />
+              </Animated.View>
+            );
+          }
+          return (
+            <SlideItem
+              key={index}
+              image={item}
+              garments={allGarments}
+              onRemove={() => onRemove(item.id)}
+              onPress={() => {
+                trackEvent(analyticsEvents.gallery.openedItem('generated'), {
+                  itemId: item.id,
+                  type: 'generated',
+                  source: 'main_carousel',
+                });
+                router.push({
+                  pathname: '/image-detail/[id]',
+                  params: { id: item.id, type: 'generated' },
+                });
+              }}
+            />
+          );
+        }}
         mode="parallax"
         modeConfig={{
           parallaxScrollingScale: 0.9,

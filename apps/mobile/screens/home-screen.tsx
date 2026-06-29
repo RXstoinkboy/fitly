@@ -13,6 +13,8 @@ import { SelectGarmentType, SelectPhotoSheet } from '@/components/modals';
 import { useGeneratedImages, useModels } from '@/state';
 import { useWindowDimensions } from 'react-native';
 import React from 'react';
+import { useIsMutating } from '@tanstack/react-query';
+import { generatedKeys } from '@/queries/image-generation/keys';
 
 export const HomeScreen = () => {
   const { currentModel } = useModels();
@@ -29,6 +31,10 @@ export const HomeScreen = () => {
   const { height: windowHeight } = useWindowDimensions();
   const carouselHeight = windowHeight * 0.5;
 
+  const isGenerating = useIsMutating({
+    mutationKey: generatedKeys.add(),
+  });
+
   return (
     <>
       <ScreenWrapper>
@@ -38,11 +44,12 @@ export const HomeScreen = () => {
           ) : (
             <YStack flex={1} minW={'100%'}>
               <YStack flex={1} justify="center" items="center">
-                {images.length > 0 ? (
+                {images.length > 0 || isGenerating ? (
                   <ImagesCarousel
                     height={carouselHeight}
                     images={images}
                     onRemove={deleteGeneratedImagePermanently}
+                    isGenerating={isGenerating > 0}
                   />
                 ) : (
                   <View

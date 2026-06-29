@@ -60,6 +60,8 @@ export function ImagesCarousel({
 
   const carouselRef = React.useRef<ICarouselInstance>(null);
   const directionAnimVal = useSharedValue(0);
+  const currentIndex = React.useRef(0);
+  const prevImagesLength = React.useRef(images.length);
 
   const { garments: topGarments } = useTopGarments();
   const { garments: bottomGarments } = useBottomGarments();
@@ -96,6 +98,15 @@ export function ImagesCarousel({
     prevGenerating.current = isGenerating;
   }, [isGenerating, displayImages.length]);
 
+  React.useEffect(() => {
+    if (images.length < prevImagesLength.current) {
+      const newIndex = Math.max(0, currentIndex.current - 1);
+      currentIndex.current = newIndex;
+      carouselRef.current?.scrollTo({ index: newIndex, animated: true });
+    }
+    prevImagesLength.current = images.length;
+  }, [images.length]);
+
   return (
     <View style={{ flex: 1 }}>
       <Carousel
@@ -113,12 +124,16 @@ export function ImagesCarousel({
         height={height}
         data={displayImages}
         renderItem={({ index, item }) => {
-          if (item.id === PLACEHOLDER_ID) {
+          if (isGenerating) {
             return (
               <Animated.View
                 entering={FadeInDown.duration(1000)}
-                style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <ImageLoader wrapped={false} />
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <ImageLoader wrapped={true} width={0.9 * width} height={height} />
               </Animated.View>
             );
           }
@@ -149,6 +164,9 @@ export function ImagesCarousel({
         }}
         onProgressChange={(_offsetProgress, absoluteProgress) => {
           directionAnimVal.value = absoluteProgress;
+        }}
+        onSnapToItem={(index) => {
+          currentIndex.current = index;
         }}
       />
     </View>

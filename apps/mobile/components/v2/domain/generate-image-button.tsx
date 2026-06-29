@@ -16,6 +16,7 @@ export const GenerateImageButton = () => {
     onSuccess: (data) => {
       if (data && currentModelId) {
         addGeneratedImage(data.filePath, currentModelId, selectedGarments.selectedIds);
+        selectedGarments.clearSelection();
       }
     },
     onError: (error) => {
@@ -68,7 +69,6 @@ export const GenerateImageButton = () => {
       context: 'app',
       modelId: currentModelId,
     });
-    selectedGarments.clearSelection();
   };
 
   return (

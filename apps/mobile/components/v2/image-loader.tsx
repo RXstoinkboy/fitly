@@ -4,9 +4,11 @@ import { useLoadingState } from '@/hooks/use-loading-state';
 
 type ImageLoaderProps = {
   wrapped?: boolean;
+  width?: number;
+  height?: number;
 };
 
-export const ImageLoader = ({ wrapped = true }: ImageLoaderProps) => {
+export const ImageLoader = ({ wrapped = true, width = 300, height = 400 }: ImageLoaderProps) => {
   const { currentModel } = useCurrentModel();
   const loadingState = useLoadingState({ isPending: true });
 
@@ -24,9 +26,10 @@ export const ImageLoader = ({ wrapped = true }: ImageLoaderProps) => {
       </YStack>
       <Image
         src={currentModel?.filePath}
-        width={300}
-        height={400}
+        width={width}
+        height={height * 1.1}
         aspectRatio={3 / 4}
+        objectFit="cover"
         blurRadius={80}
       />
     </>
@@ -34,7 +37,14 @@ export const ImageLoader = ({ wrapped = true }: ImageLoaderProps) => {
 
   if (wrapped) {
     return (
-      <YStack rounded={'$7'} overflow="hidden">
+      <YStack
+        width={width}
+        height={height}
+        rounded={'$7'}
+        overflow="hidden"
+        justify={'center'}
+        items={'center'}
+        position="relative">
         {loader}
       </YStack>
     );

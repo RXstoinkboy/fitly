@@ -113,7 +113,7 @@ export const SelectUserPhotoScreen = () => {
 
         <YStack gap={'$4'} items={'center'}>
           <Text size="xxl" weight="bold" fontFamily={'$heading'}>
-            Add you photo
+            {currentModel ? 'You look great!' : 'Add your photo'}
           </Text>
           <Text size="s" type="secondary" text="center">
             This photo will be used to try new outfits. Don&apos;t worry, you can change it anytime
@@ -121,7 +121,7 @@ export const SelectUserPhotoScreen = () => {
           {currentModel?.filePath ? (
             <Link asChild href={'/onboarding/select-garments'}>
               <Button size="l" kind="cta" width={width}>
-                Go next!
+                Select clothes
               </Button>
             </Link>
           ) : null}

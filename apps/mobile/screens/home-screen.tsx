@@ -68,7 +68,13 @@ export const HomeScreen = () => {
         onSuccess={onImageSelected}
         subject="garment"
         flow="app">
-        {tempImage ? <SelectGarmentType image={tempImage} onSuccess={handleAddGarment} /> : null}
+        {tempImage ? (
+          <SelectGarmentType
+            selectedGarments={selectedGarments.selectedGarments.map((garment) => garment.type)}
+            image={tempImage}
+            onSuccess={handleAddGarment}
+          />
+        ) : null}
       </SelectPhotoSheet>
     </>
   );

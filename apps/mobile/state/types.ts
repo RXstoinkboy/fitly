@@ -9,7 +9,12 @@
 
 export type ImageSource = 'camera' | 'library' | 'url';
 
-export type GarmentType = 'top' | 'bottom' | 'dress' | 'outerwear';
+export enum GarmentType {
+  TOP = 'top',
+  BOTTOM = 'bottom',
+  DRESS = 'dress',
+  OUTERWEAR = 'outerwear',
+}
 
 // ============================================================================
 // Base Types

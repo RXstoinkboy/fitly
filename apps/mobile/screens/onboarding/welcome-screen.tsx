@@ -27,21 +27,25 @@ export const WelcomeScreen = () => {
   };
 
   const directionAnimVal = useSharedValue(0);
-  const images = ['https://picsum.photos/200/300', 'https://picsum.photos/200/300'];
+  const images = [
+    require('@/assets/images/generation-examples/1.png'),
+    require('@/assets/images/generation-examples/2.png'),
+    require('@/assets/images/generation-examples/3.png'),
+    require('@/assets/images/generation-examples/4.png'),
+    require('@/assets/images/generation-examples/5.png'),
+    require('@/assets/images/generation-examples/6.png'),
+  ];
 
   return (
     <ScreenWrapper>
       <YStack flex={1} items={'center'} gap={'$6'}>
-        {/* TODO: add here some attractive stock image */}
-        {/* TODO: add animation from first to another image on welcome */}
-        {/* TODO: apply similar improvements to main carousel ==> even better extract common carousel wrapper part */}
-
         <Carousel
           style={{
             width,
             height,
           }}
           loop={true}
+          autoPlay
           defaultIndex={images.length - 1}
           vertical={false}
           width={width}

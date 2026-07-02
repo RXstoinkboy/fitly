@@ -6,6 +6,7 @@ import { ImageSource } from '@/state';
 import { analyticsEvents, trackEvent } from '@/lib/analytics';
 import { AnalyticsFlow } from '@/lib/analytics/types';
 import { Images, Camera } from '@/icons';
+import { ImageEditor } from 'expo-dynamic-image-crop';
 
 export const useSelectPhotoSheet = () => {
   const [opened, setOpened] = useState(false);
@@ -71,15 +72,14 @@ const SheetContents = memo(
     subject: 'model' | 'garment';
     flow: AnalyticsFlow;
   }) => {
+    const [pendingImageUri, setPendingImageUri] = useState<string | null>(null);
+    const [pendingSource, setPendingSource] = useState<ImageSource | null>(null);
+
     const onSuccessCallback =
       (source: ImageSource) =>
       (image: string): void => {
-        trackEvent(analyticsEvents.photos.added(subject, source), {
-          flow,
-          subject,
-          source,
-        });
-        onSuccess(image, source);
+        setPendingImageUri(image);
+        setPendingSource(source);
       };
 
     const getImageFromDeviceLibrary = getImageFromDevice(
@@ -89,26 +89,48 @@ const SheetContents = memo(
     const getImageFromDeviceCamera = getImageFromDevice(openCamera, onSuccessCallback('camera'));
 
     return (
-      <XStack width={'100%'} gap={'$2'} pb={'$4'} justify={'space-evenly'}>
-        <Button
-          onPress={getImageFromDeviceLibrary}
-          flexDirection="column"
-          height={'auto'}
-          p="$3"
-          flex={1}>
-          <Images size={'$3'} />
-          Select from gallery
-        </Button>
-        <Button
-          onPress={getImageFromDeviceCamera}
-          flexDirection="column"
-          height={'auto'}
-          p="$3"
-          flex={1}>
-          <Camera size={'$3'} />
-          Use a camera
-        </Button>
-      </XStack>
+      <>
+        <XStack width={'100%'} gap={'$2'} pb={'$4'} justify={'space-evenly'}>
+          <Button
+            onPress={getImageFromDeviceLibrary}
+            flexDirection="column"
+            height={'auto'}
+            p="$3"
+            flex={1}>
+            <Images size={'$3'} />
+            Select from gallery
+          </Button>
+          <Button
+            onPress={getImageFromDeviceCamera}
+            flexDirection="column"
+            height={'auto'}
+            p="$3"
+            flex={1}>
+            <Camera size={'$3'} />
+            Use a camera
+          </Button>
+        </XStack>
+        <ImageEditor
+          isVisible={!!pendingImageUri}
+          imageUri={pendingImageUri}
+          onEditingCancel={() => {
+            setPendingImageUri(null);
+            setPendingSource(null);
+          }}
+          onEditingComplete={(result) => {
+            if (pendingSource) {
+              trackEvent(analyticsEvents.photos.added(subject, pendingSource), {
+                flow,
+                subject,
+                source: pendingSource,
+              });
+              onSuccess(result.uri, pendingSource);
+            }
+            setPendingImageUri(null);
+            setPendingSource(null);
+          }}
+        />
+      </>
     );
   },
 );

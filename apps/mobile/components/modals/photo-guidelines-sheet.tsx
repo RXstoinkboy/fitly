@@ -35,7 +35,12 @@ const SheetContents = memo(() => (
       Photo guidelines for best results:
     </Text>
     <View m={'auto'} rounded={'$7'} width={300} height={400} overflow="hidden">
-      <Image src={'https://picsum.photos/300/400'} width={300} height={400} aspectRatio={3 / 4} />
+      <Image
+        src={require('@/assets/images/generation-examples/1.png')}
+        width={300}
+        height={400}
+        aspectRatio={3 / 4}
+      />
     </View>
     <YGroup>
       <YGroup.Item>

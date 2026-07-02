@@ -4,7 +4,7 @@ export const openCamera = async () => {
   // No permissions request is necessary for launching the image library
   const result = await ImagePicker.launchCameraAsync({
     mediaTypes: ['images'],
-    allowsEditing: true,
+    allowsEditing: false,
     allowsMultipleSelection: false,
     quality: 1,
   });

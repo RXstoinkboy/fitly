@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
+import { ImageEditor } from 'expo-dynamic-image-crop';
 import { router } from 'expo-router';
 import {
   Image,
@@ -23,6 +24,8 @@ export const SettingsScreen = () => {
   const { openCustomerCenter, isPresenting } = usePaywall();
   const [isChangeSheetOpen, setIsChangeSheetOpen] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [pendingImageUri, setPendingImageUri] = useState<string | null>(null);
+  const pendingSourceRef = useRef<ImageSource | null>(null);
 
   const handleSheetChange = useCallback((open: boolean) => setIsChangeSheetOpen(open), []);
   const closeSheet = useCallback(() => setIsChangeSheetOpen(false), []);
@@ -32,20 +35,10 @@ export const SettingsScreen = () => {
       const image = await picker();
       if (!image) return;
 
-      setIsAdding(true);
-      try {
-        const id = await addModel(image, source);
-        setCurrentModel(id);
-        trackEvent(analyticsEvents.photos.added('model', source), {
-          flow: 'app',
-          source,
-        });
-        closeSheet();
-      } finally {
-        setIsAdding(false);
-      }
+      pendingSourceRef.current = source;
+      setPendingImageUri(image);
     },
-    [addModel, closeSheet, setCurrentModel],
+    [],
   );
 
   const handleOpenGallery = useCallback(() => {
@@ -130,6 +123,29 @@ export const SettingsScreen = () => {
         onSelectLibrary={() => handleAddModel(openImageLibrary, 'library')}
         onGoToGallery={handleOpenGallery}
         isLoading={isAdding}
+      />
+
+      <ImageEditor
+        isVisible={!!pendingImageUri}
+        imageUri={pendingImageUri}
+        onEditingCancel={() => setPendingImageUri(null)}
+        onEditingComplete={async (result) => {
+          const source = pendingSourceRef.current!;
+          setIsAdding(true);
+          try {
+            const id = await addModel(result.uri, source);
+            setCurrentModel(id);
+            trackEvent(analyticsEvents.photos.added('model', source), {
+              flow: 'app',
+              source,
+            });
+            closeSheet();
+          } finally {
+            setIsAdding(false);
+            setPendingImageUri(null);
+            pendingSourceRef.current = null;
+          }
+        }}
       />
     </ScreenWrapper>
   );

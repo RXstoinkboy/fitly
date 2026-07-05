@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "packageManager": "npm",
+  "packageManager": "npm@11.3.0",
   "scripts": {
     "db": "docker compose up -d db",
     "dev": "npm run db && tsx watch bin/server.ts",

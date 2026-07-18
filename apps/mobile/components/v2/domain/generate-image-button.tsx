@@ -10,13 +10,28 @@ export const GenerateImageButton = () => {
   const { addGeneratedImage } = useGeneratedImages();
   const { currentModelId } = useModels();
   const selectedGarments = useSelectedGarments();
-  const { requireSubscription, isPresenting } = usePaywall();
+  const { requireSubscription, isPresenting, status } = usePaywall();
+
+  const trialRemaining =
+    status.trialGenerationsLimit !== undefined && status.trialGenerationsUsed !== undefined
+      ? Math.max(0, status.trialGenerationsLimit - status.trialGenerationsUsed)
+      : null;
+
+  const isOnTrial = status.periodType === 'trial' && trialRemaining !== null && trialRemaining > 0;
+  const isTrialExhausted =
+    status.periodType === 'trial' && trialRemaining !== null && trialRemaining === 0;
 
   const { mutate, isPending } = useGenerateImageMutation({
     onSuccess: (data) => {
       if (data && currentModelId) {
         addGeneratedImage(data.filePath, currentModelId, selectedGarments.selectedIds);
         selectedGarments.clearSelection();
+        if (isOnTrial && trialRemaining !== null) {
+          trackEvent(analyticsEvents.trial.generationUsed(), {
+            flow: 'app',
+            remaining: trialRemaining - 1,
+          });
+        }
       }
     },
     onError: (error) => {
@@ -34,6 +49,12 @@ export const GenerateImageButton = () => {
   const onGenerateImage = async () => {
     if (!currentModelId) {
       console.error('No model selected');
+      return;
+    }
+
+    if (isTrialExhausted) {
+      trackEvent(analyticsEvents.trial.exhausted(), { flow: 'app' });
+      await requireSubscription('trial_exhausted');
       return;
     }
 
@@ -71,9 +92,16 @@ export const GenerateImageButton = () => {
     });
   };
 
+  const getButtonText = () => {
+    if (isTrialExhausted) return 'Upgrade to Premium';
+    if (isPending) return loadingState;
+    if (isOnTrial) return `Try it on · Trial ${trialRemaining} left`;
+    return 'Try it on';
+  };
+
   return (
     <Button
-      bg={'$accent1'}
+      bg={isTrialExhausted ? '$accent2' : '$accent1'}
       size={'l'}
       width={'100%'}
       kind={'cta'}
@@ -81,7 +109,7 @@ export const GenerateImageButton = () => {
       icon={isPending ? Spinner : Sparkles}
       iconSize={'$4'}
       onPress={onGenerateImage}>
-      {isPending ? loadingState : 'Try it on'}
+      {getButtonText()}
     </Button>
   );
 };

@@ -26,6 +26,22 @@ export default await Env.create(new URL('../', import.meta.url), {
   API_KEY: Env.schema.string.optional(),
 
   /**
+   * RevenueCat server-side API key (Stripe/secret key) for REST calls.
+   */
+  REVENUECAT_API_KEY: Env.schema.string.optional(),
+
+  /**
+   * Shared secret used to verify RevenueCat webhook deliveries.
+   * RevenueCat sends `Authorization: Bearer {secret}`.
+   */
+  REVENUECAT_WEBHOOK_SECRET: Env.schema.string.optional(),
+
+  /**
+   * RevenueCat entitlement identifier used to determine active subscription.
+   */
+  REVENUECAT_ENTITLEMENT_ID: Env.schema.string.optional(),
+
+  /**
    * PostgreSQL database connection settings
    */
   DB_HOST: Env.schema.string({ format: 'host' }),

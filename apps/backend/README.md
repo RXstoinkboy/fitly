@@ -162,6 +162,54 @@ EXPO_PUBLIC_API_KEY=your_api_key_here
 # x-installation-id is generated automatically by the mobile app
 ```
 
+## RevenueCat Webhook Setup
+
+The backend exposes `POST /api/v1/webhooks/revenuecat` for RevenueCat to deliver subscription lifecycle events.
+
+**1. Generate a shared secret** (any random string, e.g. `openssl rand -hex 32`).
+
+**2. Set in backend `.env`:**
+```
+REVENUECAT_WEBHOOK_SECRET=<your-secret>
+REVENUECAT_API_KEY=<revenuecat-secret-api-key>
+REVENUECAT_ENTITLEMENT_ID=premium
+```
+
+**3. Configure in RevenueCat Dashboard:**
+- Project Settings → Integrations → Webhooks
+- Add webhook URL: `https://your-api.example.com/api/v1/webhooks/revenuecat`
+- Authorization header: `Bearer <your-secret>` (must match `REVENUECAT_WEBHOOK_SECRET`)
+- Enable events: `INITIAL_PURCHASE`, `TRIAL_STARTED`, `TRIAL_CONVERTED`, `RENEWAL`, `CANCELLATION`, `EXPIRATION`, `BILLING_ISSUE`
+
+**4. Local testing:**
+Use ngrok or cloudflared to expose local backend:
+```bash
+npx ngrok http 3333
+# Use the https URL in RevenueCat webhook config
+```
+
+**5. Test events:**
+RevenueCat Dashboard → Customer Profile → "Send test event" — pick event type, verify backend logs show processing.
+
+## Google Play Console — Free Trial Setup
+
+**1. Google Play Console → Subscriptions → Your subscription → Base plans**
+
+**2. Edit base plan → Add offer → Free trial:**
+- Duration: `3 days`
+- Eligibility: "New customers only" or "Has never subscribed"
+- This sets up the trial as part of the base plan; RevenueCat surfaces it automatically as `period_type: TRIAL`.
+
+**3. The trial flow:**
+- User purchases in app → Google Play triggers trial → RevenueCat sends webhook `TRIAL_STARTED` with `period_type: TRIAL`
+- Backend sets `subscription_status='trial'`, resets `trial_generations_used=0`
+- User gets up to 20 trial generations (server-tracked)
+- Trial converts to paid → webhook `TRIAL_CONVERTED` → `subscription_status='active'`, monthly 200-limit flow
+- User cancels → webhook `CANCELLATION` → `subscription_status='cancelled'`
+- Trial expires without conversion → webhook `EXPIRATION` → `subscription_status='expired'`
+
+**4. Important:** Google Play enforces one trial per Google account — this is Play-side, not your code.
+
 ## Production Build
 
 ```bash

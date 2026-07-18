@@ -69,16 +69,39 @@ export default class ImageGenerationController {
   async generate({ request, response, currentUser }: HttpContext) {
     const payload = await imageGenerationValidator.validate(request.all())
 
-    const isSubscribed = request.header('x-is-subscribed') === 'true'
+    const status = currentUser.subscriptionStatus ?? 'none'
+    const isSubscribed = status === 'active'
 
-    // Allow one free generation during onboarding
-    if (!currentUser.onboardingGenerationUsed) {
-      currentUser.onboardingGenerationUsed = true
-      await currentUser.save()
-    } else if (!isSubscribed) {
+    if (status === 'none') {
+      if (!currentUser.onboardingGenerationUsed) {
+        currentUser.onboardingGenerationUsed = true
+        await currentUser.save()
+      } else {
+        return response.status(403).json({
+          error: 'Subscription required',
+          upgradeRequired: true,
+          message: 'You have used your free generation. Subscribe to continue generating images.',
+        })
+      }
+    } else if (status === 'trial') {
+      if (currentUser.trialGenerationsUsed < currentUser.trialGenerationsLimit) {
+        currentUser.trialGenerationsUsed += 1
+        await currentUser.save()
+      } else {
+        return response.status(403).json({
+          error: 'Trial exhausted',
+          upgradeRequired: true,
+          message: 'You have used all trial generations. Upgrade to Premium to continue.',
+        })
+      }
+    } else if (isSubscribed) {
+      // Monthly 200-limit flow — usage record fetched below
+    } else {
+      // status is 'expired', 'cancelled', 'billing_issue', or unknown
       return response.status(403).json({
         error: 'Subscription required',
-        message: 'You have used your free generation. Subscribe to continue generating images.',
+        upgradeRequired: true,
+        message: 'An active subscription is required to generate images.',
       })
     }
 

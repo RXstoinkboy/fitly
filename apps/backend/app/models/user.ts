@@ -41,5 +41,29 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare subscriptionPlan: string | null
 
+  @column()
+  declare revenuecatUserId: string | null
+
+  @column()
+  declare subscriptionStatus: string | null
+
+  @column()
+  declare subscriptionPeriodType: string | null
+
+  @column.dateTime()
+  declare subscriptionCurrentPeriodStart: DateTime | null
+
+  @column.dateTime()
+  declare subscriptionCurrentPeriodEnd: DateTime | null
+
+  @column.dateTime()
+  declare subscriptionUpdatedAt: DateTime | null
+
+  @column()
+  declare trialGenerationsUsed: number
+
+  @column()
+  declare trialGenerationsLimit: number
+
   static accessTokens = DbAccessTokensProvider.forModel(User)
 }

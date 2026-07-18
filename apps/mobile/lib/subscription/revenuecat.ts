@@ -13,11 +13,13 @@ import {
   SubscriptionPlan,
   SubscriptionProductId,
   SubscriptionStatus,
+  BackendSubscriptionStatus,
 } from './types';
 
 const API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_API_KEY || 'test_WVmaoikXGmAQKvmFlFfqVWRMNdS';
-const ENTITLEMENT_ID = process.env.EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID || 'virtual_try_on_pro';
+const ENTITLEMENT_ID = process.env.EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID || 'premium';
 const OFFERING_ID = process.env.EXPO_PUBLIC_REVENUECAT_OFFERING_ID || null;
+const BACKEND_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 const PLAN_PRODUCT_IDS: Record<SubscriptionProductId, string> = {
   monthly: 'monthly',
@@ -308,6 +310,44 @@ export const presentRevenueCatPaywallIfNeeded = async (): Promise<PaywallAttempt
   } catch (error) {
     console.warn('Failed to present conditional RevenueCat paywall', error);
     return { paywallResult: PAYWALL_RESULT.ERROR, status: getFallbackStatus('error') };
+  }
+};
+
+export const fetchSubscriptionStatusFromBackend = async (): Promise<SubscriptionStatus> => {
+  try {
+    const { getOrCreateToken } = await import('@/queries/auth/api');
+    const { buildBackendHeaders } = await import('@/queries/backend-headers');
+
+    if (!BACKEND_API_URL) {
+      return getFallbackStatus('unknown');
+    }
+
+    const token = await getOrCreateToken();
+    const response = await fetch(`${BACKEND_API_URL}/api/v1/subscription/status`, {
+      headers: buildBackendHeaders({ token }),
+    });
+
+    if (!response.ok) {
+      return getFallbackStatus('error');
+    }
+
+    const data = (await response.json()) as BackendSubscriptionStatus;
+
+    return {
+      isSubscribed: data.isSubscribed,
+      activeEntitlementId: data.isSubscribed ? (data.periodType ?? 'virtual_try_on_pro') : null,
+      expirationDate: data.currentPeriodEnd,
+      lastCheckedAt: new Date().toISOString(),
+      reason: data.isSubscribed ? 'active' : 'inactive',
+      periodType: (data.periodType as 'none' | 'trial' | 'normal' | 'intro' | null) ?? null,
+      trialGenerationsUsed: data.trialGenerationsUsed,
+      trialGenerationsLimit: data.trialGenerationsLimit,
+      monthlyGenerationsUsed: data.monthlyGenerationsUsed,
+      monthlyGenerationsLimit: data.monthlyGenerationsLimit,
+    };
+  } catch (error) {
+    console.warn('Failed to fetch subscription status from backend', error);
+    return getFallbackStatus('error');
   }
 };
 

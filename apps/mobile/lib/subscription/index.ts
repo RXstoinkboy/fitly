@@ -4,6 +4,7 @@ export {
   fetchCustomerInfo,
   fetchSubscriptionPlans,
   fetchSubscriptionStatus,
+  fetchSubscriptionStatusFromBackend,
   presentRevenueCatCustomerCenter,
   presentRevenueCatPaywall,
   presentRevenueCatPaywallIfNeeded,
@@ -21,4 +22,5 @@ export type {
   SubscriptionProductId,
   SubscriptionStatus,
   SubscriptionStatusReason,
+  BackendSubscriptionStatus,
 } from './types';

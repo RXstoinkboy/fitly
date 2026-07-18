@@ -8,6 +8,11 @@ export type SubscriptionStatus = {
   expirationDate: string | null;
   lastCheckedAt: string;
   reason: SubscriptionStatusReason;
+  periodType?: 'none' | 'trial' | 'normal' | 'intro' | null;
+  trialGenerationsUsed?: number;
+  trialGenerationsLimit?: number;
+  monthlyGenerationsUsed?: number;
+  monthlyGenerationsLimit?: number;
 };
 
 export type PaywallAttemptResult = {
@@ -34,4 +39,15 @@ export type CustomerSnapshot = {
 export type CustomerCenterResult = {
   opened: boolean;
   source: 'customer-center' | 'store-management' | 'none';
+};
+
+export type BackendSubscriptionStatus = {
+  status: string;
+  periodType: string | null;
+  isSubscribed: boolean;
+  currentPeriodEnd: string | null;
+  trialGenerationsUsed: number;
+  trialGenerationsLimit: number;
+  monthlyGenerationsUsed: number;
+  monthlyGenerationsLimit: number;
 };

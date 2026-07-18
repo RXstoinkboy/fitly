@@ -41,6 +41,13 @@ export const analyticsEvents = {
     customerCenterOpened: (context: string) =>
       buildEventName('paywall', 'customer_center_opened', context),
   },
+  trial: {
+    started: () => buildEventName('trial', 'started'),
+    generationUsed: () => buildEventName('trial', 'generation_used'),
+    exhausted: () => buildEventName('trial', 'exhausted'),
+    converted: () => buildEventName('trial', 'converted'),
+    expired: () => buildEventName('trial', 'expired'),
+  },
   errors: {
     captured: () => buildEventName('error', 'captured'),
     unhandled: () => buildEventName('error', 'unhandled'),

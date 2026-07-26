@@ -14,7 +14,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useOnboarding } from '@/state';
 import { SubscriptionProvider } from '@/components/subscription';
 import { AnalyticsProvider } from '@/lib/analytics';
-import { DevMenu } from '@/components/dev-menu';
+// import { DevMenu } from '@/components/dev-menu';
 import {
   PlayfairDisplay_400Regular,
   PlayfairDisplay_700Bold,
@@ -100,7 +100,7 @@ export default function RootLayout() {
                 <GarmentsProvider>
                   <SafeAreaProvider>
                     <RootContent />
-                    <DevMenu />
+                    {/*<DevMenu />*/}
                     {/* TODO: clothes selection drawer */}
                     {/* TODO: modal with image zoom -n */}
                   </SafeAreaProvider>

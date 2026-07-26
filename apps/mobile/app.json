@@ -15,10 +15,8 @@
         "foregroundImage": "./assets/images/adaptive-app-icon.png",
         "backgroundColor": "#143352"
       },
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ],
-      "package": "com.rxstoinkboy.justtryon"
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "package": "com.mazelabs.justtryon"
     },
     "web": {
       "bundler": "metro",
@@ -49,9 +47,7 @@
           "android": {
             "kotlinVersion": "2.0.21",
             "packagingOptions": {
-              "pickFirst": [
-                "**/libc++_shared.so"
-              ]
+              "pickFirst": ["**/libc++_shared.so"]
             }
           }
         }
@@ -66,7 +62,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "7ee4d83c-94b0-4726-918e-398fb0813e00"
+        "projectId": "7ee4d83c-94b0 a-4726-918e-398fb0813e00"
       }
     }
   }

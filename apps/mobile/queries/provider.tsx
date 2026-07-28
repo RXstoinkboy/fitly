@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
-import { DevToolsBubble } from 'react-native-react-query-devtools';
+// import { DevToolsBubble } from 'react-native-react-query-devtools';
 import * as Clipboard from 'expo-clipboard';
 
 const queryClient = new QueryClient({
@@ -34,7 +34,7 @@ export function QueryClientProvider({ children }: PropsWithChildren) {
       client={queryClient}
       persistOptions={{ persister: asyncStoragePersister }}>
       {children}
-      <DevToolsBubble queryClient={queryClient} onCopy={onCopy} />
+      {/* <DevToolsBubble queryClient={queryClient} onCopy={onCopy} /> */}
     </PersistQueryClientProvider>
   );
 }

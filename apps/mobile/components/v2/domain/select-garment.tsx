@@ -24,7 +24,6 @@ export const useSelectGarment = (flow: AnalyticsFlow = 'app') => {
   const selectPhotoSheet = useSelectPhotoSheet();
 
   const onImageSelected = (filePath: string, source: ImageSource) => {
-    console.log('on image selected', filePath, source);
     setTempImage({ filePath, source });
   };
 

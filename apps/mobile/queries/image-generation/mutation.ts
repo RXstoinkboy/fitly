@@ -83,7 +83,6 @@ export const useGenerateImageMutation = (
     },
     onSuccess: (data, variables, result, context) => {
       if (data) {
-        console.log('Generated image saved to:', data.filePath);
         trackEvent(analyticsEvents.generation.succeeded(variables.context ?? 'app'), {
           garmentCount: variables.garments?.count ?? 0,
           garmentTypes: variables.garments?.types ?? [],

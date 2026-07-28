@@ -100,7 +100,7 @@ export default function RootLayout() {
                 <GarmentsProvider>
                   <SafeAreaProvider>
                     <RootContent />
-                    {/*<DevMenu />*/}
+                    {/* <DevMenu /> */}
                     {/* TODO: clothes selection drawer */}
                     {/* TODO: modal with image zoom -n */}
                   </SafeAreaProvider>

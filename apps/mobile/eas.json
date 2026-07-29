@@ -22,6 +22,7 @@
         "EXPO_PUBLIC_REVENUECAT_API_KEY": "goog_EqiTteLsXKSzmxpcJeBkzLnTtEH",
         "EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID": "premium"
       },
+      "autoIncrement": true,
       "android": {
         "buildType": "app-bundle"
       },

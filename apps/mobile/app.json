@@ -16,7 +16,8 @@
         "backgroundColor": "#143352"
       },
       "permissions": ["android.permission.RECORD_AUDIO"],
-      "package": "com.mazelabs.justtryon"
+      "package": "com.mazelabs.justtryon",
+      "versionCode": 2
     },
     "web": {
       "bundler": "metro",

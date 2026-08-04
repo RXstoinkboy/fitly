@@ -9,6 +9,7 @@ import { AnalyticsFlow } from '@/lib/analytics/types';
 import { Images, Camera } from '@/icons';
 import { ImageEditor } from 'expo-dynamic-image-crop';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Portal } from 'tamagui';
 
 export const useSelectPhotoSheet = () => {
   const [opened, setOpened] = useState(false);
@@ -65,37 +66,34 @@ export const SelectPhotoSheet = ({
   const handleImageSelected = useCallback((image: string, source: ImageSource) => {
     setPendingImageUri(image);
     setPendingSource(source);
-    toggle(false);
-  }, [toggle]);
+  }, []);
 
-  return (
-    <>
-      <Sheet disableRemoveScroll={isOpen} modal open={isOpen} onOpenChange={toggle}>
-        <Sheet.Overlay />
-        <Sheet.Handle />
-        <Sheet.Frame>
-          {children ?? (
-            <SheetContents onImagePending={handleImageSelected} />
-          )}
-        </Sheet.Frame>
-      </Sheet>
-
-      {pendingImageUri ? (
-        <View
-            style={[StyleSheet.absoluteFill, { zIndex: 100_000 }]}
-            bg={'$background'}>
-          <SafeAreaView style={{ flex: 1 }}>
+  if (pendingImageUri) {
+    return (
+      <Portal>
+        <SafeAreaView style={{ flex: 1 }}>
+          <View style={[StyleSheet.absoluteFill, { zIndex: 100_000 }]} bg={'red'}>
             <ImageEditor
-              useModal={false}
               isVisible
+              useModal={false}
               imageUri={pendingImageUri}
               onEditingCancel={handleEditingCancel}
               onEditingComplete={handleEditingComplete}
             />
-          </SafeAreaView>
-        </View>
-      ) : null}
-    </>
+          </View>
+        </SafeAreaView>
+      </Portal>
+    );
+  }
+
+  return (
+    <Sheet disableRemoveScroll={isOpen} modal open={isOpen} onOpenChange={toggle}>
+      <Sheet.Overlay />
+      <Sheet.Handle />
+      <Sheet.Frame>
+        {children ?? <SheetContents onImagePending={handleImageSelected} />}
+      </Sheet.Frame>
+    </Sheet>
   );
 };
 
@@ -115,18 +113,12 @@ const getImageFromDevice = (
 };
 
 const SheetContents = memo(
-  ({
-    onImagePending,
-  }: {
-    onImagePending: (image: string, source: ImageSource) => void;
-  }) => {
-    const getImageFromDeviceLibrary = getImageFromDevice(
-      openImageLibrary,
-      (image: string) => onImagePending(image, 'library'),
+  ({ onImagePending }: { onImagePending: (image: string, source: ImageSource) => void }) => {
+    const getImageFromDeviceLibrary = getImageFromDevice(openImageLibrary, (image: string) =>
+      onImagePending(image, 'library'),
     );
-    const getImageFromDeviceCamera = getImageFromDevice(
-      openCamera,
-      (image: string) => onImagePending(image, 'camera'),
+    const getImageFromDeviceCamera = getImageFromDevice(openCamera, (image: string) =>
+      onImagePending(image, 'camera'),
     );
 
     return (

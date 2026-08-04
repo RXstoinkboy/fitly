@@ -12,7 +12,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/app-icon.png",
+        "foregroundImage": "./assets/images/app-icon-mini.png",
         "backgroundColor": "#143352"
       },
       "permissions": ["android.permission.RECORD_AUDIO"],

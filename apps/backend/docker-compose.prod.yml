@@ -1,0 +1,46 @@
+# =============================================================================
+# Fitly Backend — Production Docker Compose (VPS / OVHcloud)
+# =============================================================================
+# Usage (on the VPS, from the repo root):
+#
+#   # 1. Create .env.production on the host (use the template below)
+#   # 2. Build and start
+#   docker compose -f apps/backend/docker-compose.prod.yml up -d --build
+#
+#   # 3. Run database migrations (first deploy + after schema changes)
+#   docker compose -f apps/backend/docker-compose.prod.yml run --rm app \
+#     node ace migration:run --force
+#
+#   # 4. View logs
+#   docker compose -f apps/backend/docker-compose.prod.yml logs -f
+#
+#   # 5. Stop
+#   docker compose -f apps/backend/docker-compose.prod.yml down
+# =============================================================================
+
+name: fitly-backend
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fitly-backend:latest
+    container_name: fitly-backend
+    restart: unless-stopped
+    ports:
+      - "3333:3333"
+    env_file:
+      - .env.production
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:3333/api/v1/health', r => process.exit(r.statusCode === 200 ? 0 : 1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s

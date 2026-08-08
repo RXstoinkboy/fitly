@@ -16,7 +16,7 @@ import {
   BackendSubscriptionStatus,
 } from './types';
 
-const API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_API_KEY || 'test_WVmaoikXGmAQKvmFlFfqVWRMNdS';
+const API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_API_KEY;
 const ENTITLEMENT_ID = process.env.EXPO_PUBLIC_REVENUECAT_ENTITLEMENT_ID || 'premium';
 const OFFERING_ID = process.env.EXPO_PUBLIC_REVENUECAT_OFFERING_ID || null;
 const BACKEND_API_URL = process.env.EXPO_PUBLIC_API_URL;

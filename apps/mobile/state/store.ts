@@ -262,6 +262,11 @@ const actions = {
    * Set the current model
    */
   setCurrentModel: (id: string) => {
+    if (!store$.models[id].peek()) {
+      console.warn(`setCurrentModel: model "${id}" does not exist`);
+      return;
+    }
+
     // Set all models to not current
     Object.keys(store$.models.get()).forEach((modelId) => {
       store$.models[modelId].isCurrent.set(false);

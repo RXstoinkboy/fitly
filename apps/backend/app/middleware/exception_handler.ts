@@ -7,7 +7,9 @@ export default class HttpExceptionHandler extends ExceptionHandler {
   async handle(error: unknown, ctx: HttpContext) {
     if (ctx.request.url().startsWith('/api')) {
       const status = error instanceof errors.E_ROUTE_NOT_FOUND ? 404 : 500
-      const message = error instanceof Error ? error.message : 'Internal server error'
+      // Don't leak internal error messages to the client in production.
+      const message =
+        this.debug && error instanceof Error ? error.message : 'Internal server error'
       return ctx.response.status(status).json({ error: message })
     }
     return super.handle(error, ctx)

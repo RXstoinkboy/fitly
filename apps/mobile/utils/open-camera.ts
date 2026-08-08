@@ -1,7 +1,14 @@
 import * as ImagePicker from 'expo-image-picker';
 
 export const openCamera = async () => {
-  // No permissions request is necessary for launching the image library
+  // Camera permission must be requested before launch on both iOS and Android.
+  const permission = await ImagePicker.requestCameraPermissionsAsync();
+
+  if (!permission.granted) {
+    console.warn('Camera permission denied');
+    return null;
+  }
+
   const result = await ImagePicker.launchCameraAsync({
     mediaTypes: ['images'],
     allowsEditing: false,

@@ -73,10 +73,7 @@ export default class ImageGenerationController {
     const isSubscribed = status === 'active'
 
     if (status === 'none') {
-      if (!currentUser.onboardingGenerationUsed) {
-        currentUser.onboardingGenerationUsed = true
-        await currentUser.save()
-      } else {
+      if (currentUser.onboardingGenerationUsed) {
         return response.status(403).json({
           error: 'Subscription required',
           upgradeRequired: true,
@@ -84,10 +81,7 @@ export default class ImageGenerationController {
         })
       }
     } else if (status === 'trial') {
-      if (currentUser.trialGenerationsUsed < currentUser.trialGenerationsLimit) {
-        currentUser.trialGenerationsUsed += 1
-        await currentUser.save()
-      } else {
+      if (currentUser.trialGenerationsUsed >= currentUser.trialGenerationsLimit) {
         return response.status(403).json({
           error: 'Trial exhausted',
           upgradeRequired: true,
@@ -189,6 +183,17 @@ export default class ImageGenerationController {
 
     for (const part of parts) {
       if (part.inlineData?.data) {
+        // Increment usage counters only after a successful generation.
+        // This prevents users from losing free/trial generations when
+        // the upstream Google GenAI call fails.
+        if (status === 'none') {
+          currentUser.onboardingGenerationUsed = true
+          await currentUser.save()
+        } else if (status === 'trial') {
+          currentUser.trialGenerationsUsed += 1
+          await currentUser.save()
+        }
+
         if (usage) {
           usage.count += 1
           await usage.save()

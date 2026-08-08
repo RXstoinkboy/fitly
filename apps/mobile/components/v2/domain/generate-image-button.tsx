@@ -40,7 +40,6 @@ export const GenerateImageButton = () => {
         flow: 'app',
         event: analyticsEvents.generation.failed('app'),
       });
-      throw error;
     },
   });
 

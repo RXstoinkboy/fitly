@@ -32,6 +32,7 @@ export const useGenerateImageMutation = (
   const { currentModel } = useModels();
 
   return useMutation<GenerateImageResult | undefined, Error, GenerateImageParams>({
+    ...options,
     mutationKey: generatedKeys.add(),
     mutationFn: async ({ top, bottom, dress, outerwear }) => {
       if (!currentModel?.filePath) {
@@ -67,8 +68,8 @@ export const useGenerateImageMutation = (
         garmentOuterwearImageBase64,
       });
 
-      if (!result) {
-        return undefined;
+      if (!result?.generatedImageBase64) {
+        throw new Error('Backend returned no generated image.');
       }
 
       const filePath = await saveToFileSystem(
@@ -115,6 +116,5 @@ export const useGenerateImageMutation = (
         queryKey: generatedKeys.list(),
       });
     },
-    ...options,
   });
 };

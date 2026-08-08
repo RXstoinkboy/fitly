@@ -18,5 +18,6 @@ export const saveToFileSystem = async (path: string, imageData: string, name?: s
     return fileUri;
   } catch (error) {
     console.error('Error saving to file system:', error);
+    throw error;
   }
 };

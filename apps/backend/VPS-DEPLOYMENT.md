@@ -4,7 +4,7 @@ Migrates the whole backend stack — app **and** database — off Railway + Neon
 onto a single VPS running Docker Compose:
 
 ```
-Internet ──► VPS (Ubuntu)
+Internet ──► VPS (Debian 12 / Ubuntu)
               ├── Caddy          :80/:443 → automatic HTTPS (Let's Encrypt)
               ├── backend app    node build/bin/server.js (port 3333, internal)
               └── PostgreSQL 18  data in a named Docker volume
@@ -17,7 +17,9 @@ Everything below happens on the VPS as root, unless noted.
 ## 1. Buy / provision the VPS
 
 - **OVHcloud VPS** (or any VPS): 2 vCPU / 4 GB RAM / 40 GB SSD is plenty.
-- OS image: **Ubuntu 24.04 LTS**.
+- OS image: **Ubuntu 24.04 LTS** or **Debian 12**. OVH's preconfigured
+  "Docker" image is Debian 12 with Docker preinstalled — that works too and
+  is the assumption in step 4; every command below is identical on both.
 - Note the public IPv4 from the control panel.
 
 ## 2. Point a domain at the VPS (needed for HTTPS)
@@ -43,9 +45,10 @@ bottom) — but real devices need HTTPS, so get the domain before releasing.
 
 Do **not** open 3333 or 5432 — they stay internal.
 
-**Layer 2 — ufw inside the VPS**:
+**Layer 2 — ufw inside the VPS** (Debian minimal images may not have it):
 
 ```bash
+apt install -y ufw
 ufw allow 22/tcp && ufw allow 80/tcp && ufw allow 443/tcp && ufw enable
 ```
 
@@ -53,7 +56,14 @@ ufw allow 22/tcp && ufw allow 80/tcp && ufw allow 443/tcp && ufw enable
 
 ```bash
 ssh root@<VPS-IP>
-curl -fsSL https://get.docker.com | sh
+
+# Docker preinstalled (OVH image)? Just verify it — and especially the
+# Compose v2 plugin, which is NOT always included:
+docker --version && docker compose version
+
+# Missing? Install Docker / the compose plugin:
+curl -fsSL https://get.docker.com | sh          # Docker itself
+apt install -y docker-compose-v2                # compose plugin (Debian 12 / Ubuntu 24.04)
 docker --version && docker compose version
 ```
 

@@ -49,4 +49,11 @@ export default await Env.create(new URL('../', import.meta.url), {
   DB_USER: Env.schema.string(),
   DB_PASSWORD: Env.schema.string.optional(),
   DB_DATABASE: Env.schema.string(),
+
+  /**
+   * Force TLS for the DB connection. Set false for a local Postgres
+   * container (the VPS setup); leave unset to default to true in production
+   * (managed DBs like Neon) and false in development.
+   */
+  DB_SSL: Env.schema.boolean.optional(),
 })

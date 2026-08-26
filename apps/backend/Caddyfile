@@ -1,0 +1,8 @@
+# Domain comes from the DOMAIN var in .env.production.
+# Caddy fetches and renews Let's Encrypt certificates automatically.
+# Ports 80 + 443 must be open in the OVH firewall + ufw.
+
+{$DOMAIN} {
+	encode gzip
+	reverse_proxy app:3333
+}

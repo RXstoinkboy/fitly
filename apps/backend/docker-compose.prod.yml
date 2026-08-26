@@ -1,46 +1,98 @@
 # =============================================================================
 # Fitly Backend — Production Docker Compose (VPS / OVHcloud)
 # =============================================================================
-# Usage (on the VPS, from the repo root):
+# Full setup: Postgres + AdonisJS app + Caddy (automatic HTTPS).
 #
-#   # 1. Create .env.production on the host (use the template below)
-#   # 2. Build and start
-#   docker compose -f apps/backend/docker-compose.prod.yml up -d --build
+# Usage (on the VPS, from apps/backend/):
 #
-#   # 3. Run database migrations (first deploy + after schema changes)
-#   docker compose -f apps/backend/docker-compose.prod.yml run --rm app \
+#   # 1. Create and fill the env file (see VPS-DEPLOYMENT.md)
+#   cp .env.production.example .env.production
+#
+#   # 2. Build and start everything
+#   docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+#
+#   # 3. Run migrations — fresh DB only; a restored Neon dump already includes
+#   #    the schema + adonis_schema bookkeeping, so this would be a no-op
+#   docker compose --env-file .env.production -f docker-compose.prod.yml run --rm app \
 #     node ace migration:run --force
 #
-#   # 4. View logs
-#   docker compose -f apps/backend/docker-compose.prod.yml logs -f
-#
-#   # 5. Stop
-#   docker compose -f apps/backend/docker-compose.prod.yml down
+#   # 4. View logs / stop
+#   docker compose --env-file .env.production -f docker-compose.prod.yml logs -f
+#   docker compose --env-file .env.production -f docker-compose.prod.yml down
 # =============================================================================
 
 name: fitly-backend
 
 services:
+  db:
+    image: postgres:18-alpine
+    container_name: fitly-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    volumes:
+      # postgres:18+ stores data in major-version subdirs under
+      # /var/lib/postgresql — mounting /var/lib/postgresql/data breaks it
+      - pgdata:/var/lib/postgresql
+    ports:
+      # Localhost only — used for the one-off Neon -> VPS data migration.
+      # Never expose this publicly.
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   app:
     build:
-      context: .
-      dockerfile: Dockerfile
+      # Repo root — the npm lockfile lives there (workspaces)
+      context: ../..
+      dockerfile: apps/backend/Dockerfile
     image: fitly-backend:latest
     container_name: fitly-backend
     restart: unless-stopped
-    ports:
-      - "3333:3333"
+    depends_on:
+      db:
+        condition: service_healthy
     env_file:
       - .env.production
+    ports:
+      # Only reachable through Caddy (HTTPS). To test over plain http while
+      # waiting for DNS, temporarily change this to "3333:3333".
+      - "127.0.0.1:3333:3333"
     healthcheck:
       test:
         [
           "CMD",
           "node",
           "-e",
-          "require('http').get('http://localhost:3333/api/v1/health', r => process.exit(r.statusCode === 200 ? 0 : 1))",
+          "fetch('http://localhost:3333/api/v1/health').then(r => process.exit(r.status === 200 ? 0 : 1)).catch(() => process.exit(1))",
         ]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 15s
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: fitly-caddy
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

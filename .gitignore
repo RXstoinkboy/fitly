@@ -3,7 +3,8 @@
 # tools
 .vscode/
 .idea/
-.github/
+.github/*
+!.github/workflows/
 .pi/
 
 # dependencies

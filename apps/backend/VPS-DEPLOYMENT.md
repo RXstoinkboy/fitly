@@ -203,7 +203,57 @@ After the app works in production for a few days:
 2. Neon: delete the project (keep it paused a week if you're nervous).
 3. Rotate anything that lived only on Railway.
 
-## 14. Deploying updates later
+## 14. Automatic deploys with GitHub Actions
+
+`.github/workflows/deploy-backend.yml` deploys on every push to `main` that
+touches `apps/backend/` (mobile-only pushes skip it). It SSHs into the VPS,
+pulls, rebuilds the image, runs migrations, swaps the container, and checks
+`/health`. A failed build or migration leaves the old app running; a container
+that never becomes healthy is rolled back automatically.
+
+### One-time setup
+
+1. **Switch the VPS checkout to main** (once the infra PR is merged):
+
+   ```bash
+   cd /opt/fitly && git checkout main && git pull
+   ```
+
+2. **Create an SSH key for the GitHub runner** (on your laptop):
+
+   ```bash
+   ssh-keygen -t ed25519 -f ~/.ssh/fitly-deploy -N ""
+   # public half → VPS:
+   ssh root@<VPS-IP> 'mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys' < ~/.ssh/fitly-deploy.pub
+   ```
+
+3. **Add secrets** — GitHub repo → Settings → Secrets and variables → Actions:
+
+   | Secret | Value |
+   |--------|-------|
+   | `VPS_HOST` | VPS IP |
+   | `VPS_USER` | `root` |
+   | `VPS_SSH_KEY` | contents of `~/.ssh/fitly-deploy` (the **private** key) |
+   | `VPS_PORT` | optional — only if SSH is not on 22 |
+
+### Verify it works
+
+1. Merging the PR to main already triggers the first run (the workflow file
+   itself is in the trigger paths). Watch it in the repo → **Actions** tab.
+   To test anytime: Actions → "Deploy backend" → **Run workflow**.
+2. Green job = log ends with `deploy ok`. On the VPS:
+
+   ```bash
+   docker ps            # fitly-backend restarted just now
+   curl -s https://api.yourdomain.com/api/v1/health
+   ```
+
+3. Red job = read the log:
+   - build/migration error → old app untouched, fix code and push again
+   - `deploy FAILED - rolled back` → new container never became healthy,
+     previous image restored
+
+Manual fallback (same thing by hand):
 
 ```bash
 cd /opt/fitly && git pull

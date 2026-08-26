@@ -1,0 +1,76 @@
+# =============================================================================
+# Auto-deploy the backend to the VPS
+# =============================================================================
+# Runs on every push to `main` that touches apps/backend/ (mobile-only pushes
+# are skipped). The GitHub runner only SSHs into the VPS — the Docker build
+# happens there, reusing the layer cache.
+#
+# Required secrets (repo → Settings → Secrets and variables → Actions):
+#   VPS_HOST      VPS IP or hostname
+#   VPS_USER      SSH user (usually root)
+#   VPS_SSH_KEY   private key; its public half goes in ~/.ssh/authorized_keys
+#   VPS_PORT      optional — only when SSH is not on 22
+#
+# Safety: build + migrations run BEFORE the running container is swapped, so a
+# failed build/migration leaves the old app untouched. If the new container
+# never becomes healthy within 60s, the previous image is restored.
+# =============================================================================
+
+name: Deploy backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/backend/**'
+      - '.github/workflows/deploy-backend.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Deploy on VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || '22' }}
+          command_timeout: 30m
+          script: |
+            set -e
+            cd /opt/fitly && git pull --ff-only
+            cd apps/backend
+            command -v curl >/dev/null || (apt-get update && apt-get install -y curl)
+            compose="docker compose --env-file .env.production -f docker-compose.prod.yml"
+
+            # Remember the current working image so a failed deploy can roll back
+            docker tag fitly-backend:latest fitly-backend:stable 2>/dev/null || true
+
+            # Build + migrate BEFORE swapping the running container: a failed
+            # build or migration leaves the old app untouched.
+            $compose build app
+            $compose run --rm app node ace migration:run --force
+            $compose up -d app
+
+            # Wait up to 60s for the new container to become healthy
+            for i in $(seq 1 12); do
+              if curl -sf http://localhost:3333/api/v1/health > /dev/null; then
+                docker tag fitly-backend:latest fitly-backend:stable
+                echo "deploy ok"
+                exit 0
+              fi
+              sleep 5
+            done
+
+            # Never became healthy — restore the previous image
+            docker tag fitly-backend:stable fitly-backend:latest 2>/dev/null || true
+            $compose up -d app
+            echo "deploy FAILED - rolled back to previous image" >&2
+            exit 1

@@ -1,0 +1,14 @@
+# Monorepo docker build context (context = repo root, see docker-compose.prod.yml)
+**/node_modules
+**/.git
+**/build
+**/dist
+**/.expo
+**/.turbo
+**/.tamagui
+**/*.tsbuildinfo
+**/.env
+**/.env.*
+
+# Keep env examples out of the image too — env comes from the host at runtime
+# (.env.production is passed via compose env_file, never baked into the image)
